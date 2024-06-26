@@ -1,0 +1,12 @@
+#IntelliJ IDEA
+.idea/*
+!.idea/vcs.xml
+!.idea/copyright
+*.iml
+
+# Common
+*~
+*.bak
+.DS_Store
+.DS_Store?
+._*
