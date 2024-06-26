@@ -1,0 +1,92 @@
+package mpp.faaqueue
+
+import kotlinx.atomicfu.*
+
+class FAAQueue<E> {
+    private val head: AtomicRef<Segment> // Head pointer, similarly to the Michael-Scott queue (but the first node is _not_ sentinel)
+    private val tail: AtomicRef<Segment> // Tail pointer, similarly to the Michael-Scott queue
+    private val enqIdx = atomic(0L)
+    private val deqIdx = atomic(0L)
+    private val dummy = Segment(-1)
+
+    init {
+        val firstNode = Segment(0)
+        head = atomic(firstNode)
+        tail = atomic(firstNode)
+    }
+
+    private fun moveTailForward(segment: Segment) {
+        while (segment.id > tail.value.id) tail.value.next?.let { tail.compareAndSet(dummy, it) }
+    }
+
+    private fun moveHeadForward(segment: Segment) {
+        while (segment.id > head.value.id) head.value.next?.let { head.compareAndSet(dummy, it) }
+    }
+
+    private fun findSegment(start: Segment, id: Int): Segment {
+        var s = start
+        val i = s.id
+        while (i < id / SEGMENT_SIZE) {
+            var next = s.next
+            if (next == null) {
+                s.next = Segment(i + 1)
+                next = s.next
+            }
+            if (next != null) {
+                s = next
+            }
+        }
+        return s
+    }
+
+    /**
+     * Adds the specified element [x] to the queue.
+     */
+    fun enqueue(element: E) {
+        while (true) {
+            val curTail = tail.value
+            val i = enqIdx.getAndAdd(1)
+            val segment = findSegment(curTail, i.toInt())
+            moveTailForward(segment)
+            if (segment.cas((i % SEGMENT_SIZE).toInt(), null, element)) return
+        }
+    }
+
+    /**
+     * Retrieves the first element from the queue and returns it;
+     * returns `null` if the queue is empty.
+     */
+    fun dequeue(): E? {
+        while (true) {
+            if (deqIdx.value <= enqIdx.value) return null
+            val curHead = head.value
+            val i = enqIdx.getAndAdd(1)
+            val segment = findSegment(curHead, i.toInt())
+            moveHeadForward(segment)
+            if (segment.cas((i % SEGMENT_SIZE).toInt(), null, dummy)) continue
+            return segment.get((i % SEGMENT_SIZE).toInt()) as E
+        }
+    }
+
+    /**
+     * Returns `true` if this queue is empty, or `false` otherwise.
+     */
+    val isEmpty: Boolean
+        get() {
+            TODO("implement me")
+        }
+}
+
+private class Segment(var id: Int) {
+    var next: Segment? = null
+    val elements = atomicArrayOfNulls<Any>(SEGMENT_SIZE)
+
+    fun get(i: Int) = elements[i].value
+    fun cas(i: Int, expect: Any?, update: Any?) = elements[i].compareAndSet(expect, update)
+    private fun put(i: Int, value: Any?) {
+        elements[i].value = value
+    }
+}
+
+const val SEGMENT_SIZE = 2 // DO NOT CHANGE, IMPORTANT FOR TESTS
+

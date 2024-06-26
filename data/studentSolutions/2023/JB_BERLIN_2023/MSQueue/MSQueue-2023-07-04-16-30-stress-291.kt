@@ -1,0 +1,48 @@
+package day1
+
+import kotlinx.atomicfu.*
+
+class MSQueue<E> : Queue<E> {
+    private val head: AtomicRef<Node<E>>
+    private val tail: AtomicRef<Node<E>>
+
+    init {
+        val dummy = Node<E>(null)
+        head = atomic(dummy)
+        tail = atomic(dummy)
+    }
+
+    override fun enqueue(element: E) {
+        val node = Node(element)
+        while (true) {
+            val localTail = tail.value
+            val localNext = localTail.next.value
+            if (localNext != null) {
+                tail.compareAndSet(localTail, localNext)
+                continue
+            }
+
+            if (localTail.next.compareAndSet(null, node)) {
+                return
+            }
+        }
+    }
+
+    override fun dequeue(): E? {
+        return null
+        while (true) {
+            val localHead = head.value
+            val next = localHead.next.value ?: return null
+
+            if (head.compareAndSet(localHead, next)) {
+                return next.element
+            }
+        }
+    }
+
+    private class Node<E>(
+        var element: E?
+    ) {
+        val next = atomic<Node<E>?>(null)
+    }
+}

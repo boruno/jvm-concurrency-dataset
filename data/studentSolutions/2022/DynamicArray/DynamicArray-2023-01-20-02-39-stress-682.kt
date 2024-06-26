@@ -1,0 +1,390 @@
+package mpp.dynamicarray
+
+import kotlinx.atomicfu.*
+
+interface DynamicArray<E> {
+    /**
+     * Returns the element located in the cell [index],
+     * or throws [IllegalArgumentException] if [index]
+     * exceeds the [size] of this array.
+     */
+    fun get(index: Int): E
+
+    /**
+     * Puts the specified [element] into the cell [index],
+     * or throws [IllegalArgumentException] if [index]
+     * exceeds the [size] of this array.
+     */
+    fun put(index: Int, element: E)
+
+    /**
+     * Adds the specified [element] to this array
+     * increasing its [size].
+     */
+    fun pushBack(element: E)
+
+    /**
+     * Returns the current size of this array,
+     * it increases with [pushBack] invocations.
+     */
+    val size: Int
+}
+
+/*
+class DynamicArrayImpl<E> : DynamicArray<E> {
+    private val _size = atomic(0)
+    private val core = atomic(Core<E>(INITIAL_CAPACITY))
+
+    override fun get(index: Int): E {
+        checkIndex(index)
+        while (true) {
+            val el = core.value.array[index].value
+            if (el is Move) {
+                helpCopy()
+            } else if (el is Elem) {
+                return el.el
+            } else if (el == null) {
+                throw IllegalStateException("Жопа")
+            } else {
+                throw IllegalStateException("Не может быть ")
+            }
+        }
+    }
+
+    private fun helpCopy() {
+        val curCore = core.value
+        if (curCore.size > _size.value) return
+        // Если мы тут, значит:
+        // 1) Идет фаза копирования из array -> next
+        // 2) Фаза закончилась и в array лежат Move
+        curCore.nextCore.compareAndSet(null, Core(curCore.size * 2))
+        var index = -1
+        while (++index < curCore.array.size) {
+            var elFromNext = curCore.nextCore.value!!.array[index].value
+            var el = curCore.array[index].value
+            while (el is Elem) {
+                //
+                if (curCore.nextCore.value!!.array[index].compareAndSet(elFromNext, el))
+                    if (curCore.array[index].compareAndSet(el, Move()))
+                        break
+                elFromNext = curCore.nextCore.value!!.array[index].value
+                el = curCore.array[index].value
+            }
+        }
+        core.compareAndSet(curCore, curCore.nextCore.value!!)
+    }
+
+    override fun put(index: Int, element: E) {
+        checkIndex(index)
+        while (true) {
+            val el = core.value.array[index].value
+            if (el is Move) {
+                helpCopy()
+            } else if (el is Elem) {
+                if (core.value.array[index].compareAndSet(el, Elem(element)))
+                    return
+            } else if (el == null) {
+                throw IllegalStateException("Жопа")
+            } else {
+                throw IllegalStateException("Не может быть ")
+            }
+        }
+    }
+
+    override fun pushBack(element: E) {
+        while (true) {
+            val curSize = _size.value
+            val curCore = core.value
+            if (curSize < curCore.size) {
+                if (core.value.array[curSize].compareAndSet(null, Elem(element))) {
+                    // interrupt и сразу не lock-free, надо форсить
+                    _size.compareAndSet(curSize, curSize + 1)
+                    return
+                } else {
+                    _size.compareAndSet(curSize, curSize + 1)
+                }
+            } else {
+                helpCopy()
+            }
+        }
+    }
+
+    private fun checkIndex(index: Int) {
+        if (index < 0 || index >= _size.value)
+            throw IllegalArgumentException()
+    }
+
+    override val size: Int
+        get() {
+            return _size.value
+        }
+
+    private class Core<E>(
+        val size: Int
+    ) {
+        val array: AtomicArray<State<E>?> = atomicArrayOfNulls(size)
+        val nextCore: AtomicRef<Core<E>?> = atomic(null)
+    }
+
+    private interface State<E>
+
+    private class Elem<E>(val el: E) : State<E>
+
+    private class Move<E>() : State<E>
+}
+
+private const val INITIAL_CAPACITY = 1 // DO NOT CHANGE ME
+
+ */
+
+
+
+class DynamicArrayImpl<E> : DynamicArray<E> {
+    private val core = atomic(Core<E>(INITIAL_CAPACITY))
+
+    private fun helpCopy() {
+        val curCore = core.value
+        if (curCore.capacity > core.value.size.value) return
+        // Если мы тут, значит:
+        // 1) Идет фаза копирования из array -> next
+        // 2) Фаза закончилась и в array лежат Move
+        curCore.nextCore.compareAndSet(null, Core(curCore.capacity * 2))
+        var index = -1
+        while (++index < curCore.array.size) {
+            var elFromNext = curCore.nextCore.value!!.array[index].value
+            var el = curCore.array[index].value
+            while (el is Node) {
+                //
+                if (curCore.nextCore.value!!.array[index].compareAndSet(elFromNext, el))
+                    if (curCore.array[index].compareAndSet(el, RemovedNode(null)))
+                        break
+                elFromNext = curCore.nextCore.value!!.array[index].value
+                el = curCore.array[index].value
+            }
+        }
+        core.compareAndSet(curCore, curCore.nextCore.value!!)
+    }
+
+    override fun get(index: Int): E {
+        require(index in 0 until size)
+        val curCore = core.value
+        while (true) {
+            val element = curCore.array[index].value ?: break
+            if (element is RemovedNode) {
+                helpCopy()
+                continue
+            }
+            return element.value!!
+        }
+        throw IllegalStateException()
+    }
+
+    override fun put(index: Int, element: E) {
+        require(index in 0 until size)
+        while (true) {
+            val el = core.value.array[index].value
+            if (el is RemovedNode) {
+                helpCopy()
+            } else if (el is Node) {
+                if (core.value.array[index].compareAndSet(el, Node(element)))
+                    return
+            } else if (el == null) {
+                throw IllegalStateException("Жопа")
+            } else {
+                throw IllegalStateException("Не может быть ")
+            }
+        }
+    }
+
+    override fun pushBack(element: E) {
+        /*while (true) {
+            val curCore = core.value
+            val pos = curCore.size.value
+            val newNode = Node(element)
+            if (pos >= curCore.capacity) {
+                if (!usingFlag.compareAndSet(expect = 0, update = 1))
+                    continue
+                val newCore = Core<E>(curCore.capacity * 2, pos)
+                var i = 0
+                while (i != pos) {
+                    val curNode = curCore.getArray()[i].value
+                    val newRemovedNode = RemovedNode(curNode!!.value)
+                    if (!curCore.getArray()[i].compareAndSet(curNode, newRemovedNode))
+                        continue
+                    newCore.getArray()[i++].value = curNode
+                }
+                core.compareAndSet(curCore, newCore)
+                usingFlag.value = 0
+            } else if (curCore.getArray()[pos].compareAndSet(null, newNode) && curCore.size.compareAndSet(pos, pos + 1))
+                return
+        }*/
+        while (true) {
+            val curSize = core.value.size.value
+            val curCore = core.value
+            if (curSize < curCore.capacity) {
+                if (core.value.array[curSize].compareAndSet(null, Node(element))) {
+                    // interrupt и сразу не lock-free, надо форсить
+                    core.value.size.compareAndSet(curSize, curSize + 1)
+                    return
+                } else {
+                    core.value.size.compareAndSet(curSize, curSize + 1)
+                }
+            } else {
+                helpCopy()
+            }
+        }
+    }
+
+    override val size: Int get() = core.value.size.value
+}
+
+private class Core<E>(
+    val capacity: Int,
+) {
+    val array = atomicArrayOfNulls<Node<E>>(capacity)
+    val size = atomic(0)
+    val nextCore: AtomicRef<Core<E>?> = atomic(null)
+
+    /*@Suppress("UNCHECKED_CAST")
+    fun get(index: Int): E {
+        return array[index].value as E
+    }*/
+}
+
+open class Node<E> (val value: E?)
+
+class RemovedNode<E>(v: E?) : Node<E>(v)
+
+private const val INITIAL_CAPACITY = 1 // DO NOT CHANGE ME
+
+
+
+/*
+class DynamicArrayImpl<E> : DynamicArray<E> {
+    private val core = atomic(Core<E>(INITIAL_CAPACITY))
+    private val _size = atomic(0)
+
+    override fun get(index: Int): E {
+        if (index < 0 || index >= _size.value) {
+            throw IllegalArgumentException()
+        }
+        while (true) {
+            val cell = core.value.get(index)
+            when (cell?.hasNotElement) {
+                true -> move()
+                else -> return cell?.element!!
+            }
+        }
+    }
+
+    override fun put(index: Int, element: E) {
+        if (index < 0 || index >= _size.value) {
+            throw IllegalArgumentException()
+        }
+        while (true) {
+            val cell = core.value.get(index)
+            when (cell?.hasNotElement) {
+                true -> move()
+                else -> {
+                    when (core.value.cas(index, cell, ElementCell(element))) {
+                        true -> return
+                        false -> continue
+                    }
+                }
+            }
+        }
+    }
+
+    override fun pushBack(element: E) {
+        while (true) {
+            val curSize = _size.value
+            val curCore = core.value
+            when (curSize < curCore.size) {
+                true -> {
+                    val success = core.value.cas(curSize, null, ElementCell(element))
+                    _size.compareAndSet(curSize, curSize + 1)
+                    if (success) return
+                }
+                false -> move()
+            }
+        }
+    }
+
+    private fun move() {
+        val curCore = core.value
+        if (curCore.size <= _size.value) {
+            curCore.next.compareAndSet(null, Core(curCore.size * 2))
+            for (i in 0 until curCore.array.size){
+                var nextCell = curCore.next.value!!.get(i)
+                var cell = curCore.get(i)!!
+                while (cell.element != null && !(curCore.next.value!!.cas(i, nextCell, cell) && curCore.cas(i, cell, ElementCell()))) {
+                    nextCell = curCore.next.value!!.get(i)
+                    cell = curCore.get(i)!!
+                }
+            }
+            core.compareAndSet(curCore, curCore.next.value!!)
+        }
+    }
+
+    override val size: Int get() = _size.value
+}
+
+private class ElementCell<E> {
+    var element: E? = null
+    var hasNotElement: Boolean? = null
+
+    constructor() {
+        hasNotElement = true
+        element = null
+    }
+
+    constructor(element: E) {
+        this.element = element
+        hasNotElement = false
+    }
+}
+
+
+private class Core<E>(
+    capacity: Int,
+) {
+    val array = atomicArrayOfNulls<ElementCell<E>?>(capacity)
+    val next: AtomicRef<Core<E>?> = atomic(null)
+    private val _size = atomic(capacity)
+
+    val size: Int = _size.value
+
+    @Suppress("UNCHECKED_CAST")
+    fun get(index: Int): ElementCell<E>? {
+        require(index < size)
+        return array[index].value as ElementCell<E>?
+    }
+
+    fun cas(index: Int, expected: ElementCell<E>?, update: ElementCell<E>?): Boolean {
+        require(index < size)
+        return array[index].compareAndSet(expected, update)
+    }
+}
+
+
+
+
+private const val INITIAL_CAPACITY = 1 // DO NOT CHANGE ME
+*/
+
+
+/*
+
+
+
+private class Core<E> constructor(c: Int, s: Int) {
+    private val array = atomicArrayOfNulls<Node<E>>(c)
+    val size = atomic(s)
+    val capacity = c
+
+    fun getArray(): AtomicArray<Node<E>?> {
+        return array
+    }
+}
+
+ */

@@ -1,0 +1,129 @@
+@file:Suppress("FoldInitializerAndIfToElvis", "DuplicatedCode")
+
+package day2
+
+import kotlinx.atomicfu.*
+import java.util.concurrent.atomic.AtomicReference
+
+@Suppress("DuplicatedCode")
+class MSQueueWithLinearTimeNonParallelRemove<E> : QueueWithRemove<E> {
+
+    private val headRef: AtomicReference<Node>
+    private val tailRef: AtomicReference<Node>
+
+    init {
+        val dummy = Node(null)
+        headRef = AtomicReference(dummy)
+        tailRef = AtomicReference(dummy)
+    }
+
+    override fun enqueue(element: E) {
+        val node = Node(element)
+        while (true) {
+            val tail = tailRef.get()
+            val witness = tail.next.compareAndExchange(null, node)
+            if (witness === null) {
+                // this thread published the node
+                tailRef.compareAndSet(tail, node)
+                return
+            } else {
+                tailRef.compareAndSet(tail, witness)
+                // loop again
+            }
+        }
+    }
+
+    override fun dequeue(): E? {
+        var head = headRef.get()
+        while (true) {
+            val next = head.next.get() ?: return null
+            val witness = headRef.compareAndExchange(head, next)
+            if (witness === head && next.remove()) {
+                // this thread moved the pointer forward
+                val result = next.element
+                next.element = null // this node is now a dummy
+                return result
+            } else {
+                head = witness
+            }
+        }
+    }
+
+    override fun remove(element: E): Boolean {
+        // Traverse the linked list, searching the specified
+        // element. Try to remove the corresponding node if found.
+        // DO NOT CHANGE THIS CODE.
+        var node = headRef.get()
+        while (true) {
+            val next = node.next.get()
+            if (next == null) return false
+            node = next
+            if (node.element == element && node.remove()) return true
+        }
+    }
+
+    /**
+     * This is an internal function for tests.
+     * DO NOT CHANGE THIS CODE.
+     */
+    override fun checkNoRemovedElements() {
+        check(tailRef.get().next.get() == null) {
+            "tail.next must be null"
+        }
+        var node = headRef.get()
+        // Traverse the linked list
+        while (true) {
+            if (node !== headRef.get() && node !== tailRef.get()) {
+                check(!node.extractedOrRemoved) {
+                    "Removed node with element ${node.element} found in the middle of this queue"
+                }
+            }
+            node = node.next.get() ?: break
+        }
+    }
+
+    // TODO: Node is an inner class for accessing `head` in `remove()`
+    private inner class Node(
+        var element: E?
+    ) {
+        val next = AtomicReference<Node?>(null)
+
+        /**
+         * TODO: Both [dequeue] and [remove] should mark
+         * TODO: nodes as "extracted or removed".
+         */
+        private val _extractedOrRemoved = atomic(false)
+        val extractedOrRemoved get() = _extractedOrRemoved.value
+
+        fun markExtractedOrRemoved(): Boolean = _extractedOrRemoved.compareAndSet(false, true)
+
+        /**
+         * Removes this node from the queue structure.
+         * Returns `true` if this node was successfully
+         * removed, or `false` if it has already been
+         * removed by [remove] or extracted by [dequeue].
+         */
+        fun remove(): Boolean {
+            if (!markExtractedOrRemoved()) {
+                return false
+            }
+            val previousNode = findPrevNode()
+            @Suppress("IfThenToSafeAccess")
+            if (previousNode != null) {
+                previousNode.next.set(next.get())
+            }
+            return true
+        }
+
+        private fun findPrevNode(): Node? {
+            var current = headRef.get()
+            while (true) {
+                val next = current.next.get() ?: return null
+                if (next === this) {
+                    return current
+                }
+                current = next
+            }
+        }
+    }
+}

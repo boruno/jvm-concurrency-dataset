@@ -1,0 +1,112 @@
+import kotlinx.atomicfu.atomicArrayOfNulls
+import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
+
+class FCPriorityQueue<E : Comparable<E>> {
+    private val q = PriorityQueue<E>()
+    private val lock = AtomicBoolean(false)
+    private val array = atomicArrayOfNulls<Cell<E>>(128)
+
+    /**
+     * Retrieves the element with the highest priority
+     * and returns it as the result of this function;
+     * returns `null` if the queue is empty.
+     */
+    fun poll(): E? {
+        return execute(Action.POLL)
+    }
+
+    /**
+     * Returns the element with the highest priority
+     * or `null` if the queue is empty.
+     */
+    fun peek(): E? {
+        return execute(Action.PEEK)
+    }
+
+    /**
+     * Adds the specified element to the queue.
+     */
+    fun add(element: E) {
+        execute(Action.ADD, element)
+    }
+
+    private fun execute(action: Action, element: E? = null): E? {
+        var myCell = Int.MAX_VALUE
+        while (true) {
+            var result: E? = null
+            if (this.lock.compareAndSet(false, true)) {
+                try {
+                    if (myCell != Int.MAX_VALUE) {
+                        val result_ = array[myCell].getAndSet(null)
+                        if (result_?.isWaiting == true) return result_.result
+                    }
+                    for (i in 0 .. 127) {
+                        val cellValue = array[i].value
+                        if (cellValue != null) {
+                            if (cellValue.isWaiting) {
+                                continue
+                            }
+                            when (cellValue.action) {
+                                Action.POLL -> cellValue.result = q.poll()
+                                Action.PEEK -> cellValue.result = q.peek()
+                                else -> q.add(cellValue.element)
+                            }
+                            cellValue.isWaiting = true
+                        }
+                    }
+                   when(action) {
+                        Action.POLL -> result = q.poll()
+                        Action.PEEK -> result = q.peek()
+                        else -> q.add(element)
+                    }
+                    return result
+                } finally {
+                    this.lock.compareAndSet(true, false)
+                }
+            } else {
+                if (myCell == Int.MAX_VALUE) {
+                    val newValue = Cell<E>(action, null)
+                    for (i in 0 .. 127) {
+                        if (array[i].compareAndSet(null, newValue)) {
+                            myCell = i
+                            break
+                        }
+                    }
+                } else {
+                    val result_ = array[myCell].value
+                    if (result_?.isWaiting == true) {
+                        array[myCell].compareAndSet(result_, null)
+                        return result_.result
+                    }
+                }
+            }
+        }
+    }
+
+    enum class Action {
+        POLL,
+        PEEK,
+        ADD
+    }
+
+    class Cell<E>(val action: Action, var result: E?, var element: E? = null, var isWaiting: Boolean = false) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Cell<*>
+
+            if (action != other.action) return false
+            if (result != other.result) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result1 = action.hashCode()
+            result1 = 31 * result1 + (result?.hashCode() ?: 0)
+            return result1
+        }
+    }
+}

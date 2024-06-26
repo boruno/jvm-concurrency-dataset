@@ -1,0 +1,159 @@
+import java.util.*
+import kotlinx.atomicfu.*
+import java.util.concurrent.ThreadLocalRandom
+
+
+class FCPriorityQueue<E : Comparable<E>> {
+    private val threads = 5 * Runtime.getRuntime().availableProcessors()
+    private val q = PriorityQueue<E>()
+    private val lock = atomic(false)
+    private val operations = atomicArrayOfNulls<Operation<E>>(threads)
+
+    constructor() {
+    }
+
+
+    /**
+     * Retrieves the element with the highest priority
+     * and returns it as the result of this function;
+     * returns `null` if the queue is empty.
+     */
+    fun poll(): E? {
+        var idx = ThreadLocalRandom.current().nextInt(0, threads)
+        val operation = Operation({ q.poll() })
+        while (!operations.get(idx).compareAndSet(null, operation)) {
+            idx = ThreadLocalRandom.current().nextInt(0, threads)
+        }
+        while (true) {
+            if (lock.compareAndSet(false, true)) {
+                for (i in 0..threads) {
+                    val op = operations.get(i)
+                    val opValue = op.value
+                    if (opValue != null && !opValue.done) {
+                        opValue.call()
+                    }
+                }
+                lock.compareAndSet(true, false)
+                break
+            }
+            if (operation.done) {
+                break;
+            }
+        }
+        operations.get(idx).getAndSet(null)
+        return operation.operationResult
+    }
+
+    /**
+     * Returns the element with the highest priority
+     * or `null` if the queue is empty.
+     */
+    fun peek(): E? {
+        return null
+        // var idx = setOperationIdx(2)
+        // while (true) {
+        //     if (lock.compareAndSet(false, true)) {
+        //         val result = getResultIfReady(idx)
+        //         var resultE: E? = result.second
+        //         if (result.first == false) {
+        //             resultE = q.peek()
+        //             help(idx)
+        //         }
+        //         lock.getAndSet(false)
+        //         return resultE
+        //     } else {
+        //         val result = getResultIfReady(idx)
+        //         if (result.first != false) {
+        //             return result.second
+        //         }
+        //     }
+        //     Thread.yield()
+        // }
+    }
+
+    /**
+     * Adds the specified element to the queue.
+     */
+    fun add(element: E) {
+        // var idx = setOperationIdx(3)
+        // results.get(idx).getAndSet(element)
+        // while (true) {
+        //     if (lock.compareAndSet(false, true)) {
+        //         val result = getResultIfReady(idx)
+        //         if (result.first == false) {
+        //             q.add(element)
+        //             help(idx)
+        //         }
+        //         lock.getAndSet(false)
+        //         return
+        //     } else {
+        //         val result = getResultIfReady(idx)
+        //         if (result.first != false) {
+        //             return
+        //         }
+        //     }
+        //     Thread.yield()
+        // }
+    }
+
+    // private fun setOperationIdx(operationIdx: Int): Int {
+    //     // val idx = ThreadLocalRandom.current().nextInt(0, 10 * Runtime.getRuntime().availableProcessors())
+    //     for (i in 0 until 10 * Runtime.getRuntime().availableProcessors()) {
+    //         if (operations.get(i).compareAndSet(0, operationIdx)) {
+    //             return i
+    //         }
+    //     }
+    //     return -1
+    // }
+
+    // private fun getResultIfReady(idx: Int): Pair<Boolean, E?> {
+    //     if (operations.get(idx).value != 4) {
+    //         return Pair(false, null);
+    //     }
+    //     operations.get(idx).getAndSet(0)
+    //     return Pair(true, results.get(idx).getAndSet(null));
+    // }
+
+    // private fun help(idx: Int) {
+    //     operations.get(idx).getAndSet(0)
+    //     results.get(idx).getAndSet(null)
+    //     for (i in 0 until 10 * Runtime.getRuntime().availableProcessors()) {
+    //         val value = operations.get(i).value
+    //         if (value == 0) {
+    //             continue
+    //         } else if (value == 1) {
+    //             results.get(i).getAndSet(q.poll())
+    //         } else if (value == 2) {
+    //             results.get(i).getAndSet(q.peek())
+    //         } else if (value == 3) {
+    //             val result = results.get(i).value
+    //             if (result != null) {
+    //                 q.add(result)
+    //             } else {
+    //                 continue
+    //             }
+    //         } else if (value == 4) {
+    //             continue
+    //         }
+    //         operations.get(i).getAndSet(4)
+    //     }
+    //     lock.getAndSet(false)
+    // }
+}
+
+private class Operation<E> {
+    public var operationResult: E?
+    public var done: Boolean
+    val operation: () -> E?
+
+    constructor(operation: () -> E?) {
+        this.operation = operation
+        this.done = false
+        this.operationResult = null
+    }
+
+    public fun call() {
+        operationResult = operation()
+        done = true
+    }
+}

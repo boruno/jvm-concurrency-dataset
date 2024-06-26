@@ -1,0 +1,71 @@
+package day2
+
+import day1.*
+import java.util.concurrent.atomic.*
+import kotlin.math.*
+
+class FAABasedQueueSimplified<E> : Queue<E> {
+    private val infiniteArray = AtomicReferenceArray<Any?>(1024) // conceptually infinite array
+    private val enqIdx = AtomicLong(0)
+    private val deqIdx = AtomicLong(0)
+
+    override fun enqueue(element: E) {
+        while (true) {
+            // TODO: Increment the counter atomically via Fetch-and-Add.
+            // TODO: Use `getAndIncrement()` function for that.
+            val i = enqIdx.getAndIncrement()
+            // TODO: Atomically install the element into the cell
+            // TODO: if the cell is not poisoned.
+            val prevVal = infiniteArray.getAndUpdate(i.toInt()) {
+                if (it != POISONED) element
+                it
+            }
+            if (prevVal != POISONED) return
+        }
+
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun dequeue(): E? {
+        while (true) {
+            // Is this queue empty?
+            if (enqIdx.get() <= deqIdx.get()) return null
+            // TODO: Increment the counter atomically via Fetch-and-Add.
+            // TODO: Use `getAndIncrement()` function for that.
+            val i = deqIdx.getAndIncrement()
+            // TODO: Try to retrieve an element if the cell contains an
+            // TODO: element, poisoning the cell if it is empty.
+            val prevVal = infiniteArray.getAndUpdate(i.toInt()) {
+                if (it != null) POISONED
+                it
+            }
+            if (prevVal != null && prevVal != POISONED) return prevVal as E?
+        }
+
+    }
+
+    private fun shouldDequeue(): Boolean {
+        while (true) {
+            val curDeqIdx = deqIdx.get()
+            val curEnqIdx = enqIdx.get()
+            if (curDeqIdx != deqIdx.get()) continue
+            return curDeqIdx >= curEnqIdx
+        }
+    }
+
+    override fun validate() {
+        for (i in 0 until min(deqIdx.get().toInt(), enqIdx.get().toInt())) {
+            check(infiniteArray[i] == null || infiniteArray[i] == POISONED) {
+                "`infiniteArray[$i]` must be `null` or `POISONED` with `deqIdx = ${deqIdx.get()}` at the end of the execution"
+            }
+        }
+        for (i in max(deqIdx.get().toInt(), enqIdx.get().toInt()) until infiniteArray.length()) {
+            check(infiniteArray[i] == null || infiniteArray[i] == POISONED) {
+                "`infiniteArray[$i]` must be `null` or `POISONED` with `enqIdx = ${enqIdx.get()}` at the end of the execution"
+            }
+        }
+    }
+}
+
+// TODO: poison cells with this value.
+private val POISONED = Any()

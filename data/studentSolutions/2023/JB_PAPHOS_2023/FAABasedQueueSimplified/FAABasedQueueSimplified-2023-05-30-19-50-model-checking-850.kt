@@ -1,0 +1,32 @@
+package day2
+
+import day1.*
+import kotlinx.atomicfu.*
+
+class FAABasedQueueSimplified<E> : Queue<E> {
+    private val infiniteArray = atomicArrayOfNulls<Any?>(1024) // conceptually infinite array
+    private val enqIdx = atomic(0)
+    private val deqIdx = atomic(0)
+
+    override fun enqueue(element: E) {
+        while (true) {
+            val i = enqIdx.addAndGet(1)
+            if (infiniteArray[i].compareAndSet(null, element)) return
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun dequeue(): E? {
+        while (true) {
+            if (enqIdx.value <= deqIdx.value) return null
+            val i = deqIdx.addAndGet(1)
+            val result = !infiniteArray[i].compareAndSet(null, POISONED)
+            if (result) {
+               //return infiniteArray[i] as E
+            }
+        }
+
+    }
+}
+
+private val POISONED = Any()

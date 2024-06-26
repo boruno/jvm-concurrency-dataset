@@ -1,0 +1,86 @@
+package mpp.dynamicarray
+
+import kotlinx.atomicfu.*
+
+interface DynamicArray<E> {
+    /**
+     * Returns the element located in the cell [index],
+     * or throws [IllegalArgumentException] if [index]
+     * exceeds the [size] of this array.
+     */
+    fun get(index: Int): E
+
+    /**
+     * Puts the specified [element] into the cell [index],
+     * or throws [IllegalArgumentException] if [index]
+     * exceeds the [size] of this array.
+     */
+    fun put(index: Int, element: E)
+
+    /**
+     * Adds the specified [element] to this array
+     * increasing its [size].
+     */
+    fun pushBack(element: E)
+
+    /**
+     * Returns the current size of this array,
+     * it increases with [pushBack] invocations.
+     */
+    val size: Int
+}
+
+class DynamicArrayImpl<E> : DynamicArray<E> {
+    private val core = atomic(Core<E>(INITIAL_CAPACITY, null))
+    override fun get(index: Int): E = core.value.get(index)
+
+    override fun put(index: Int, element: E) {
+        //var head =
+        if (index >= core.value._size.value) throw IllegalArgumentException()
+        core.value.array[index].getAndSet(element)
+        while (true) {
+            if (core.value.get(index) != null && core.value.next.value != null) {
+                core.value.next.value!!.array[index].getAndSet(core.value.get(index))
+                core.value = core.value.next.value!!
+            } else return
+        }
+    }
+
+    override fun pushBack(element: E) {
+        while (true) {
+            val head = core.value
+            val size = head._size.value
+            if (size < head.capacity) {
+                if (head.array[size].compareAndSet(null, element)) {
+                    head._size.compareAndSet(size, size + 1)
+                    return
+                } else head._size.compareAndSet(size, size + 1)
+            } else {
+                val newNode = Core<E>(2 * head.capacity, null)
+                newNode._size.getAndSet(head.capacity)
+                if (head.next.compareAndSet(null, newNode)) move(head, newNode)
+                else if (head.next.value != null) move(head, head.next.value!!)
+            }
+        }
+    }
+
+    override val size: Int get() = core.value._size.value
+
+    private fun move(curHead: Core<E>, nextNode: Core<E>) {
+        for (i in 1 until curHead.capacity) if (curHead.get(i - 1) != null) nextNode.array[i - 1].compareAndSet(null, curHead.get(i - 1))
+        core.compareAndSet(curHead, nextNode)
+    }
+}
+
+private class Core<E>(var capacity: Int, next: Core<E>?) {
+    val array = atomicArrayOfNulls<E>(capacity)
+    val _size = atomic(0)
+    val next = atomic(next)
+    @Suppress("UNCHECKED_CAST")
+    fun get(index: Int): E {
+        require(index < _size.value)
+        return array[index].value as E
+    }
+}
+
+private const val INITIAL_CAPACITY = 1 // DO NOT CHANGE ME

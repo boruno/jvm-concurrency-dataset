@@ -1,0 +1,112 @@
+package day3
+
+import kotlinx.atomicfu.*
+
+// This implementation never stores `null` values.
+class AtomicArrayWithDCSS<E : Any>(size: Int, initialValue: E) {
+    private val array = atomicArrayOfNulls<Any?>(size)
+
+    init {
+        // Fill array with the initial value.
+        for (i in 0 until size) {
+            array[i].value = initialValue
+        }
+    }
+
+    fun get(index: Int): E {
+        val value = array[index].value
+        if (value is AtomicArrayWithDCSS<*>.DCSSDescriptor) {
+            if (value.index1 == index && value.status.value != Status.SUCCESS) return value.expected1 as E
+            if (value.index1 == index && value.status.value == Status.SUCCESS) return value.update1 as E
+        }
+        return value as E
+    }
+
+    fun cas(index: Int, expected: E?, update: E?): Boolean {
+        // TODO: the cell can store a descriptor
+        while (true) {
+            if (array[index].compareAndSet(expected, update)) return true
+            val value = array[index].value
+            if (value is AtomicArrayWithDCSS<*>.DCSSDescriptor) {
+                value.apply()
+            }
+            if (value !== expected) return false
+        }
+    }
+
+    fun dcss(
+        index1: Int, expected1: E, update1: E,
+        index2: Int, expected2: E
+    ): Boolean {
+        require(index1 != index2) { "The indices should be different" }
+        // TODO This implementation is not linearizable!
+        // TODO Store a DCSS descriptor in array[index1].
+        val dcssDescriptor = DCSSDescriptor(index1, expected1, update1, index2, expected2)
+        dcssDescriptor.apply()
+        return dcssDescriptor.status.value === Status.SUCCESS
+    }
+
+    inner class DCSSDescriptor(
+        val index1: Int,
+        val expected1: E,
+        val update1: E,
+        val index2: Int,
+        val expected2: E
+    ) {
+        val status = atomic(Status.UNDECIDED)
+
+        fun apply() {
+            if (status.value === Status.UNDECIDED) {
+                if (!tryToSetValue()) {
+                    status.compareAndSet(Status.UNDECIDED, Status.FAILED)
+                } else {
+                    tryToUpdateValue()
+                }
+            }
+            updateValues()
+        }
+
+        private fun tryToSetValue(): Boolean {
+            while (!array[index1].compareAndSet(expected1, this)) {
+                val currentState: Any? = array[index1].value
+                if (currentState is AtomicArrayWithDCSS<*>.DCSSDescriptor) {
+                    if (currentState === this) return true
+                    currentState.apply()
+                    // The problem was here
+                } else if (currentState !== expected1) {
+                    return false
+                }
+            }
+            return true
+        }
+
+         private fun tryToUpdateValue() {
+             while (true) {
+                 val currentState = array[index2].value
+                 if (currentState === expected2) {
+                     status.compareAndSet(Status.UNDECIDED, Status.SUCCESS)
+                     return
+                 }
+                 if (currentState is AtomicArrayWithDCSS<*>.DCSSDescriptor) {
+                     if (currentState === this) return
+                     currentState.apply()
+                 } else {
+                     status.compareAndSet(Status.UNDECIDED, Status.FAILED)
+                     return
+                 }
+             }
+         }
+
+        private fun updateValues() {
+            if (status.value == Status.SUCCESS) {
+                array[index1].compareAndSet(this, update1)
+            } else {
+                array[index1].compareAndSet(this, expected1)
+            }
+        }
+    }
+
+    enum class Status {
+        UNDECIDED, SUCCESS, FAILED
+    }
+}
