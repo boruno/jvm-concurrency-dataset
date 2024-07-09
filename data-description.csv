@@ -1,26 +1,26 @@
 Class,Type,API,Source,Correctness,Description
 ArrayBlockingQueue,Data Structure,blocking,java.util.concurrent,TBD,A bounded blocking queue backed by an array. This queue orders elements FIFO (first-in-first-out).
-ConcurrentHashMap,Data Structure,TBD,java.util.concurrent,TBD,A hash table supporting full concurrency of retrievals and high expected concurrency for updates.
-ConcurrentLinkedDeque,Data Structure,TBD,java.util.concurrent,Incorrect,An unbounded concurrent deque based on linked nodes.
-ConcurrentLinkedQueue,Data Structure,TBD,java.util.concurrent,TBD,An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO (first-in-first-out).
-ConcurrentSkipListMap,Data Structure,TBD,java.util.concurrent,TBD,A scalable concurrent ConcurrentNavigableMap implementation.
-ConcurrentSkipListSet,Data Structure,TBD,java.util.concurrent,TBD,A scalable concurrent NavigableSet implementation based on a ConcurrentSkipListMap.
-CopyOnWriteArrayList,Data Structure,TBD,java.util.concurrent,TBD,A thread-safe variant of ArrayList in which all mutative operations are implemented by making a fresh copy of the underlying array.
-CopyOnWriteArraySet,Data Structure,TBD,java.util.concurrent,TBD,A Set that uses an internal CopyOnWriteArrayList for all of its operations.
-DelayQueue,Data Structure,TBD,java.util.concurrent,TBD,An unbounded blocking queue of Delayed elements in which an element generally becomes eligible for removal when its delay has expired.
+ConcurrentHashMap,Data Structure,non-blocking,java.util.concurrent,TBD,A hash table supporting full concurrency of retrievals and high expected concurrency for updates.
+ConcurrentLinkedDeque,Data Structure,non-blocking,java.util.concurrent,Incorrect,An unbounded concurrent deque based on linked nodes.
+ConcurrentLinkedQueue,Data Structure,non-blocking,java.util.concurrent,TBD,An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO (first-in-first-out).
+ConcurrentSkipListMap,Data Structure,non-blocking,java.util.concurrent,TBD,A scalable concurrent ConcurrentNavigableMap implementation.
+ConcurrentSkipListSet,Data Structure,non-blocking,java.util.concurrent,TBD,A scalable concurrent NavigableSet implementation based on a ConcurrentSkipListMap.
+CopyOnWriteArrayList,Data Structure,non-blocking,java.util.concurrent,TBD,A thread-safe variant of ArrayList in which all mutative operations are implemented by making a fresh copy of the underlying array.
+CopyOnWriteArraySet,Data Structure,non-blocking,java.util.concurrent,TBD,A Set that uses an internal CopyOnWriteArrayList for all of its operations.
+DelayQueue,Data Structure,blocking,java.util.concurrent,TBD,An unbounded blocking queue of Delayed elements in which an element generally becomes eligible for removal when its delay has expired.
 LinkedBlockingDeque,Data Structure,blocking,java.util.concurrent,TBD,An optionally-bounded blocking deque based on linked nodes.
 LinkedBlockingQueue,Data Structure,blocking,java.util.concurrent,TBD,An optionally-bounded blocking queue based on linked nodes. This queue orders elements FIFO (first-in-first-out).
-LinkedTransferQueue,Data Structure,TBD,java.util.concurrent,TBD,An unbounded TransferQueue based on linked nodes. This queue orders elements FIFO (first-in-first-out) with respect to any given producer.
+LinkedTransferQueue,Data Structure,blocking,java.util.concurrent,TBD,An unbounded TransferQueue based on linked nodes. This queue orders elements FIFO (first-in-first-out) with respect to any given producer.
 PriorityBlockingQueue,Data Structure,blocking,java.util.concurrent,TBD,An unbounded blocking queue that uses the same ordering rules as class PriorityQueue and supplies blocking retrieval operations.
 SynchronousQueue,Data Structure,blocking,java.util.concurrent,TBD,A blocking queue in which each insert operation must wait for a corresponding remove operation by another thread and vice versa.
 AtomicBoolean,Type,N/A,java.util.concurrent,TBD,A boolean value that may be updated atomically.
 AtomicInteger,Type,N/A,java.util.concurrent,TBD,An int value that may be updated atomically.
-AtomicIntegerArray,Data Structure,TBD,java.util.concurrent,TBD,An int array in which elements may be updated atomically.
+AtomicIntegerArray,Data Structure,non-blocking,java.util.concurrent,TBD,An int array in which elements may be updated atomically.
 AtomicLong,Type,N/A,java.util.concurrent,TBD,A long value that may be updated atomically.
-AtomicLongArray,Data Structure,TBD,java.util.concurrent,TBD,A long array in which elements may be updated atomically.
+AtomicLongArray,Data Structure,non-blocking,java.util.concurrent,TBD,A long array in which elements may be updated atomically.
 AtomicMarkableReference,Reference,N/A,java.util.concurrent,TBD,An AtomicMarkableReference maintains an object reference along with a mark bit that can be updated atomically.
 AtomicReference,Reference,N/A,java.util.concurrent,TBD,An object reference that may be updated atomically.
-AtomicReferenceArray,Data Structure,TBD,java.util.concurrent,TBD,An array of object references in which elements may be updated atomically.
+AtomicReferenceArray,Data Structure,non-blocking,java.util.concurrent,TBD,An array of object references in which elements may be updated atomically.
 AtomicStampedReference,Reference,N/A,java.util.concurrent,TBD,An AtomicStampedReference maintains an object reference along with an integer "stamp" that can be updated atomically.
 DoubleAccumulator,Object,N/A,java.util.concurrent,TBD,One or more variables that together maintain a running double value updated using a supplied function.
 DoubleAdder,Object,N/A,java.util.concurrent,TBD,One or more variables that together maintain an initially zero double sum.
@@ -46,50 +46,50 @@ ThreadPerTaskExecutor,Executor,N/A,java.util.concurrent,TBD,An Executor that sta
 ThreadPoolExecutor,Executor,N/A,java.util.concurrent,TBD,An ExecutorService that executes each submitted task using one of possibly several pooled threads normally configured using Executors factory methods.
 FixedSizeStripedLongCounterV6,Counter,N/A,JCTools,TBD,Lock-free implementation of striped counter using CAS primitives.
 FixedSizeStripedLongCounterV8,Counter,N/A,JCTools,TBD,Wait-free implementation of striped counter using Java 8 Unsafe intrinsics (lock addq and lock xchg).
-ConcurrentAutoTable,Data Structure,TBD,JCTools,TBD,An auto-resizing table of longs supporting low-contention CAS operations.
+ConcurrentAutoTable,Data Structure,non-blocking,JCTools,TBD,An auto-resizing table of longs supporting low-contention CAS operations.
 NonBlockingHashMap,Data Structure,non-blocking,JCTools,TBD,A lock-free alternate implementation of java. util. concurrent. ConcurrentHashMap with better scaling properties and generally lower costs to mutate the Map.
 NonBlockingHashMapLong,Data Structure,non-blocking,JCTools,TBD,A lock-free alternate implementation of java. util. concurrent. ConcurrentHashMap with primitive long keys better scaling properties and generally lower costs.
 NonBlockingHashSet,Data Structure,non-blocking,JCTools,TBD,A simple wrapper around NonBlockingHashMap making it implement the Set interface.
 NonBlockingIdentityHashMap,Data Structure,non-blocking,JCTools,TBD,A lock-free alternate implementation of java. util. concurrent. ConcurrentHashMap with better scaling properties and generally lower costs to mutate the Map.
 NonBlockingSetInt,Data Structure,non-blocking,JCTools,TBD,A multi-threaded bit-vector set implemented as an array of primitive longs.
-MpmcAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
-MpscAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,A Multi-Producer-Single-Consumer queue based on a ConcurrentCircularArrayQueue.
-MpscChunkedAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
-MpscGrowableAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-MpscLinkedAtomicQueue,Data Structure,TBD,JCTools,TBD,This is a Java port of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
-MpscUnboundedAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
-SpmcAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
-SpscAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
-SpscChunkedAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
-SpscGrowableAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-SpscLinkedAtomicQueue,Data Structure,TBD,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
-SpscUnboundedAtomicArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
-MpmcUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
-MpscChunkedUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
-MpscGrowableUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-MpscLinkedUnpaddedQueue,Data Structure,TBD,JCTools,TBD,This is a Java port of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
-MpscUnboundedUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
-MpscUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,A Multi-Producer-Single-Consumer queue based on a ConcurrentCircularArrayQueue.
-SpmcUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
-SpscChunkedUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
-SpscGrowableUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-SpscLinkedUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
-SpscUnboundedUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
-SpscUnpaddedArrayQueue,Data Structure,TBD,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
-MpmcArrayQueue,Data Structure,TBD,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
-MpmcUnboundedXaddArrayQueue,Data Structure,TBD,JCTools,TBD,An MPMC array queue which grows unbounded in linked chunks. Differently from MpmcArrayQueue it is designed to provide a better scaling when more producers are concurrently offering.
-MpscArrayQueue,Data Structure,TBD,JCTools,TBD,A Multi-Producer-Single-Consumer queue based on a ConcurrentCircularArrayQueue.
-MpscBlockingConsumerArrayQueue,Data Structure,TBD,JCTools,TBD,This is a partial implementation of the BlockingQueue on the consumer side only on top of the mechanics described in BaseMpscLinkedArrayQueue but with the reservation bit used for blocking rather than resizing in this instance.
-MpscChunkedArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
-MpscCompoundQueue,Data Structure,TBD,JCTools,TBD,Use a set number of parallel MPSC queues to diffuse the contention on tail.
-MpscGrowableArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-MpscLinkedQueue,Data Structure,TBD,JCTools,TBD,This is a Java port of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
-MpscUnboundedArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
-MpscUnboundedXaddArrayQueue,Data Structure,TBD,JCTools,TBD,An MPSC array queue which grows unbounded in linked chunks. Differently from MpscUnboundedArrayQueue it is designed to provide a better scaling when more producers are concurrently offering.
-SpmcArrayQueue,Data Structure,TBD,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
-SpscArrayQueue,Data Structure,TBD,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
-SpscChunkedArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
-SpscGrowableArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-SpscLinkedQueue,Data Structure,TBD,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
-SpscUnboundedArrayQueue,Data Structure,TBD,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
+MpmcAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
+MpscAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Multi-Producer-Single-Consumer queue based on a ConcurrentCircularArrayQueue.
+MpscChunkedAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
+MpscGrowableAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
+MpscLinkedAtomicQueue,Data Structure,non-blocking,JCTools,TBD,This is a Java port of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+MpscUnboundedAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
+SpmcAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
+SpscAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
+SpscChunkedAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
+SpscGrowableAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
+SpscLinkedAtomicQueue,Data Structure,non-blocking,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+SpscUnboundedAtomicArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
+MpmcUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
+MpscChunkedUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
+MpscGrowableUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
+MpscLinkedUnpaddedQueue,Data Structure,non-blocking,JCTools,TBD,This is a Java port of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+MpscUnboundedUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
+MpscUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Multi-Producer-Single-Consumer queue based on a ConcurrentCircularArrayQueue.
+SpmcUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
+SpscChunkedUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
+SpscGrowableUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
+SpscLinkedUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+SpscUnboundedUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
+SpscUnpaddedArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
+MpmcArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
+MpmcUnboundedXaddArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPMC array queue which grows unbounded in linked chunks. Differently from MpmcArrayQueue it is designed to provide a better scaling when more producers are concurrently offering.
+MpscArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Multi-Producer-Single-Consumer queue based on a ConcurrentCircularArrayQueue.
+MpscBlockingConsumerArrayQueue,Data Structure,blocking,JCTools,TBD,This is a partial implementation of the BlockingQueue on the consumer side only on top of the mechanics described in BaseMpscLinkedArrayQueue but with the reservation bit used for blocking rather than resizing in this instance.
+MpscChunkedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
+MpscCompoundQueue,Data Structure,non-blocking,JCTools,TBD,Use a set number of parallel MPSC queues to diffuse the contention on tail.
+MpscGrowableArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
+MpscLinkedQueue,Data Structure,non-blocking,JCTools,TBD,This is a Java port of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+MpscUnboundedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
+MpscUnboundedXaddArrayQueue,Data Structure,non-blocking,JCTools,TBD,An MPSC array queue which grows unbounded in linked chunks. Differently from MpscUnboundedArrayQueue it is designed to provide a better scaling when more producers are concurrently offering.
+SpmcArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
+SpscArrayQueue,Data Structure,non-blocking,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
+SpscChunkedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
+SpscGrowableArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
+SpscLinkedQueue,Data Structure,non-blocking,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+SpscUnboundedArrayQueue,Data Structure,non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
 PaddedAtomicLong,Type,N/A,JCTools,TBD,A padded version of the java. util. concurrent. atomic. AtomicLong.
