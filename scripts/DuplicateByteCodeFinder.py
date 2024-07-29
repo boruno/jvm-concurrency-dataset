@@ -4,10 +4,19 @@ import subprocess
 import hashlib
 import time
 
-dataset_path = '.'  # Path to the dataset
-project_path = '.'  # Path to the project that will be compiled
-compilation_failed_file = 'compilationFailed.txt'
-duplicates_file = 'duplicates.txt'
+'''
+This script is used to find duplicate bytecode in the dataset. It compiles the Kotlin files in the dataset and
+obfuscates the bytecode of the compiled classes. The script then extracts the bytecode of the compiled classes and
+compares them to find duplicates. To run this script properly, you'll need a project, in which files would be copied
+and compiled. The project should have a Gradle build script and all interfaces needed in corresponding folders
+(day1 to day4), as well as a test directory with all testing members definitions. Also, you'll need a ProGuard tool
+installed locally.
+'''
+
+dataset_path = ''  # Specify a path to the dataset
+project_path = ''  # Specify a path to the project that will be compiled
+compilation_failed_file = 'compilationFailed.txt'  # File to store compilation errors for further analysis
+duplicates_file = 'duplicates.txt'  # File to store results as pairs of files with duplicate bytecode
 
 directories = [os.path.join(dataset_path, d) for d in os.listdir(dataset_path) if
                os.path.isdir(os.path.join(dataset_path, d))]
@@ -24,9 +33,40 @@ def copy_file_to_package(src_file, package):
 
 def compile_project():
     env = os.environ.copy()
-    result = subprocess.run(['./gradlew', 'clean', 'build'], cwd=project_path, capture_output=True, text=True, env=env,
-                            shell=True)
-    return result.returncode == 0, result.stderr
+    proguard_path = ''  # Specify the path to the ProGuard executable script
+    # Input and output directories for ProGuard
+    input_dir = os.path.join(project_path, 'build', 'classes', 'kotlin', 'main')
+    output_jar = os.path.join(project_path, 'build', 'obfuscated.jar')
+
+    compile_result = subprocess.run(['./gradlew', 'clean', 'build'], cwd=project_path, capture_output=True, text=True,
+                                    env=env, shell=True)
+    if compile_result.returncode != 0:
+        return False, compile_result.stderr
+
+    # ProGuard command to obfuscate the bytecode of the compiled project classes
+    proguard_command = [
+        proguard_path,
+        f'-injars {input_dir}',
+        f'-outjars {output_jar}',
+        f'-libraryjars {java_home}/jmods/java.base.jmod',
+        '-optimizationpasses 5',
+        '-overloadaggressively',
+        '-repackageclasses \'\'',
+        '-allowaccessmodification',
+        '-dontusemixedcaseclassnames',
+        '-keep public class * { public static void main(java.lang.String[]); }',
+        '-dontskipnonpubliclibraryclasses',
+        '-dontskipnonpubliclibraryclassmembers',
+        '-dontnote',
+        '-dontwarn'
+    ]
+
+    proguard_result = subprocess.run(proguard_command, capture_output=True, text=True, env=env)
+
+    if proguard_result.returncode != 0:
+        return False, proguard_result.stderr
+
+    return True, "Compilation and obfuscation successful"
 
 
 def extract_bytecode(class_file):
