@@ -5,8 +5,6 @@ ConcurrentLinkedDeque,Data Structure,Non-blocking,java.util.concurrent,Incorrect
 ConcurrentLinkedQueue,Data Structure,Non-blocking,java.util.concurrent,Correct,An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO (first-in-first-out).
 ConcurrentSkipListMap,Data Structure,Non-blocking,java.util.concurrent,Correct,A scalable concurrent ConcurrentNavigableMap implementation.
 ConcurrentSkipListSet,Data Structure,Non-blocking,java.util.concurrent,TBD,A scalable concurrent NavigableSet implementation based on a ConcurrentSkipListMap.
-CopyOnWriteArrayList,Data Structure,Non-blocking,java.util.concurrent,TBD,A thread-safe variant of ArrayList in which all mutative operations are implemented by making a fresh copy of the underlying array.
-CopyOnWriteArraySet,Data Structure,Non-blocking,java.util.concurrent,TBD,A Set that uses an internal CopyOnWriteArrayList for all of its operations.
 DelayQueue,Data Structure,Blocking,java.util.concurrent,TBD,An unbounded blocking queue of Delayed elements in which an element generally becomes eligible for removal when its delay has expired.
 LinkedBlockingDeque,Data Structure,Blocking,java.util.concurrent,TBD,An optionally-bounded blocking deque based on linked nodes.
 LinkedBlockingQueue,Data Structure,Blocking,java.util.concurrent,TBD,An optionally-bounded blocking queue based on linked nodes. This queue orders elements FIFO (first-in-first-out).
@@ -15,12 +13,12 @@ PriorityBlockingQueue,Data Structure,Blocking,java.util.concurrent,TBD,An unboun
 SynchronousQueue,Data Structure,Blocking,java.util.concurrent,TBD,A blocking queue in which each insert operation must wait for a corresponding remove operation by another thread and vice versa.
 AtomicBoolean,Type,N/A,java.util.concurrent,TBD,A boolean value that may be updated atomically.
 AtomicInteger,Type,N/A,java.util.concurrent,TBD,An int value that may be updated atomically.
-AtomicIntegerArray,Data Structure,Non-blocking,java.util.concurrent,TBD,An int array in which elements may be updated atomically.
+AtomicIntegerArray,Type,Non-blocking,java.util.concurrent,TBD,An int array in which elements may be updated atomically.
 AtomicLong,Type,N/A,java.util.concurrent,Correct,A long value that may be updated atomically.
-AtomicLongArray,Data Structure,Non-blocking,java.util.concurrent,TBD,A long array in which elements may be updated atomically.
+AtomicLongArray,Type,Non-blocking,java.util.concurrent,TBD,A long array in which elements may be updated atomically.
 AtomicMarkableReference,Reference,N/A,java.util.concurrent,TBD,An AtomicMarkableReference maintains an object reference along with a mark bit that can be updated atomically.
 AtomicReference,Reference,N/A,java.util.concurrent,TBD,An object reference that may be updated atomically.
-AtomicReferenceArray,Data Structure,Non-blocking,java.util.concurrent,TBD,An array of object references in which elements may be updated atomically.
+AtomicReferenceArray,Type,Non-blocking,java.util.concurrent,TBD,An array of object references in which elements may be updated atomically.
 AtomicStampedReference,Reference,N/A,java.util.concurrent,TBD,An AtomicStampedReference maintains an object reference along with an integer "stamp" that can be updated atomically.
 DoubleAccumulator,Object,N/A,java.util.concurrent,TBD,One or more variables that together maintain a running double value updated using a supplied function.
 DoubleAdder,Object,N/A,java.util.concurrent,TBD,One or more variables that together maintain an initially zero double sum.
@@ -104,3 +102,9 @@ AtomicLongMap,Data Structure,Non-blocking,Google Guava,TBD,A map of longs each a
 ForwardingBlockingDeque,Data Structure,Blocking,Google Guava,TBD,A BlockingDeque which forwards all its method calls to another BlockingDeque.
 ForwardingBlockingQueue,Data Structure,Blocking,Google Guava,TBD,A BlockingQueue which forwards all its method calls to another BlockingQueue.
 ForwardingLock,Lock,N/A,Google Guava,TBD,A Lock which forwards all its method calls to another Lock.
+ConcurrentSoftValuesMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that uses soft references to store its keys.
+ConcurrentWeakKeysMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that uses weak references to store its keys.
+ConcurrentExpiringMap, Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that expires entries after a specified time-to-live.
+ConcurrentSizedMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that maintains a size.
+ConcurrentMapWithRemovalListener, Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that notifies a listener when an entry is removed.
+ConcurrntCombinedMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that combines multiple properties.
