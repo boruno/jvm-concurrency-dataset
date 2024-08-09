@@ -28,7 +28,7 @@ ReentrantLock,Lock,N/A,java.util.concurrent,Correct,A reentrant mutual exclusion
 ReentrantReadWriteLock,Lock,N/A,java.util.concurrent,TBD,An implementation of ReadWriteLock supporting similar semantics to ReentrantLock.
 StampedLock,Lock,N/A,java.util.concurrent,TBD,A capability-based lock with three modes for controlling read/write access.
 CompletableFuture,Future,N/A,java.util.concurrent,TBD,A Future that may be explicitly completed (setting its value and status) and may be used as a CompletionStage supporting dependent functions and actions that trigger upon its completion.
-CountDownLatch,Synchronization,N/A,java.util.concurrent,TBD,A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
+CountDownLatch,Synchronization,Blocking,java.util.concurrent,TBD,A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
 CyclicBarrier,Synchronization,N/A,java.util.concurrent,TBD,A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point.
 Exchanger,Synchronization,N/A,java.util.concurrent,TBD,A synchronization point at which threads can pair and swap elements within pairs.
 Phaser,Synchronization,N/A,java.util.concurrent,TBD,A reusable synchronization barrier similar in functionality to CyclicBarrier and CountDownLatch but supporting more flexible usage.
@@ -71,7 +71,7 @@ MpscUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,A Multi-Producer-
 SpmcUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,A Single-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
 SpscChunkedUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks of the initial size.
 SpscGrowableUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows to maxCapacity in linked chunks doubling theirs size every time until the full blown backing array is used.
-SpscLinkedUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
+SpscLinkedUnpaddedQueue,Data Structure,Non-blocking,JCTools,TBD,This is a weakened version of the MPSC algorithm as presented on 1024 Cores by D. Vyukov. The original has been adapted to Java and it's quirks with regards to memory model and layout.
 SpscUnboundedUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,An SPSC array queue which starts at initialCapacity and grows indefinitely in linked chunks of the initial size.
 SpscUnpaddedArrayQueue,Data Structure,Non-blocking,JCTools,TBD,A Single-Producer-Single-Consumer queue backed by a pre-allocated buffer.
 MpmcArrayQueue,Data Structure,Non-blocking,JCTools,TBD,A Multi-Producer-Multi-Consumer queue based on a ConcurrentCircularArrayQueue.
@@ -104,7 +104,7 @@ ForwardingBlockingQueue,Data Structure,Blocking,Google Guava,TBD,A BlockingQueue
 ForwardingLock,Lock,N/A,Google Guava,TBD,A Lock which forwards all its method calls to another Lock.
 ConcurrentSoftValuesMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that uses soft references to store its keys.
 ConcurrentWeakKeysMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that uses weak references to store its keys.
-ConcurrentExpiringMap, Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that expires entries after a specified time-to-live.
+ConcurrentExpiringMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that expires entries after a specified time-to-live.
 ConcurrentSizedMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that maintains a size.
-ConcurrentMapWithRemovalListener, Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that notifies a listener when an entry is removed.
-ConcurrntCombinedMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that combines multiple properties.
+ConcurrentMapWithRemovalListener,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that notifies a listener when an entry is removed.
+ConcurrentCombinedMap,Data Structure,Non-blocking,Google Guava,TBD,A ConcurrentMap that combines multiple properties.
