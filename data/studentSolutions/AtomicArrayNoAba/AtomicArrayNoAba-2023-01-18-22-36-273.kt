@@ -1,0 +1,110 @@
+import AtomicArrayNoAba.Outcome.*
+import kotlinx.atomicfu.*
+import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.atomic.AtomicReferenceArray
+
+class AtomicArrayNoAba<E>(size: Int, initialValue: E) {
+    private enum class Outcome {
+        UNDECIDED,
+        SUCCESS,
+        FAIL,
+    }
+
+    private interface Descriptor {
+        fun complete()
+    }
+
+    private class CAS2Descriptor<A, B, E>(
+        val x: Int, val expectA: A, val updateA: A,
+        val y: Int, val expectB: B, val updateB: B,
+        val ar: AtomicReference<AtomicArrayNoAba<E>>,
+        val outcome: AtomicRef<Outcome> = atomic(UNDECIDED),
+    ) : Descriptor {
+        override fun complete() {
+            val updateOutcome = if (ar.get().a[y].value!!.v.compareAndSet(expectB, this)) { SUCCESS } else { FAIL } // Or DCSS instead of CAS
+            outcome.compareAndSet(UNDECIDED, updateOutcome)
+            if (outcome.value == SUCCESS) {
+                ar.get().a[x].value!!.v.compareAndSet(this, updateA)
+                ar.get().a[y].value!!.v.compareAndSet(this, updateB)
+            } else {
+                ar.get().a[x].value!!.v.compareAndSet(this, expectA)
+                ar.get().a[y].value!!.v.compareAndSet(this, expectB)
+            }
+        }
+    }
+
+    private class Ref<T>(initial: T) {
+        val v = atomic<Any?>(initial)
+
+        var value: T
+            get() {
+                v.loop {
+                    when(it) {
+                        is Descriptor -> it.complete()
+                        else -> return it as T
+                    }
+                }
+            }
+            set(upd) {
+                v.loop {
+                    when (it) {
+                        is Descriptor -> it.complete()
+                        else -> if (v.compareAndSet(it, upd)) return
+                    }
+                }
+            }
+
+        fun cas(expected: T, update: T): Boolean {
+            v.loop {
+                when (it) {
+                    is Descriptor -> it.complete()
+                    else -> return v.compareAndSet(expected, update)
+                }
+            }
+        }
+    }
+
+    private val a = atomicArrayOfNulls<Ref<Any?>>(size)
+
+    init {
+        for (i in 0 until size) a[i].value = Ref(initialValue)
+    }
+
+    fun get(index: Int) =
+        a[index].value!!.value as E
+
+    fun cas(index: Int, expected: E, update: E) =
+        a[index].value!!.cas(expected, update)
+
+    fun cas2(index1: Int, expected1: E, update1: E,
+             index2: Int, expected2: E, update2: E): Boolean {
+        val index11: Int
+        val index22: Int
+        val expected11: E
+        val expected22: E
+        val update11: E
+        val update22: E
+        if (index1 < index2) {
+            index11 = index1
+            index22 = index2
+            expected11 = expected1
+            expected22 = expected2
+            update11 = update1
+            update22 = update2
+        } else {
+            index11 = index2
+            index22 = index1
+            expected11 = expected2
+            expected22 = expected1
+            update11 = update2
+            update22 = update1
+        }
+//        val x = a[index11].value!!
+        val descriptor = CAS2Descriptor(index11, expected11, update11, index22, expected22, update22, AtomicReference(this))
+        if (!a[index11].value!!.v.compareAndSet(expected11, descriptor)) {
+            return false
+        }
+        descriptor.complete()
+        return descriptor.outcome.value == SUCCESS
+    }
+}

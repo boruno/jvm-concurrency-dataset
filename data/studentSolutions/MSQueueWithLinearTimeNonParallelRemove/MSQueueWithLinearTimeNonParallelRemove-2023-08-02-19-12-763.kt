@@ -1,0 +1,137 @@
+@file:Suppress("FoldInitializerAndIfToElvis", "DuplicatedCode")
+
+package day2
+
+import kotlinx.atomicfu.AtomicRef
+import kotlinx.atomicfu.atomic
+
+class MSQueueWithLinearTimeNonParallelRemove<E> : QueueWithRemove<E> {
+    private val head: AtomicRef<Node>
+    private val tail: AtomicRef<Node>
+
+    init {
+        val dummy = Node(null)
+        head = atomic(dummy)
+        tail = atomic(dummy)
+    }
+
+    override fun enqueue(element: E) {
+        // When adding a new node, check whether
+        // the previous tail is logically removed.
+        // If so, remove it physically from the linked list.
+        while (true) {
+            val newTail = Node(element)
+            val curTail = tail.value
+            if (curTail.next.compareAndSet(null, newTail)) {
+                tail.compareAndSet(curTail, newTail)
+//                if (curTail.extractedOrRemoved) curTail.removePhysically()
+                return
+            } else {
+                tail.compareAndSet(curTail, curTail.next.value!!)
+            }
+        }
+    }
+
+    override fun dequeue(): E? {
+        // After moving the `head` pointer forward,
+        // mark the node that contains the extracting
+        // element as "extracted or removed", restarting
+        // the operation if this node has already been removed.
+        while (true) {
+            val curHead = head.value
+            val curHeadNext = curHead.next.value ?: return null
+            if (head.compareAndSet(curHead, curHeadNext)) {
+                if (curHeadNext.markExtractedOrRemoved())
+                    return curHeadNext.element
+            }
+        }
+    }
+
+    override fun remove(element: E): Boolean {
+        // Traverse the linked list, searching the specified
+        // element. Try to remove the corresponding node if found.
+        // DO NOT CHANGE THIS CODE.
+        var node = head.value
+        while (true) {
+            val next = node.next.value
+            if (next == null) return false
+            node = next
+            if (node.element == element && node.remove()) return true
+        }
+    }
+
+    /**
+     * This is an internal function for tests.
+     * DO NOT CHANGE THIS CODE.
+     */
+    override fun validate() {
+        check(tail.value.next.value == null) {
+            "tail.next must be null"
+        }
+        var node = head.value
+        // Traverse the linked list
+        while (true) {
+            if (node !== head.value && node !== tail.value) {
+                check(!node.extractedOrRemoved) {
+                    "Removed node with element ${node.element} found in the middle of this queue"
+                }
+            }
+            node = node.next.value ?: break
+        }
+    }
+
+    private inner class Node(
+        var element: E?
+    ) {
+        val next = atomic<Node?>(null)
+
+        /**
+         * Both [dequeue] and [remove] should mark
+         * nodes as "extracted or removed".
+         */
+        private val _extractedOrRemoved = atomic(false)
+        val extractedOrRemoved get() = _extractedOrRemoved.value
+
+        fun markExtractedOrRemoved(): Boolean = _extractedOrRemoved.compareAndSet(false, true)
+
+        /**
+         * Removes this node from the queue structure.
+         * Returns `true` if this node was successfully
+         * removed, or `false` if it has already been
+         * removed by [remove] or extracted by [dequeue].
+         */
+        fun remove(): Boolean {
+            // The removal procedure is split into two phases.
+            // First, you need to mark the node as "extracted or removed".
+            // On success, this node is logically removed, and the
+            // operation should return `true` at the end.
+            // In the second phase, the node should be removed
+            // physically, updating the `next` field of the previous
+            // node to `this.next.value`.
+            // Do not remove `head` and `tail` physically to make
+            // the algorithm simpler. In case a tail node is logically removed,
+            // it will be removed physically by `enqueue(..)`.
+            val removed = markExtractedOrRemoved()
+            if (next.value != null)
+                removePhysically()
+            return removed
+        }
+
+        fun removePhysically() {
+            val prev = findPrev()
+            if (prev != null)
+                prev.next.value = next.value
+        }
+
+        private fun findPrev() : Node? {
+            var curNode = head.value
+            while (true) {
+                val next = curNode.next.value
+                if (next == null) return null
+                if (next === this)
+                    return curNode
+                curNode = next
+            }
+        }
+    }
+}

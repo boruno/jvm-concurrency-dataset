@@ -1,0 +1,63 @@
+package mpp.stackWithElimination
+
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.atomicArrayOfNulls
+import kotlin.random.Random
+
+class TreiberStackWithElimination<E> {
+    private val top = atomic<Node<E>?>(null)
+    private val eliminationArray = atomicArrayOfNulls<Any?>(ELIMINATION_ARRAY_SIZE)
+    private val cnt = atomic(0)
+    private val done = "done"
+
+    /**
+     * Adds the specified element [x] to the stack.
+     */
+    fun push(x: E) {
+        var ind = -1
+        while(true) {
+            ind = Random.nextInt(0, ELIMINATION_ARRAY_SIZE)
+            if(eliminationArray[ind].compareAndSet(null, x)) {
+                cnt.incrementAndGet()
+                break
+            }
+        }
+        for(i in 0..1000) { }
+        val res = eliminationArray[ind].getAndSet(null)
+        cnt.decrementAndGet()
+        if(res === done)
+            return
+        while(true) {
+            val curTop = top.value
+            val newTop = Node(x, curTop)
+            if(top.compareAndSet(curTop, newTop))
+                return
+        }
+    }
+
+    /**
+     * Retrieves the first element from the stack
+     * and returns it; returns `null` if the stack
+     * is empty.
+     */
+    fun pop(): E? {
+        while(true) {
+            val ind = Random.nextInt(0, ELIMINATION_ARRAY_SIZE)
+            val x = eliminationArray[ind].value
+            if(x != null && x !== done) {
+                if(eliminationArray[ind].compareAndSet(x, done)) {
+                    return x as E
+                }
+            }
+
+            val curTop = top.value ?: if(cnt.value == 0) return null else continue
+            val newTop = curTop.next
+            if(top.compareAndSet(curTop, newTop))
+                return curTop.x
+        }
+    }
+}
+
+private class Node<E>(val x: E, val next: Node<E>?)
+
+private const val ELIMINATION_ARRAY_SIZE = 2 // DO NOT CHANGE IT
