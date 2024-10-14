@@ -4,7 +4,7 @@ import torch
 import json
 from transformers import RobertaTokenizer, RobertaModel
 
-dataset_path = "/Users/Dmitrii.Kotov/repos/concurrency-tools/lincheck-incorrect-data-structures-dataset/data/studentSolutions"
+dataset_path = "lincheck-incorrect-data-structures-dataset/data/studentSolutions"
 output_path = "."
 tokenizer = RobertaTokenizer.from_pretrained("microsoft/codebert-base")
 model = RobertaModel.from_pretrained("microsoft/codebert-base")
