@@ -7,6 +7,7 @@ List of potential data sources can be found in [Lincheck Benchmark outline](http
 
 Currently, the dataset contains:
  - Student submissions. Initial source – [Amazon S3 bucket](https://us-east-2.console.aws.amazon.com/s3/buckets/mpp2022incorrectimplementations?region=us-east-2&bucketType=general&tab=objects). More than a half of those submissions were duplicated and/or contained unfinished functions and were removed from the dataset.
+ - Clustered student submissions. Using HDBSCAN and Edit Distance Clustering algorithms, two reduced datasets were produced. Corresponding scripts for re-creation could be found in [HDBSCAN](data/clusteredStudentSolutions/HDBSCAN) and [EditDistanceClustering](data/clusteredStudentSolutions/EditDistanceClustering) folders.
 
 ### Getting Started
 
