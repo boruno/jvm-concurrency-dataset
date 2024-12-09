@@ -1,0 +1,4 @@
+package singleTasks
+
+class FineGrainedBank {
+}
