@@ -2,14 +2,15 @@ import os
 import shutil
 import subprocess
 import xml.etree.ElementTree as ET
+from scripts.lincheck_report_parser import LincheckReport
 import re
 import time
 
 # Paths
-DATASET_PATH = "data/clusteredStudentSolutions/HDBSCAN/results"
-TARGET_TEMPLATE_PATH = "template-project"
+DATASET_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/clusteredStudentSolutions/HDBSCAN/results"))
+TARGET_TEMPLATE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../template-project"))
 TEST_RESULTS_PATH = "./test-results"
-JAVA_HOME = "" # insert your path here
+JAVA_HOME = ""
 
 # Ensure test results directory exists
 os.makedirs(TEST_RESULTS_PATH, exist_ok=True)
