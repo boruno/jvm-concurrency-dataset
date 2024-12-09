@@ -9,7 +9,7 @@ import time
 DATASET_PATH = "data/clusteredStudentSolutions/HDBSCAN/results"
 TARGET_TEMPLATE_PATH = "template-project"
 TEST_RESULTS_PATH = "./test-results"
-JAVA_HOME = "/Users/Dmitrii.Kotov/Library/Java/JavaVirtualMachines/corretto-21.0.4/Contents/Home"
+JAVA_HOME = "" # insert your path here
 
 # Ensure test results directory exists
 os.makedirs(TEST_RESULTS_PATH, exist_ok=True)

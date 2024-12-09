@@ -2,9 +2,9 @@ import os
 import shutil
 
 # Paths
-initial_dataset_path = "lincheck-incorrect-data-structures-dataset/data/studentSolutions"
-reduction_file_path = "lincheck-incorrect-data-structures-dataset/data/clusteredStudentSolutions/EditDistanceClustering/EditDistanceClustering_final_reduction.txt"
-results_path = "lincheck-incorrect-data-structures-dataset/data/clusteredStudentSolutions/EditDistanceClustering/results"
+initial_dataset_path = "data/studentSolutions"
+reduction_file_path = "data/clusteredStudentSolutions/EditDistanceClustering/EditDistanceClustering_final_reduction.txt"
+results_path = "data/clusteredStudentSolutions/EditDistanceClustering/results"
 
 def copy_reduced_files():
     with open(reduction_file_path, 'r') as f:
