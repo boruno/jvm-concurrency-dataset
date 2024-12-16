@@ -4,7 +4,7 @@ import numpy as np
 from math import log2, floor
 
 dataset_path = "./clusters"  # Path to the folder containing JSON and TXT files
-output_file = "EditDistanceClustering_final_reduction.txt"
+output_file = "editDistanceClustering_final_reduction.txt"
 
 def load_json_data(taskname):
     # Load JSON distance matrix and cluster data for a given task.
