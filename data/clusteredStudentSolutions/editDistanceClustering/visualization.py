@@ -49,17 +49,6 @@ def visualize_clusters(task_name):
 
 
 if __name__ == "__main__":
-    task_names = [
-        "MSQueueWithConstantTimeRemove", "FCPriorityQueue", "FAABasedQueue", "BoundedQueue", "FlatCombiningQueue",
-        "FineGrainedBank", "MSQueueWithOnlyLogicalRemove", "ConcurrentHashTableWithoutResize",
-        "AtomicArrayNoAba",
-        "AtomicArrayWithCAS2",
-        "AtomicArrayWithCAS2Simplified", "TreiberStack", "MSQueue", "FAABasedQueueSimplified",
-        "IntIntHashMap", "AtomicCounterArray", "AtomicArrayWithCAS2SingleWriter", "MichaelScottQueueWithConstantTimeRemove",
-        "MSQueueWithLinearTimeNonParallelRemove", "SkipList", "AtomicArray", "AtomicArrayWithCAS2AndImplementedDCSS",
-        "SynchronousQueue", "DynamicArraySimplified", "TreiberStackWithElimination", "DynamicArray", "SingleWriterHashTable",
-        "CoarseGrainedBank", "AtomicArrayWithDCSS", "ConcurrentHashTable", "AtomicArrayWithSingleWriterCas2AndCasSimplified",
-        "MSQueueWithLinearTimeRemove", "LinkedListSet", "MichaelScottQueueWithLinearTimeRemove", "ShardedCounter", "FAAQueue",
-    ]
+    task_names = []
     for task_name in task_names:
         visualize_clusters(task_name)

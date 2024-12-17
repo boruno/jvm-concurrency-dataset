@@ -88,15 +88,7 @@ def process_task_folder(task_folder, skip_folders):
 if __name__ == "__main__":
     task_folders = [os.path.join(dataset_path, folder) for folder in os.listdir(dataset_path)]
     task_folders = [folder for folder in task_folders if os.path.isdir(folder)]  # Filter out non-directories
-    skip_folders = [
-        "MSQueueWithConstantTimeRemove", "FCPriorityQueue", "FAABasedQueue", "BoundedQueue", "FlatCombiningQueue",
-        "FineGrainedBank", "MSQueueWithOnlyLogicalRemove", "ConcurrentHashTableWithoutResize", "AtomicArrayNoAba",
-        "AtomicArrayWithCAS2", "AtomicArrayWithCAS2Simplified", "TreiberStack", "MSQueue", "FAABasedQueueSimplified",
-        "IntIntHashMap", "AtomicCounterArray", "AtomicArrayWithCAS2SingleWriter", "MichaelScottQueueWithConstantTimeRemove",
-        "MSQueueWithLinearTimeNonParallelRemove", "SkipList", "AtomicArray", "AtomicArrayWithCAS2AndImplementedDCSS",
-        "SynchronousQueue", "DynamicArraySimplified", "TreiberStackWithElimination", "DynamicArray", "SingleWriterHashTable",
-        "CoarseGrainedBank", "AtomicArrayWithDCSS", "ConcurrentHashTable"
-    ]
+    skip_folders = []
     if not os.path.exists(os.path.join(output_path, "clusters")):
         os.makedirs(os.path.join(output_path, "clusters"))
 
