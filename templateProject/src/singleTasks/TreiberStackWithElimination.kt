@@ -1,4 +1,0 @@
-package singleTasks
-
-class TreiberStackWithElimination {
-}
