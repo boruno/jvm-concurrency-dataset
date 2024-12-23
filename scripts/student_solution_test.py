@@ -2,71 +2,58 @@ import os
 import shutil
 import subprocess
 import xml.etree.ElementTree as ET
-from scripts.lincheck_report_parser import LincheckReport
+from lincheck_report_parser import LincheckReport
 import re
 import time
 
 # Paths
 DATASET_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../data/clusteredStudentSolutions/HDBSCAN/results"))
-TARGET_TEMPLATE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../template-project"))
+TARGET_TEMPLATE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../template-projects"))
 TEST_RESULTS_PATH = "./test-results"
 JAVA_HOME = ""
 
 # Ensure test results directory exists
 os.makedirs(TEST_RESULTS_PATH, exist_ok=True)
 
-# Mapping of source file name to test file name
-TEST_MAPPING = {
-    "AtomicArray": "AtomicArrayTest.kt",
-    "AtomicArrayNoAba": "AtomicArrayNoAbaTest.kt",
-    "AtomicArrayWithCAS2": "AtomicArrayTests.kt",
-    "AtomicArrayWithCAS2AndImplementedDCSS": "AtomicArrayTests.kt",
-    "AtomicArrayWithCAS2Simplified": "AtomicArrayTests.kt",
-    "AtomicArrayWithCAS2SingleWriter": "AtomicArrayTests.kt",
-    "AtomicArrayWithDCSS": "AtomicArrayTests.kt",
-    "AtomicArrayWithSingleWriterCas2AndCasSimplified": None,
-    "AtomicCounterArray": "AtomicCounterArrayTest.kt",
-    "BoundedQueue": None,
-    "CoarseGrainedBank": "BankTests.kt",
-    "ConcurrentHashTable": "HashMapTests.kt",
-    "ConcurrentHashTableWithoutResize": "HashMapTests.kt",
-    "DynamicArray": "DynamicArrayTest.kt",
-    "DynamicArraySimplified": "DynamicArraySimplifiedTest.kt",
-    "FAABasedQueue": "QueueTests.kt",
-    "FAABasedQueueSimplified": "QueueTests.kt",
-    "FAAQueue": "FAAQueueTest.kt",
-    "FCPriorityQueue": "FCPriorityQueueTest.kt",
-    "FineGrainedBank": "BankTests.kt",
-    "FlatCombiningQueue": "QueueTests.kt",
-    "IntIntHashMap": "IntIntHashMapTest.kt",
-    "LinkedListSet": "LinkedListSetTest.kt",
-    "MichaelScottQueueWithConstantTimeRemove": None,
-    "MichaelScottQueueWithLinearTimeRemove": None,
-    "MSQueue": "MSQueueTest.kt",
-    "MSQueueWithConstantTimeRemove": "QueueTests.kt",
-    "MSQueueWithLinearTimeNonParallelRemove": "QueueTests.kt",
-    "MSQueueWithLinearTimeRemove": "QueueTests.kt",
-    "MSQueueWithOnlyLogicalRemove": "QueueTests.kt",
-    "ShardedCounter": "ShardedCounterTest.kt",
-    "SingleWriterHashTable": "HashMapTests.kt",
-    "SkipList": "SkipListTest.kt",
-    "SynchronousQueue": "SynchronousQueueTest.kt",
-    "TreiberStack": None,  # Depends on package
-    "TreiberStackWithElimination": "StackTests.kt"
+# Mapping of single-task file names to project names
+SINGLE_TASK_PROJECTS = {
+    "AtomicArray": "casn",
+    "AtomicArrayNoAba": "casn-without-aba",
+    "DynamicArray": "dynamic-array",
+    "FAAQueue": "faa-queue",
+    "FCPriorityQueue": "fc-priority-queue",
+    "FineGrainedBank": "fine-grained-bank",
+    "IntIntHashMap": "hash-map",
+    "LinkedListSet": "linked-list-set",
+    "MSQueue": "msqueue",
+    "ShardedCounter": "sharded-counter",
+    "SkipList": "skip-list",
+    "SynchronousQueue": "syncronous-queue",
+    "TreiberStack": "treiber-stack",
+    "TreiberStackWithElimination": "stack-elimination"
 }
 
-# Function to determine the corresponding target folder for each file
-def determine_target_folder(task_name, package_name):
-    if package_name:
-        return os.path.join(TARGET_TEMPLATE_PATH, "src", package_name)
-    else:
-        return os.path.join(TARGET_TEMPLATE_PATH, "src", "singleTasks")
-
-# Function to determine the test file name
-def determine_test_file(task_name, package_name):
-    if task_name == "TreiberStack":
-        return "TreiberStackTest.kt" if package_name == "singleTasks" else "StackTests.kt"
-    return TEST_MAPPING.get(task_name, None)
+# Mapping of template-based file names to project names
+TEMPLATE_PROJECTS = {
+    "AtomicArrayWithCAS2": "template4",
+    "AtomicArrayWithCAS2AndImplementedDCSS": "template4",
+    "AtomicArrayWithCAS2Simplified": "template4",
+    "AtomicArrayWithCAS2SingleWriter": "template4",
+    "AtomicArrayWithDCSS": "template3",
+    "AtomicCounterArray": "template1",
+    "CoarseGrainedBank": "template4",
+    "ConcurrentHashTable": "template4",
+    "ConcurrentHashTableWithoutResize": "template4",
+    "DynamicArraySimplified": "template1",
+    "FAABasedQueue": "template4",
+    "FAABasedQueueSimplified": "template4",
+    "FlatCombiningQueue": "template4",
+    "MSQueueWithConstantTimeRemove": "template4",
+    "MSQueueWithLinearTimeNonParallelRemove": "template44",
+    "MSQueueWithLinearTimeRemove": "template4",
+    "MSQueueWithOnlyLogicalRemove": "template4",
+    "SingleWriterHashTable": "template4"
+}
 
 # Function to scan the file for the package statement
 def get_package_name(file_path):
@@ -75,66 +62,48 @@ def get_package_name(file_path):
         match = re.search(r'package (day\d)', content)
         if match:
             return match.group(1)
-    return "singleTasks"
+    return None
 
-# Function to copy solution file to the target directory
-def copy_solution_file(solution_file, target_folder):
-    os.makedirs(target_folder, exist_ok=True)
-    dest_file = os.path.join(target_folder, os.path.basename(solution_file))
-    shutil.copy(solution_file, dest_file)
-    return dest_file
+# Function to process files in single-task projects
+def process_single_task_file(file_name, solution_file):
+    project_name = SINGLE_TASK_PROJECTS[file_name]
+    project_path = os.path.join(PROJECTS_PATH, project_name)
+    src_path = os.path.join(project_path, "src")
+    dummy_file = os.path.join(src_path, f"{file_name}.kt")
 
-# Function to run gradle build and test, and save results to an XML file
-def run_gradle_test(task_name, solution_file):
-    # Determine the package name and target folder
-    package_name = get_package_name(solution_file)
-    target_folder = determine_target_folder(task_name, package_name)
-
-    # Copy solution file to the target directory
-    dummy_file = os.path.join(target_folder, f"{task_name}.kt")
-    copied_file = copy_solution_file(solution_file, target_folder)
-
-    # Backup the dummy file and replace it temporarily
-    if os.path.exists(dummy_file):
-        shutil.move(dummy_file, f"{dummy_file}.bak")
-    shutil.move(copied_file, dummy_file)
-
-    # Run Gradle build and test
-    env = os.environ.copy()
-    env["JAVA_HOME"] = JAVA_HOME
+    # Replace dummy file and run tests
+    backup_file = f"{dummy_file}.bak"
+    shutil.move(dummy_file, backup_file)
+    shutil.copy(solution_file, dummy_file)
 
     try:
-        result = subprocess.run(["./gradlew", "clean", "test"], cwd=TARGET_TEMPLATE_PATH, capture_output=True, text=True, timeout=300, env=env)
-        test_output = result.stdout + "\n" + result.stderr
-    except subprocess.TimeoutExpired:
-        test_output = "Test execution timed out."
-    except Exception as e:
-        test_output = f"An error occurred: {str(e)}"
+        run_gradle(project_path)
+    finally:
+        shutil.move(backup_file, dummy_file)
 
-    # Restore the original dummy file and remove the copied file
-    if os.path.exists(dummy_file):
-        os.remove(dummy_file)
-    if os.path.exists(f"{dummy_file}.bak"):
-        shutil.move(f"{dummy_file}.bak", dummy_file)
+# Function to process files in template projects
+def process_template_file(file_name, solution_file, package_name):
+    project_name = TEMPLATE_PROJECTS[file_name]
+    project_path = os.path.join(PROJECTS_PATH, project_name)
+    src_path = os.path.join(project_path, "src", package_name)
+    dummy_file = os.path.join(src_path, f"{file_name}.kt")
 
-    # Parse the test output using LincheckReport and save results to an XML file
-    result_file_path = os.path.join(TEST_RESULTS_PATH, f"{task_name}_results.xml")
-    root = ET.Element("testResults")
-    ET.SubElement(root, "taskName").text = task_name
-    ET.SubElement(root, "solutionFile").text = os.path.basename(solution_file)
-    if TEST_MAPPING[task_name] is None:
-        ET.SubElement(root, "output").text = "No corresponding test found for this file."
-    else:
-        failure_info = {
-            'class_name': task_name,
-            'testcase_name': os.path.basename(solution_file),
-            'exception_type': 'Exception',  # Assuming a generic exception type for now
-            'terminal_message': test_output
-        }
-        lincheck_report = LincheckReport(failure_info)
-        ET.SubElement(root, "output").text = lincheck_report.terminal_message  # Using the parsed terminal message
-    tree = ET.ElementTree(root)
-    tree.write(result_file_path)
+    # Replace dummy file and run tests
+    backup_file = f"{dummy_file}.bak"
+    shutil.move(dummy_file, backup_file)
+    shutil.copy(solution_file, dummy_file)
+
+    try:
+        run_gradle(project_path)
+    finally:
+        shutil.move(backup_file, dummy_file)
+
+# Function to run gradle build and test
+def run_gradle(project_path):
+    env = os.environ.copy()
+    env["JAVA_HOME"] = JAVA_HOME
+    result = subprocess.run(["./gradlew", "clean", "test"], cwd=project_path, capture_output=True, text=True, env=env)
+    return result.stdout + "\n" + result.stderr
 
 # Start time
 overall_start_time = time.time()
@@ -146,8 +115,13 @@ for task_folder in os.listdir(DATASET_PATH):
         for solution_file in os.listdir(task_path):
             if solution_file.endswith(".kt"):
                 solution_path = os.path.join(task_path, solution_file)
-                run_gradle_test(task_folder, solution_path)
-        print(f"Finished processing folder: {task_folder}")
+                package_name = get_package_name(solution_path)
+                file_name = os.path.splitext(solution_file)[0].split('-')[0]
+
+                if file_name in SINGLE_TASK_PROJECTS and not package_name:
+                    process_single_task_file(file_name, solution_path)
+                elif file_name in TEMPLATE_PROJECTS and package_name:
+                    process_template_file(file_name, solution_path, package_name)
 
 # End time
 overall_end_time = time.time()
@@ -155,3 +129,4 @@ overall_end_time = time.time()
 # Calculate and print the total time taken
 total_time = overall_end_time - overall_start_time
 print(f"Total time taken to process all folders: {total_time:.2f} seconds")
+
