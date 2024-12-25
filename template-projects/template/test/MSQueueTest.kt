@@ -1,0 +1,1 @@
+class MSQueueTest : AbstractQueueTest(MSQueue())

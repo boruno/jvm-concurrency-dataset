@@ -1,0 +1,1 @@
+class FlatCombiningQueueTest : AbstractQueueTest(FlatCombiningQueue(), checkObstructionFreedom = false)
