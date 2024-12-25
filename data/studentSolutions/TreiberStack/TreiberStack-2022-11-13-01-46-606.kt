@@ -1,6 +1,6 @@
 @file:Suppress("UNREACHABLE_CODE")
 
-package mpp.stack
+//package mpp.stack
 
 import kotlinx.atomicfu.atomic
 import java.util.EmptyStackException

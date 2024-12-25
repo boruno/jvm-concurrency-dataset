@@ -1,4 +1,4 @@
-package mpp.stack
+//package mpp.stack
 
 import jdk.nashorn.internal.objects.Global.print
 import kotlinx.atomicfu.atomic

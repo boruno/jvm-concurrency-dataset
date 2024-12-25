@@ -1,4 +1,4 @@
-package day4
+//package day4
 
 import java.util.concurrent.atomic.*
 import kotlin.contracts.contract

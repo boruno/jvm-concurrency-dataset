@@ -1,4 +1,4 @@
-package mpp.skiplist
+//package mpp.skiplist
 
 import kotlinx.atomicfu.atomicArrayOfNulls
 import java.util.concurrent.ThreadLocalRandom

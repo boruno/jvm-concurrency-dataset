@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode", "FoldInitializerAndIfToElvis", "UNCHECKED_CAST")
 
-package day2
+//package day2
 
 import day2.MSQueueWithConstantTimeRemove.Node.Status.FAILED
 import day2.MSQueueWithConstantTimeRemove.Node.Status.SUCCESS

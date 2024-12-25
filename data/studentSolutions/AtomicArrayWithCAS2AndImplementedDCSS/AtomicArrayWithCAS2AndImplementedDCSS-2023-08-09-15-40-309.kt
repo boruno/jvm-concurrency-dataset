@@ -5,7 +5,7 @@
     "WHEN_ENUM_CAN_BE_NULL_IN_JAVA"
 )
 
-package day3
+//package day3
 
 import day3.AtomicArrayWithCAS2AndImplementedDCSS.Status.*
 import java.util.concurrent.atomic.AtomicReference

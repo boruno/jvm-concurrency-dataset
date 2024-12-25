@@ -1,6 +1,6 @@
 @file:Suppress("FoldInitializerAndIfToElvis")
 
-package day4
+//package day4
 
 import day1.Queue
 import kotlinx.atomicfu.atomic

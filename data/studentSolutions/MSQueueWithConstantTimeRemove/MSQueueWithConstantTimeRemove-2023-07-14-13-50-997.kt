@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode", "FoldInitializerAndIfToElvis")
 
-package day3
+//package day3
 
 // FIXME не работает
 

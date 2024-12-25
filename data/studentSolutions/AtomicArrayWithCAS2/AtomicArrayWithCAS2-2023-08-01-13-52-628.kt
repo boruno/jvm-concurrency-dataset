@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode", "UNCHECKED_CAST")
 
-package day4
+//package day4
 
 import kotlinx.atomicfu.*
 

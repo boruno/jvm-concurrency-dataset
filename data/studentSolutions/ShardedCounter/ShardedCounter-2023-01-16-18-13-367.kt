@@ -1,4 +1,4 @@
-package mpp.counter
+//package mpp.counter
 
 import kotlinx.atomicfu.AtomicIntArray
 import kotlinx.atomicfu.locks.ReentrantLock

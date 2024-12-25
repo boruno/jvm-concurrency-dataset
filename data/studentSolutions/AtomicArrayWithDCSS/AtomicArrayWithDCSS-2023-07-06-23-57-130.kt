@@ -1,4 +1,4 @@
-package day3
+//package day3
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls

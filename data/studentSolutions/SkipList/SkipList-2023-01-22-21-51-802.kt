@@ -1,4 +1,4 @@
-package mpp.skiplist
+//package mpp.skiplist
 
 import java.util.concurrent.atomic.AtomicMarkableReference
 import kotlin.random.Random

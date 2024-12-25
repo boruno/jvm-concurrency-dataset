@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package day4
+//package day4
 
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicReferenceArray

@@ -1,4 +1,4 @@
-package mpp.dynamicarray
+//package mpp.dynamicarray
 
 import kotlinx.atomicfu.*
 import kotlinx.atomicfu.AtomicRef

@@ -68,7 +68,7 @@
 //
 //private const val ELIMINATION_ARRAY_SIZE = 2 // DO NOT CHANGE IT
 
-package mpp.stackWithElimination
+//package mpp.stackWithElimination
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls

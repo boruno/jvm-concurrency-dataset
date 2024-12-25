@@ -1,4 +1,4 @@
-package mpp.stackWithElimination
+//package mpp.stackWithElimination
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls

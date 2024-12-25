@@ -1,4 +1,4 @@
-package mpp.linkedlistset
+//package mpp.linkedlistset
 // 1 prev 1st 4 1st 5 6 2nd
 import kotlinx.atomicfu.*
 

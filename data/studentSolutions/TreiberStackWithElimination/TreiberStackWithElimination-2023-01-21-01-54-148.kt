@@ -1,4 +1,4 @@
-package mpp.stackWithElimination
+//package mpp.stackWithElimination
 
 import kotlinx.atomicfu.AtomicArray
 import kotlinx.atomicfu.AtomicRef

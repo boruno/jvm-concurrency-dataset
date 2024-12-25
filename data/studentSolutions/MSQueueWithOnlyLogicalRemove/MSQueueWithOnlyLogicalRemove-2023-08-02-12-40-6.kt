@@ -1,4 +1,4 @@
-package day2
+//package day2
 
 import kotlinx.atomicfu.atomic
 import java.util.concurrent.atomic.AtomicBoolean

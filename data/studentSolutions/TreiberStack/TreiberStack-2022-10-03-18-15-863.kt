@@ -1,4 +1,4 @@
-package stack
+//package stack
 
 import kotlinx.atomicfu.atomic
 

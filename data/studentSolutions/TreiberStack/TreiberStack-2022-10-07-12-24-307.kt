@@ -1,4 +1,4 @@
-package mpp.stack
+//package mpp.stack
 
 class TreiberStack<E> {
     private var top = Node<E?>(null,null)

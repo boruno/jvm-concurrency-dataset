@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode", "LiftReturnOrAssignment")
 
-package day3
+//package day3
 
 import kotlinx.atomicfu.*
 

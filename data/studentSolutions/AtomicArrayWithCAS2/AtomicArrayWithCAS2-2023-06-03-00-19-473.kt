@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode")
 
-package day4
+//package day4
 
 import day4.AtomicArrayWithCAS2.Status.*
 import kotlinx.atomicfu.*

@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode")
 
-package day1
+//package day1
 
 import day1.Bank.Companion.MAX_AMOUNT
 import kotlin.concurrent.withLock

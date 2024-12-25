@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode", "UNCHECKED_CAST", "WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
 
-package day3
+//package day3
 
 import day3.AtomicArrayWithCAS2Simplified.Status.*
 import java.util.concurrent.atomic.AtomicReference

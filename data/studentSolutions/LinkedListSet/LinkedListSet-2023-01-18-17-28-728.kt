@@ -1,4 +1,4 @@
-package mpp.linkedlistset
+//package mpp.linkedlistset
 
 import kotlinx.atomicfu.*
 import kotlin.Double.Companion.NEGATIVE_INFINITY

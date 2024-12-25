@@ -1,4 +1,4 @@
-package day1
+//package day1
 
 import java.lang.RuntimeException
 import java.util.concurrent.atomic.AtomicReference

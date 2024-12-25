@@ -1,4 +1,4 @@
-package day4
+//package day4
 
 import kotlinx.atomicfu.*
 import day4.AtomicArrayWithDCSS.Status.*

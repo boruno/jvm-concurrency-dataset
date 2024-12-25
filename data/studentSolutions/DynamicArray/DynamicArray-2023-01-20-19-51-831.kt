@@ -1,6 +1,6 @@
 @file:Suppress("BooleanLiteralArgument")
 
-package mpp.dynamicarray
+//package mpp.dynamicarray
 
 import kotlinx.atomicfu.*
 

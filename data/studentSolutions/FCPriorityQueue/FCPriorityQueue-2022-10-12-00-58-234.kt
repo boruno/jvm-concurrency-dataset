@@ -1,4 +1,4 @@
-package fcqueue
+//package fcqueue
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls

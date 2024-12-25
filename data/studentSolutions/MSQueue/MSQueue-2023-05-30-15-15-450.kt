@@ -1,4 +1,4 @@
-package day1
+//package day1
 
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic

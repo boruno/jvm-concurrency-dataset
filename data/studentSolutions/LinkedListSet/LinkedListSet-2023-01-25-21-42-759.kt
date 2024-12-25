@@ -1,5 +1,5 @@
 @file:Suppress("UNCHECKED_CAST")
-package mpp.linkedlistset
+//package mpp.linkedlistset
 
 import kotlinx.atomicfu.*
 

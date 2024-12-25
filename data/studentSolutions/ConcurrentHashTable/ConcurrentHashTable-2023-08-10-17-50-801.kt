@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package day4
+//package day4
 
 import day1.MSQueue
 import java.util.concurrent.atomic.*

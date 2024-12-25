@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode", "UNCHECKED_CAST")
 
-package day3
+//package day3
 
 import day3.AtomicArrayWithCAS2.Status.*
 import java.util.concurrent.atomic.*

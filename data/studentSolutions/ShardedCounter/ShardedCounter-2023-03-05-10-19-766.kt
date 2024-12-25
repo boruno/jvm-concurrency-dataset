@@ -1,4 +1,4 @@
-package mpp.counter
+//package mpp.counter
 
 import kotlin.random.Random
 import kotlinx.atomicfu.AtomicIntArray

@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package day4
+//package day4
 
 import java.lang.RuntimeException
 import java.util.concurrent.atomic.*

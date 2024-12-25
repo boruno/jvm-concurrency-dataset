@@ -1,4 +1,4 @@
-package mpp.msqueue
+//package mpp.msqueue
 
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic

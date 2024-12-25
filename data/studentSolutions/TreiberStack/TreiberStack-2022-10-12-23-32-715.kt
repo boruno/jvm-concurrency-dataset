@@ -1,4 +1,4 @@
-package mpp.stack
+//package mpp.stack
 
 import kotlinx.atomicfu.atomic
 import java.util.concurrent.atomic.AtomicReferenceArray

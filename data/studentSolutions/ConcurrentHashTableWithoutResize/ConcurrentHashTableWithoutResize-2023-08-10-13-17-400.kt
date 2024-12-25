@@ -1,6 +1,6 @@
 @file:Suppress("DuplicatedCode")
 
-package day4
+//package day4
 
 import java.util.concurrent.atomic.*
 import kotlin.math.absoluteValue

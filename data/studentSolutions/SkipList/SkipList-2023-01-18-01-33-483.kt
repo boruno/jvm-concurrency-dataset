@@ -1,4 +1,4 @@
-package mpp.skiplist
+//package mpp.skiplist
 
 import kotlinx.atomicfu.AtomicArray
 import kotlinx.atomicfu.atomicArrayOfNulls

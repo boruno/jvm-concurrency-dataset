@@ -1,4 +1,4 @@
-package day1
+//package day1
 
 import kotlinx.atomicfu.*
 import kotlinx.atomicfu.locks.withLock

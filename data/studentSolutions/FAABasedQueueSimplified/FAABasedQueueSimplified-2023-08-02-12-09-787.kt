@@ -65,7 +65,7 @@
 //
 
 
-package day2
+//package day2
 
 import day1.*
 import kotlinx.atomicfu.atomicArrayOfNulls

@@ -1,4 +1,4 @@
-package mpp.stackWithElimination
+//package mpp.stackWithElimination
 
 import com.sun.org.apache.xpath.internal.operations.Bool
 import kotlinx.atomicfu.atomic

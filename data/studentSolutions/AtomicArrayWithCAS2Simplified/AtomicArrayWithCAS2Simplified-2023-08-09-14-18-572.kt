@@ -1,4 +1,4 @@
-package day3
+//package day3
 
 
 import day3.AtomicArrayWithCAS2Simplified.Status.FAILED

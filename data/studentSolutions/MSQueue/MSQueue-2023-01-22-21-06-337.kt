@@ -1,4 +1,4 @@
-package mpp.msqueue
+//package mpp.msqueue
 
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic
@@ -60,7 +60,7 @@ private class Node<E>(val x: E?) {
 
 /*
 
-package msqueue
+//package msqueue
 
 import kotlinx.atomicfu.AtomicRef
 

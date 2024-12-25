@@ -1,4 +1,4 @@
-package day2
+//package day2
 
 import day1.Queue
 import kotlinx.atomicfu.atomic

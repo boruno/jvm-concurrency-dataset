@@ -1,4 +1,4 @@
-package mpp.linkedlistset
+//package mpp.linkedlistset
 
 import kotlinx.atomicfu.*
 import java.util.concurrent.atomic.AtomicReference

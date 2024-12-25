@@ -68,7 +68,7 @@
 //    }
 //}
 
-package day1
+//package day1
 
 import kotlinx.atomicfu.atomicArrayOfNulls
 import java.util.concurrent.ThreadLocalRandom

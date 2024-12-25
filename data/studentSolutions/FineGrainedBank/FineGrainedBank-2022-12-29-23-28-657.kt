@@ -1,4 +1,4 @@
-package mpp.fgbank
+//package mpp.fgbank
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.locks.*

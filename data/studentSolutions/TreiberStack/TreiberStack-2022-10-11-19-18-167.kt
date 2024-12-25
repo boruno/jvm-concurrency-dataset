@@ -1,4 +1,4 @@
-package mpp.stack
+//package mpp.stack
 
 import kotlinx.atomicfu.AtomicArray
 import kotlinx.atomicfu.atomic

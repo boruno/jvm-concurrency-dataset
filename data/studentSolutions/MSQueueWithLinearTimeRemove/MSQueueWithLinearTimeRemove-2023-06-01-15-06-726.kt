@@ -1,6 +1,6 @@
 @file:Suppress("FoldInitializerAndIfToElvis", "DuplicatedCode")
 
-package day3
+//package day3
 
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic

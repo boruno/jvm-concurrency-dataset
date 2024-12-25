@@ -41,7 +41,7 @@
 //private class Node<E>(val x: E, var next: Node<E>?)
 //
 //private const val ELIMINATION_ARRAY_SIZE = 2 // DO NOT CHANGE IT
-package mpp.stack
+//package mpp.stack
 
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls
