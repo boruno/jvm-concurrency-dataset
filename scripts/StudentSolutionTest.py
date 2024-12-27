@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 import xml.etree.ElementTree as ET
-from lincheck_report_parser import LincheckReport
+from LincheckReportParser import LincheckReport
 import re
 import time
 
