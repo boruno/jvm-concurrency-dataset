@@ -36,37 +36,43 @@ SINGLE_TASK_PROJECTS = {
 
 # Mapping of template-based file names to test files
 TEMPLATE_PROJECT = {
-    "AtomicArrayWithCAS2": "AtomicArrayTests.kt",
-    "AtomicArrayWithCAS2AndImplementedDCSS": "AtomicArrayTests.kt",
-    "AtomicArrayWithCAS2Simplified": "AtomicArrayTests.kt",
-    "AtomicArrayWithCAS2SingleWriter": "AtomicArrayTests.kt",
-    "AtomicArrayWithDCSS": "AtomicArrayTests.kt",
-    "AtomicCounterArray": "AtomicCounterArrayTest.kt",
-    "CoarseGrainedBank": "BankTests.kt",
-    "ConcurrentHashTable": "HashMapTests.kt",
-    "ConcurrentHashTableWithoutResize": "HashMapTests.kt",
-    "DynamicArray": "DynamicArrayTest.kt",
-    "DynamicArraySimplified": "DynamicArraySimplifiedTest.kt",
-    "FAABasedQueue": "QueueTests.kt",
-    "FAABasedQueueSimplified": "QueueTests.kt",
-    "FineGrainedBank": "BankTests.kt",
-    "FlatCombiningQueue": "FlatCombiningQueueTest.kt",
-    "IntIntHashMap": "IntIntHashMapTest.kt",
-    "MSQueue": "MSQueueTest.kt",
-    "MSQueueWithConstantTimeRemove": "QueueTests.kt",
-    "MSQueueWithLinearTimeNonParallelRemove": "QueueTests.kt",
-    "MSQueueWithLinearTimeRemove": "QueueTests.kt",
-    "MSQueueWithOnlyLogicalRemove": "QueueTests.kt",
-    "SingleWriterHashTable": "HashMapTests.kt",
-    "TreiberStack": "StackTests.kt",
-    "TreiberStackWithElimination": "StackTests.kt",
+    "AtomicArrayWithCAS2": "AtomicArrayWithCAS2Test",
+    "AtomicArrayWithCAS2AndImplementedDCSS": "AtomicArrayWithCAS2AndImplementedDCSSTest",
+    "AtomicArrayWithCAS2Simplified": "AtomicArrayWithCAS2SimplifiedTest",
+    "AtomicArrayWithCAS2SingleWriter": "AtomicArrayWithCAS2SingleWriterTest",
+    "AtomicArrayWithDCSS": "AtomicArrayWithDCSSTest",
+    "AtomicCounterArray": "AtomicCounterArrayTest",
+    "CoarseGrainedBank": "CoarseGrainedBankTest",
+    "ConcurrentHashTable": "ConcurrentHashTableTest",
+    "ConcurrentHashTableWithoutResize": "ConcurrentHashTableWithoutResizeTest",
+    "DynamicArray": "DynamicArrayTest",
+    "DynamicArraySimplified": "DynamicArraySimplifiedTest",
+    "FAABasedQueue": "FAABasedQueueTest",
+    "FAABasedQueueSimplified": "FAABasedQueueSimplifiedTest",
+    "FineGrainedBank": "FineGrainedBankTest",
+    "FlatCombiningQueue": "FlatCombiningQueueTest",
+    "IntIntHashMap": "IntIntHashMapTest",
+    "MSQueue": "MSQueueTest",
+    "MSQueueWithConstantTimeRemove": "MSQueueWithConstantTimeRemoveTest",
+    "MSQueueWithLinearTimeNonParallelRemove": "MSQueueWithLinearTimeNonParallelRemoveTest",
+    "MSQueueWithLinearTimeRemove": "MSQueueWithLinearTimeRemoveTest",
+    "MSQueueWithOnlyLogicalRemove": "MSQueueWithOnlyLogicalRemoveTest",
+    "SingleWriterHashTable": "SingleWriterHashTableTest",
+    "TreiberStack": "TreiberStackTest",
+    "TreiberStackWithElimination": "TreiberStackWithEliminationTest",
 }
 
-def run_gradle_task_with_timeout(project_path, task, timeout=60):
-    """Run a Gradle task with a timeout, terminating all child processes if necessary."""
+def run_gradle_task_with_timeout(project_path, task, test_name=None, timeout=60):
+    """Run a Gradle task with a timeout, adding the specified configurations and test options."""
     try:
+        # Build command with additional Gradle flags
+        gradle_command = ["./gradlew", task, "--info", "--warning-mode", "none"]
+        if test_name:
+            gradle_command.extend(["--tests", test_name])
+
+        # Execute Gradle task
         result = subprocess.run(
-            ["./gradlew", task],
+            gradle_command,
             cwd=project_path,
             capture_output=True,
             text=True,
@@ -75,11 +81,12 @@ def run_gradle_task_with_timeout(project_path, task, timeout=60):
         )
         return result.stdout, None
     except subprocess.TimeoutExpired:
-        # Kill all processes in the group if timeout occurs
+        # Handle timeout
         subprocess.run(["pkill", "-f", f"./gradlew {task}"], cwd=project_path)
         return None, f"Timeout: Task '{task}' took longer than {timeout} seconds and was terminated."
     except subprocess.CalledProcessError as e:
         return None, e.stdout + e.stderr
+
 
 def extract_lincheck_output(output):
     """Extract Lincheck-specific test results from the output."""
