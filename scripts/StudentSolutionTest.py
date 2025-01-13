@@ -14,7 +14,29 @@ JAVA_HOME = ""
 os.makedirs(TEST_RESULTS_PATH, exist_ok=True)
 
 # Folders to skip
-SKIP_FOLDERS = []
+SKIP_FOLDERS = [
+                # "MSQueueWithConstantTimeRemove",
+                # "FCPriorityQueue",
+                # "FAABasedQueue",
+                # "FlatCombiningQueue",
+                # "FineGrainedBank",
+                # "MSQueueWithOnlyLogicalRemove",
+                # "ConcurrentHashTableWithoutResize",
+                # "AtomicArrayNoAba",
+                # "AtomicArrayWithCAS2",
+                # "AtomicArrayWithCAS2Simplified",
+                # "TreiberStack",
+                # "MSQueue",
+                # "FAABasedQueueSimplified",
+                # "IntIntHashMap",
+                # "AtomicCounterArray",
+                # "AtomicArrayWithCAS2SingleWriter",
+                # "MSQueueWithLinearTimeNonParallelRemove",
+                # "SkipList",
+                # "AtomicArray",
+                # "AtomicArrayWithCAS2AndImplementedDCSS",
+                # "SynchronousQueue",
+]
 
 # Mapping of single-task file names to project names
 SINGLE_TASK_PROJECTS = {
@@ -62,15 +84,17 @@ TEMPLATE_PROJECT = {
     "TreiberStackWithElimination": "TreiberStackWithEliminationTest",
 }
 
-def run_gradle_task_with_timeout(project_path, task, test_name=None, timeout=60):
-    """Run a Gradle task with a timeout, adding the specified configurations and test options."""
+def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=60):
+    """Run a specific test method within a test class using Gradle, with a timeout."""
     try:
-        # Build command with additional Gradle flags
-        gradle_command = ["./gradlew", task, "--info", "--warning-mode", "none"]
-        if test_name:
-            gradle_command.extend(["--tests", test_name])
+        # Build the Gradle command for the specific test method
+        gradle_command = [
+            "./gradlew", "test",
+            f"--tests={test_class}.{test_method}",
+            "--info", "--warning-mode", "none"
+        ]
 
-        # Execute Gradle task
+        # Run the command with a timeout
         result = subprocess.run(
             gradle_command,
             cwd=project_path,
@@ -79,77 +103,111 @@ def run_gradle_task_with_timeout(project_path, task, test_name=None, timeout=60)
             check=True,
             timeout=timeout
         )
-        return result.stdout, None
+        return result.stdout, None  # Return test output on success
+
     except subprocess.TimeoutExpired:
-        # Handle timeout
-        subprocess.run(["pkill", "-f", f"./gradlew {task}"], cwd=project_path)
-        return None, f"Timeout: Task '{task}' took longer than {timeout} seconds and was terminated."
+        # Kill only the specific Gradle task if timeout occurs
+        subprocess.run(
+            ["pkill", "-f", f"./gradlew test --tests={test_class}.{test_method}"],
+            cwd=project_path
+        )
+        return None, f"Timeout: The test '{test_class}.{test_method}' exceeded {timeout} seconds and was terminated."
+
     except subprocess.CalledProcessError as e:
+        # Capture error if the Gradle task fails
         return None, e.stdout + e.stderr
+
 
 
 def extract_lincheck_output(output):
     """Extract Lincheck-specific test results from the output."""
-    lincheck_start = output.find("= Invalid execution results =")
-    if lincheck_start != -1:
-        return output[lincheck_start:].strip()
+    lincheck_error_messages = [
+        "= The execution failed with an unexpected exception =",
+        "= The execution has hung =",
+        "= The execution has hung, see the thread dump =",
+        "= Invalid execution results =",
+        "= Validation function",
+        "The algorithm should be non-blocking"
+    ]
+
+    for message in lincheck_error_messages:
+        lincheck_start = output.find(message)
+        if lincheck_start != -1:
+            return output[lincheck_start:].strip()
     return "No Lincheck results found."
 
+
 def process_single_task(file_path, project_name, log_file):
-    """Process a single task by replacing the dummy file and running tests."""
+    """Process a single task by running both modelCheckingTest and stressTest, logging results in a .txt file."""
     project_path = os.path.join(PROJECTS_PATH, project_name)
     src_path = os.path.join(project_path, "src")
 
     dummy_file = next(iter(os.listdir(src_path)))  # Get the single dummy file
     shutil.copy(file_path, os.path.join(src_path, dummy_file))
 
-    # Run tests
-    output, error = run_gradle_task_with_timeout(project_path, "clean")
-    if error:
-        output = error
-    else:
-        test_output, test_error = run_gradle_task_with_timeout(project_path, "test")
-        output += test_output if test_output else test_error
+    # Run tests: modelCheckingTest and stressTest
+    test_class = os.path.splitext(os.path.basename(file_path))[
+        0]  # Assume test class matches the file name without extension
+
+    with open(log_file, "a") as log:
+        log.write(f"Processing file: {os.path.basename(file_path)}\n")
+
+        for test_method in ["modelCheckingTest", "stressTest"]:
+            output, error = run_gradle_test_with_timeout(project_path, test_class, test_method)
+            lincheck_output = None
+            if error:
+                lincheck_output = extract_lincheck_output(error)
+            elif output:
+                lincheck_output = extract_lincheck_output(output)
+
+            if lincheck_output and lincheck_output != "No Lincheck results found.":
+                log.write(f"  Test method: {test_class}.{test_method}\n")
+                log.write(f"{lincheck_output}\n")
+
+        log.write("\n")  # Add spacing between files
 
     # Restore the dummy file
     shutil.copy(os.path.join(src_path, dummy_file), file_path)
 
-    # Extract and log Lincheck output
-    lincheck_output = extract_lincheck_output(output)
-    with open(log_file, "a") as log:
-        log.write(f"{os.path.basename(file_path)}\n{lincheck_output}\n\n")
 
 def process_template_task(file_path, test_file, log_file):
-    """Process a template task by mapping the file to its corresponding test."""
+    """Process a template task, running both modelCheckingTest and stressTest, logging results in a .txt file."""
     project_path = os.path.join(PROJECTS_PATH, "template")
     src_path = os.path.join(project_path, "src")
 
     shutil.copy(file_path, src_path)
 
-    # Update test file mapping
-    test_task = f"test --tests {test_file}"
+    test_class = test_file  # For template tasks, the test class corresponds to test_file
 
-    # Run tests
-    output, error = run_gradle_task_with_timeout(project_path, "clean")
-    if error:
-        output = error
-    else:
-        test_output, test_error = run_gradle_task_with_timeout(project_path, test_task)
-        output += test_output if test_output else test_error
+    with open(log_file, "a") as log:
+        log.write(f"Processing file: {os.path.basename(file_path)}\n")
+
+        for test_method in ["modelCheckingTest", "stressTest"]:
+            output, error = run_gradle_test_with_timeout(project_path, test_class, test_method)
+
+            log.write(f"  Test method: {test_class}.{test_method}\n")
+            lincheck_output = None
+            if error:
+                lincheck_output = extract_lincheck_output(error)
+            elif output:
+                lincheck_output = extract_lincheck_output(output)
+
+            if lincheck_output and lincheck_output != "No Lincheck results found.":
+                log.write(f"  Test method: {test_class}.{test_method}\n")
+                log.write(f"    Lincheck Output:\n{lincheck_output}\n")
+
+        log.write("\n")  # Add spacing between files
 
     # Restore the dummy file
     os.remove(os.path.join(src_path, os.path.basename(file_path)))
 
-    # Extract and log Lincheck output
-    lincheck_output = extract_lincheck_output(output)
-    with open(log_file, "a") as log:
-        log.write(f"{os.path.basename(file_path)}\n{lincheck_output}\n\n")
 
 def main():
     """Main function to process the dataset."""
     for root, dirs, _ in os.walk(DATASET_PATH):
         if root == DATASET_PATH:
-            dirs[:] = [d for d in dirs if d not in SKIP_FOLDERS and d != os.path.basename(PROJECTS_PATH)]  # Exclude "template-projects" and skipped folders
+            dirs[:] = [d for d in dirs if d not in SKIP_FOLDERS and d != os.path.basename(
+                PROJECTS_PATH)]  # Exclude "template-projects" and skipped folders
 
         for folder in dirs:
             folder_path = os.path.join(root, folder)
