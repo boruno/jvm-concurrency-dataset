@@ -42,6 +42,18 @@ class MSQueueWithOnlyLogicalRemove<E> : QueueWithRemove<E> {
      * This is an internal function for tests.
      * DO NOT CHANGE THIS CODE.
      */
+    override fun checkNoRemovedElements() {
+        // In this version, we allow storing
+        // removed elements in the linked list.
+        check(tail.get().next.get() == null) {
+            "`tail.next` must be `null`"
+        }
+    }
+
+    /**
+     * This is an internal function for tests.
+     * DO NOT CHANGE THIS CODE.
+     */
     override fun validate() {
         // In this version, we allow storing
         // removed elements in the linked list.

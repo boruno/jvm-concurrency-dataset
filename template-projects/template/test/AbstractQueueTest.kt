@@ -22,7 +22,7 @@ abstract class AbstractQueueTest(
     fun dequeue() = queue.dequeue()
 
     @Validate
-    fun validate() = queue.validate()
+    open fun validate() = queue.validate()
 }
 
 class IntQueueSequential {

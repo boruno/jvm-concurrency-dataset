@@ -44,6 +44,41 @@ class MSQueueWithConstantTimeRemove<E> : QueueWithRemove<E> {
      * This is an internal function for tests.
      * DO NOT CHANGE THIS CODE.
      */
+    override fun checkNoRemovedElements() {
+        check(head.get().prev.get() == null) {
+            "`head.prev` must be null"
+        }
+        check(tail.get().next.get() == null) {
+            "tail.next must be null"
+        }
+        // Traverse the linked list
+        var node = head.get()
+        while (true) {
+            if (node !== head.get() && node !== tail.get()) {
+                check(!node.extractedOrRemoved) {
+                    "Removed node with element ${node.element} found in the middle of the queue"
+                }
+            }
+            val nodeNext = node.next.get()
+            // Is this the end of the linked list?
+            if (nodeNext == null) break
+            // Is next.prev points to the current node?
+            val nodeNextPrev = nodeNext.prev.get()
+            check(nodeNextPrev != null) {
+                "The `prev` pointer of node with element ${nodeNext.element} is `null`, while the node is in the middle of the queue"
+            }
+            check(nodeNextPrev == node) {
+                "node.next.prev != node; `node` contains ${node.element}, `node.next` contains ${nodeNext.element}"
+            }
+            // Process the next node.
+            node = nodeNext
+        }
+    }
+
+    /**
+     * This is an internal function for tests.
+     * DO NOT CHANGE THIS CODE.
+     */
     override fun validate() {
         check(head.get().prev.get() == null) {
             "`head.prev` must be null"

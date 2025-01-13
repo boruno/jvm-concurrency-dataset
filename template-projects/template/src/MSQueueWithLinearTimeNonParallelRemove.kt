@@ -44,6 +44,26 @@ class MSQueueWithLinearTimeNonParallelRemove<E> : QueueWithRemove<E> {
      * This is an internal function for tests.
      * DO NOT CHANGE THIS CODE.
      */
+    override fun checkNoRemovedElements() {
+        check(tail.get().next.get() == null) {
+            "tail.next must be null"
+        }
+        var node = head.get()
+        // Traverse the linked list
+        while (true) {
+            if (node !== head.get() && node !== tail.get()) {
+                check(!node.extractedOrRemoved) {
+                    "Removed node with element ${node.element} found in the middle of this queue"
+                }
+            }
+            node = node.next.get() ?: break
+        }
+    }
+
+    /**
+     * This is an internal function for tests.
+     * DO NOT CHANGE THIS CODE.
+     */
     override fun validate() {
         check(tail.get().next.get() == null) {
             "tail.next must be null"

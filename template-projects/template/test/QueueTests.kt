@@ -19,6 +19,14 @@ abstract class AbstractQueueWithRemoveTest(
 ) {
     @Operation
     fun remove(@Param(name = "element") element: Int) = queue.remove(element)
+
+    override fun validate() {
+        super.validate()
+        queue.checkNoRemovedElements()
+    }
+
+    @StateRepresentation
+    fun state() = queue.toString()
 }
 
 @Param(name = "element", gen = IntGen::class, conf = "0:3")
