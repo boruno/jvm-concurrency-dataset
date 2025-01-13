@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import kotlinx.atomicfu.*
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException

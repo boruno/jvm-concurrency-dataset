@@ -1,6 +1,6 @@
 //package day2
 
-import day1.Queue
+import Queue
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls
 

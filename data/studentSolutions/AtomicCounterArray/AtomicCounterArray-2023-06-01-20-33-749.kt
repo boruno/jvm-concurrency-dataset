@@ -2,7 +2,7 @@
 
 //package day3
 
-import day3.AtomicCounterArray.Status.*
+import AtomicCounterArray.Status.*
 import kotlinx.atomicfu.*
 
 // This implementation never stores `null` values.

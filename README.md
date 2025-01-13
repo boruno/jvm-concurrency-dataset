@@ -14,7 +14,7 @@ Student submissions reduction history:
  - Using [DuplicateDeleter.py](scripts/DuplicateDeleter.py) script, full duplicates were found and deleted
  - After that, using [TODODeleter.py](scripts/TODODeleter.py), all submissions with unimplemented functions were eliminated
  - With [ProGuard](https://www.guardsquare.com/proguard) tool, [DuplicateByteCodeFinder](scripts/DuplicateByteCodeFinder.py) script eliminated two more files, that were shown as full bytecode duplicates
- - Many solutions had `package` declarations in them, which were commented with the corresponding [script](scripts/PackageCommentingScript.py)
+ - Many solutions had `package` declarations in them, which were commented with the corresponding [script](scripts/PackageCommentingScript.py). Also, `import` statements featuring unrelated paths were [shortened](scripts/ImportShorteningScript.py).
  - Using [HDBSCAN](data/clusteredStudentSolutions/HDBSCAN/HDBSCANModel.py) and [Edit distance clustering](data/clusteredStudentSolutions/editDistanceClustering/EDCModel.py) models and corresponding scripts ([HDBSCAN](data/clusteredStudentSolutions/HDBSCAN/HDBSCANReductionScript.py), [EDC](data/clusteredStudentSolutions/editDistanceClustering/EDCReductionScript.py)), two reduced datasets were created, shrinking ~25k files from the previous step to ~250 files in each.
 
 To run tests on clustered student solutions, run this:

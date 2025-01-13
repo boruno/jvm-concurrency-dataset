@@ -2,7 +2,7 @@
 
 //package day4
 
-import day1.MSQueue
+import MSQueue
 import java.util.concurrent.atomic.*
 import kotlin.math.absoluteValue
 

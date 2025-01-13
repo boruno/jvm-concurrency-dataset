@@ -2,8 +2,8 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2AndImplementedDCSS.Status.SUCCESS
-import day3.AtomicArrayWithCAS2AndImplementedDCSS.Status.UNDECIDED
+import AtomicArrayWithCAS2AndImplementedDCSS.Status.SUCCESS
+import AtomicArrayWithCAS2AndImplementedDCSS.Status.UNDECIDED
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicReferenceArray
 

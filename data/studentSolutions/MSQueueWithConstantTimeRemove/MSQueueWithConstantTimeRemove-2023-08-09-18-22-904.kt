@@ -2,9 +2,9 @@
 
 //package day2
 
-import day2.MSQueueWithConstantTimeRemove.Node.Status.FAILED
-import day2.MSQueueWithConstantTimeRemove.Node.Status.SUCCESS
-import day2.MSQueueWithConstantTimeRemove.Node.Status.UNDECIDED
+import MSQueueWithConstantTimeRemove.Node.Status.FAILED
+import MSQueueWithConstantTimeRemove.Node.Status.SUCCESS
+import MSQueueWithConstantTimeRemove.Node.Status.UNDECIDED
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 

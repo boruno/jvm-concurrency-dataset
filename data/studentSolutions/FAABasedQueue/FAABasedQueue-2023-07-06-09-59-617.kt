@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import kotlinx.atomicfu.*
 
 private const val SEGMENT_SIZE = 2

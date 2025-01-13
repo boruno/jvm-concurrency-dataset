@@ -2,7 +2,7 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2Simplified.Status.*
+import AtomicArrayWithCAS2Simplified.Status.*
 import java.lang.Integer.max
 import java.lang.Integer.min
 import java.util.concurrent.atomic.AtomicReference

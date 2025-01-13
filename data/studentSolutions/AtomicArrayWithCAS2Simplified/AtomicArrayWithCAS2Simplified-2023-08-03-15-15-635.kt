@@ -1,6 +1,6 @@
 //package day3
 
-import day3.AtomicArrayWithCAS2Simplified.Status.*
+import AtomicArrayWithCAS2Simplified.Status.*
 import kotlinx.atomicfu.atomic
 import java.util.concurrent.atomic.AtomicReferenceArray
 

@@ -2,7 +2,7 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2Simplified.Status.*
+import AtomicArrayWithCAS2Simplified.Status.*
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls
 import kotlin.math.max

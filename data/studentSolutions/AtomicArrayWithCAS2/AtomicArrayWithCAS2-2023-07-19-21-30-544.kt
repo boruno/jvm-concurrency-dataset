@@ -4,7 +4,7 @@
 
 import kotlinx.atomicfu.*
 
-import day4.AtomicArrayWithCAS2.Status.*
+import AtomicArrayWithCAS2.Status.*
 
 // This implementation never stores `null` values.
 @Suppress("DUPLICATES")

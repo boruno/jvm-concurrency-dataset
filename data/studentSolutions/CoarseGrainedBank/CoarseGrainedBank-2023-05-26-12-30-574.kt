@@ -1,6 +1,6 @@
 //package day1
 
-import day1.Bank.Companion.MAX_AMOUNT
+import Bank.Companion.MAX_AMOUNT
 
 class CoarseGrainedBank(accountsNumber: Int) : Bank {
     private val accounts: Array<Account> = Array(accountsNumber) { Account() }

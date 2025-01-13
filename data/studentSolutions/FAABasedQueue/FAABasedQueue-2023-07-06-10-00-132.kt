@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import kotlinx.atomicfu.*
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicReferenceArray

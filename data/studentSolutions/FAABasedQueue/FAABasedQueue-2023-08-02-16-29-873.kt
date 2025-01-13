@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import kotlinx.atomicfu.*
 private val SEGMENT_SIZE = 1024
 class FAABasedQueue<E> : Queue<E> {

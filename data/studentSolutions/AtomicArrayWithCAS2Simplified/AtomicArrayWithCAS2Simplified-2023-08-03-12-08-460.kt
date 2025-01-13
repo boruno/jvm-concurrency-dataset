@@ -1,7 +1,7 @@
 //package day3
 
-import day3.AtomicArrayWithCAS2Simplified.Status.*
-import day3.AtomicArrayWithCAS2SingleWriter.*
+import AtomicArrayWithCAS2Simplified.Status.*
+import AtomicArrayWithCAS2SingleWriter.*
 import kotlinx.atomicfu.*
 
 

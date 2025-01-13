@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import java.util.concurrent.atomic.*
 import kotlin.math.*
 

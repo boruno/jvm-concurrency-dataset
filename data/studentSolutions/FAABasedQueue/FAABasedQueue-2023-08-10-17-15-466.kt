@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import java.util.concurrent.atomic.*
 
 class FAABasedQueue<E> : Queue<E> {

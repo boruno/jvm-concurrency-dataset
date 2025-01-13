@@ -2,9 +2,9 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2.Status.FAILED
-import day3.AtomicArrayWithCAS2.Status.SUCCESS
-import day3.AtomicArrayWithCAS2.Status.UNDECIDED
+import AtomicArrayWithCAS2.Status.FAILED
+import AtomicArrayWithCAS2.Status.SUCCESS
+import AtomicArrayWithCAS2.Status.UNDECIDED
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicReferenceArray
 

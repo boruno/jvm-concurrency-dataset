@@ -1,7 +1,7 @@
 //package day3
 
-import day3.AtomicArrayWithCAS2SingleWriter.Status.SUCCESS
-import day3.AtomicArrayWithCAS2SingleWriter.Status.UNDECIDED
+import AtomicArrayWithCAS2SingleWriter.Status.SUCCESS
+import AtomicArrayWithCAS2SingleWriter.Status.UNDECIDED
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls
 

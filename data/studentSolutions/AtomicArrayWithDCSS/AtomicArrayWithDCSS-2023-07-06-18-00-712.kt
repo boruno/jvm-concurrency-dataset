@@ -1,6 +1,6 @@
 //package day3
 
-import day3.AtomicArrayWithDCSS.Status.*
+import AtomicArrayWithDCSS.Status.*
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.atomicArrayOfNulls
 

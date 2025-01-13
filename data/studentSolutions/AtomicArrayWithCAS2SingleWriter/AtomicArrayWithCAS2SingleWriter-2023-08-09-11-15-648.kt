@@ -2,8 +2,8 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2SingleWriter.Status.SUCCESS
-import day3.AtomicArrayWithCAS2SingleWriter.Status.UNDECIDED
+import AtomicArrayWithCAS2SingleWriter.Status.SUCCESS
+import AtomicArrayWithCAS2SingleWriter.Status.UNDECIDED
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicReferenceArray
 

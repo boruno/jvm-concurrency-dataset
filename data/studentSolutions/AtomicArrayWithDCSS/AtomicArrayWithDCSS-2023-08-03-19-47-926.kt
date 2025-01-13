@@ -1,6 +1,6 @@
 //package day3
 
-import day3.AtomicArrayWithDCSS.Status.*
+import AtomicArrayWithDCSS.Status.*
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicReferenceArray
 

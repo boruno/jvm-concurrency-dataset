@@ -1,6 +1,6 @@
 //package day2
 
-import day1.MSQueue
+import MSQueue
 import java.util.concurrent.atomic.*
 
 class MSQueueWithOnlyLogicalRemove<E> : QueueWithRemove<E> {

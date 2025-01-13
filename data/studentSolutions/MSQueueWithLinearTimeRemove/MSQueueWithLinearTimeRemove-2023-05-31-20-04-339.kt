@@ -2,7 +2,7 @@
 
 //package day3
 
-import day1.MSQueue
+import MSQueue
 import kotlinx.atomicfu.*
 import java.lang.Exception
 

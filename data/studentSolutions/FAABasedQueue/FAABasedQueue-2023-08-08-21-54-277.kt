@@ -1,7 +1,7 @@
 //package day2
 
-import day1.MSQueue
-import day1.Queue
+import MSQueue
+import Queue
 import java.util.concurrent.atomic.*
 
 // TODO: Copy the code from `FAABasedQueueSimplified`

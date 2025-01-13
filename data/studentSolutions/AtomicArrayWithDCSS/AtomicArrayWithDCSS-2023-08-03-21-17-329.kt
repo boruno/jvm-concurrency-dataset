@@ -1,7 +1,7 @@
 //package day3
 
 import kotlinx.atomicfu.*
-import day3.AtomicArrayWithDCSS.Status.*
+import AtomicArrayWithDCSS.Status.*
 import kotlin.math.exp
 
 // This implementation never stores `null` values.

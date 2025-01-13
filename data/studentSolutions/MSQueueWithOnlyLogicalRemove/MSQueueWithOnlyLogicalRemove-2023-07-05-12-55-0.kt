@@ -1,6 +1,6 @@
 //package day2
 
-import day1.MSQueue
+import MSQueue
 import kotlinx.atomicfu.*
 
 class MSQueueWithOnlyLogicalRemove<E> : QueueWithRemove<E> {

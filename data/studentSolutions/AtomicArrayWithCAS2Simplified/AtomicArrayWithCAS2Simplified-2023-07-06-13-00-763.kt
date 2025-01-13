@@ -1,7 +1,7 @@
 //package day3
 
 import com.sun.net.httpserver.Authenticator.Success
-import day3.AtomicArrayWithCAS2Simplified.Status.*
+import AtomicArrayWithCAS2Simplified.Status.*
 import kotlinx.atomicfu.*
 
 

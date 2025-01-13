@@ -1,7 +1,7 @@
 //package day3
 
-import day3.AtomicArrayWithCAS2SingleWriter.Status.*
-import day4.AtomicArrayWithCAS2
+import AtomicArrayWithCAS2SingleWriter.Status.*
+import AtomicArrayWithCAS2
 import kotlinx.atomicfu.*
 
 // This implementation never stores `null` values.

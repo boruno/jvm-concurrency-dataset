@@ -1,6 +1,5 @@
 //package day4
 
-import day1.*
 import kotlinx.atomicfu.*
 import java.lang.ClassCastException
 import java.util.concurrent.*

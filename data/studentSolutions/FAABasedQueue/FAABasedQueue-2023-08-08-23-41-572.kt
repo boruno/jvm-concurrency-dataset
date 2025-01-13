@@ -1,6 +1,5 @@
 //package day2
 
-import day1.*
 import java.util.concurrent.atomic.*
 
 // TODO: Copy the code from `FAABasedQueueSimplified` and implement the infinite array on a linked list of fixed-size `Segment`s.

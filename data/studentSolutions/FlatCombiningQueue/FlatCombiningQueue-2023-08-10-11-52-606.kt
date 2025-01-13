@@ -1,7 +1,7 @@
 //package day4
 
-import day1.Queue
-import day4.Result
+import Queue
+import Result
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReferenceArray

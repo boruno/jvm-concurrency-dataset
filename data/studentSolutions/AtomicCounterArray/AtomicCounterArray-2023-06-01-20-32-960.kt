@@ -2,7 +2,7 @@
 
 //package day4
 
-import day4.AtomicCounterArray.Status.*
+import AtomicCounterArray.Status.*
 import kotlinx.atomicfu.*
 
 private fun Int.incIf(b: Boolean): Int {

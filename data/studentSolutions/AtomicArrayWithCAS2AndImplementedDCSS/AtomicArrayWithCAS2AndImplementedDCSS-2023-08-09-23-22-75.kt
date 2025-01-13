@@ -2,7 +2,7 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2AndImplementedDCSS.Status.*
+import AtomicArrayWithCAS2AndImplementedDCSS.Status.*
 import java.util.concurrent.atomic.*
 import kotlin.math.max
 import kotlin.math.min

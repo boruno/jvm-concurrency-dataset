@@ -1,6 +1,5 @@
 //package day4
 
-import day1.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*
 

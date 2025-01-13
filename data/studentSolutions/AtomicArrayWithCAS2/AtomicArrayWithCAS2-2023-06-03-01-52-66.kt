@@ -2,7 +2,7 @@
 
 //package day4
 
-import day4.AtomicArrayWithCAS2.Status.*
+import AtomicArrayWithCAS2.Status.*
 import kotlinx.atomicfu.*
 
 // This implementation never stores `null` values.

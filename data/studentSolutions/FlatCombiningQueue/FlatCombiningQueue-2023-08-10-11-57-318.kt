@@ -1,6 +1,5 @@
 //package day4
 
-import day1.*
 import java.lang.ClassCastException
 import java.lang.IllegalStateException
 import java.util.concurrent.*

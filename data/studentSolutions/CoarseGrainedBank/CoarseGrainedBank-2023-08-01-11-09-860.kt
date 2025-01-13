@@ -2,7 +2,7 @@
 
 //package day1
 
-import day1.Bank.Companion.MAX_AMOUNT
+import Bank.Companion.MAX_AMOUNT
 import java.lang.Exception
 import java.util.concurrent.locks.*
 

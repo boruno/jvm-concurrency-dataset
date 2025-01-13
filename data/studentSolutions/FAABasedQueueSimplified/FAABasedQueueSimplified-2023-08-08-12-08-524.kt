@@ -1,6 +1,6 @@
 //package day2
 
-import day1.Queue
+import Queue
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReferenceArray
 import kotlin.math.max

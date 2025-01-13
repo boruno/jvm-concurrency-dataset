@@ -1,7 +1,7 @@
 //package day4
 
 import kotlinx.atomicfu.*
-import day4.AtomicArrayWithDCSS.Status.*
+import AtomicArrayWithDCSS.Status.*
 
 // This implementation never stores `null` values.
 class AtomicArrayWithDCSS<E : Any>(size: Int, initialValue: E) {

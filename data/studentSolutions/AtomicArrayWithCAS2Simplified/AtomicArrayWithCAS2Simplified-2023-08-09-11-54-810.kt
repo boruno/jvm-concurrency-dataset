@@ -2,8 +2,8 @@
 
 //package day3
 
-import day3.AtomicArrayWithCAS2Simplified.Status.*
-import day3.AtomicArrayWithCAS2SingleWriter.Companion.fromDescriptorOrValue
+import AtomicArrayWithCAS2Simplified.Status.*
+import AtomicArrayWithCAS2SingleWriter.Companion.fromDescriptorOrValue
 import java.util.concurrent.atomic.*
 
 

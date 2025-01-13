@@ -67,7 +67,6 @@
 
 //package day2
 
-import day1.*
 import kotlinx.atomicfu.atomicArrayOfNulls
 import kotlinx.atomicfu.atomic
 import kotlin.contracts.contract
