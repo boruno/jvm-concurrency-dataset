@@ -51,7 +51,7 @@ SINGLE_TASK_PROJECTS = {
     "MSQueue": "msqueue",
     "ShardedCounter": "sharded-counter",
     "SkipList": "skip-list",
-    "SynchronousQueue": "syncronous-queue",
+    "SynchronousQueue": "synchronous-queue",
     "TreiberStack": "treiber-stack",
     "TreiberStackWithElimination": "stack-elimination"
 }
