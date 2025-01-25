@@ -4,7 +4,7 @@
 
 import kotlinx.atomicfu.*
 
-class MichaelScottQueueWithLinearTimeRemove<E> : QueueWithRemove<E> {
+class MSQueueWithLinearTimeRemove<E> : QueueWithRemove<E> {
     private val head: AtomicRef<Node>
     private val tail: AtomicRef<Node>
 
