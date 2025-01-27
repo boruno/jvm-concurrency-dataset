@@ -1,0 +1,182 @@
+MSQueueWithConstantTimeRemove
+Number of files processed: 10
+Validation function error: 8
+Invalid execution results: 1
+Non-blocking algorithm: 1
+
+FCPriorityQueue
+Number of files processed: 10
+Invalid execution results: 9
+Execution hung: 1
+
+FAABasedQueue
+Number of files processed: 8
+Lincheck bug: 2
+Validation function error: 1
+Invalid execution results: 3
+Non-blocking algorithm: 1
+Execution hung: 1
+
+FlatCombiningQueue
+Number of files processed: 9
+Invalid execution results: 5
+Lincheck bug: 2
+Execution hung: 2
+
+FineGrainedBank
+Number of files processed: 9
+Invalid execution results: 4
+Execution hung: 3
+Correct: 2
+
+MSQueueWithOnlyLogicalRemove
+Number of files processed: 6
+Invalid execution results: 6
+
+ConcurrentHashTableWithoutResize
+Number of files processed: 6
+Invalid execution results: 3
+Execution hung: 3
+
+AtomicArrayNoAba
+Number of files processed: 10
+Invalid execution results: 4
+Lincheck bug: 3
+Non-blocking algorithm: 3
+
+AtomicArrayWithCAS2
+Number of files processed: 8
+Invalid execution results: 5
+Correct: 2
+Non-blocking algorithm: 1
+
+AtomicArrayWithCAS2Simplified
+Number of files processed: 10
+Non-blocking algorithm: 2
+Correct: 3
+Invalid execution results: 5
+
+TreiberStack
+Number of files processed: 5
+Correct: 4
+Non-blocking algorithm: 1
+
+MSQueue
+Number of files processed: 10
+Invalid execution results: 9
+Validation function error: 1
+
+FAABasedQueueSimplified
+Number of files processed: 9
+Lincheck bug: 2
+Invalid execution results: 6
+Validation function error: 1
+
+IntIntHashMap
+Number of files processed: 9
+Execution hung: 1
+Invalid execution results: 8
+
+AtomicCounterArray
+Number of files processed: 7
+Non-blocking algorithm: 3
+Invalid execution results: 4
+
+AtomicArrayWithCAS2SingleWriter
+Number of files processed: 8
+Invalid execution results: 6
+Lincheck bug: 1
+Non-blocking algorithm: 1
+
+MSQueueWithLinearTimeNonParallelRemove
+Number of files processed: 9
+Invalid execution results: 6
+Non-blocking algorithm: 1
+Correct: 1
+Validation function error: 1
+
+SkipList
+Number of files processed: 4
+Invalid execution results: 4
+
+AtomicArray
+Number of files processed: 8
+Correct: 1
+Non-blocking algorithm: 1
+Invalid execution results: 5
+Lincheck bug: 1
+
+AtomicArrayWithCAS2AndImplementedDCSS
+Number of files processed: 7
+Invalid execution results: 4
+Non-blocking algorithm: 2
+Lincheck bug: 1
+
+SynchronousQueue
+Number of files processed: 9
+Correct: 2
+Invalid execution results: 5
+Non-blocking algorithm: 1
+Unexpected exception: 1
+
+DynamicArraySimplified
+Number of files processed: 1
+Invalid execution results: 1
+
+TreiberStackWithElimination
+Number of files processed: 11
+Correct: 4
+Invalid execution results: 5
+Non-blocking algorithm: 2
+
+DynamicArray
+Number of files processed: 11
+Invalid execution results: 9
+Correct: 1
+Non-blocking algorithm: 1
+
+SingleWriterHashTable
+Number of files processed: 2
+Correct: 1
+Invalid execution results: 1
+
+CoarseGrainedBank
+Number of files processed: 1
+Invalid execution results: 1
+
+AtomicArrayWithDCSS
+Number of files processed: 8
+Non-blocking algorithm: 2
+Invalid execution results: 6
+
+ConcurrentHashTable
+Number of files processed: 7
+Invalid execution results: 4
+Execution hung: 1
+Lincheck bug: 1
+Non-blocking algorithm: 1
+
+MSQueueWithLinearTimeRemove
+Number of files processed: 10
+Non-blocking algorithm: 1
+Validation function error: 5
+Invalid execution results: 4
+
+LinkedListSet
+Number of files processed: 9
+Invalid execution results: 9
+
+ShardedCounter
+Number of files processed: 3
+Invalid execution results: 3
+
+FAAQueue
+Number of files processed: 10
+Invalid execution results: 10
+
+Overall Statistics
+Total number of files processed: 244
+Correct: 21
+Incorrect: 223
+Incorrectness: 91.39%
+Lincheck bugs: 13
