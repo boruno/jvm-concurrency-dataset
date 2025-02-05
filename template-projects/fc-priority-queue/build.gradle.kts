@@ -24,6 +24,7 @@ group = "ru.ifmo.mpp"
 version = "1.0-SNAPSHOT"
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -32,7 +33,7 @@ dependencies {
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test-junit"))
     testImplementation("junit:junit:4.13.1")
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.34")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.35")
 }
 
 kotlin {

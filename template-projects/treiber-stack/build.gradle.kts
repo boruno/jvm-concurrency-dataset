@@ -31,7 +31,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.34")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.35")
 }
 
 sourceSets.main {
