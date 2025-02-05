@@ -3,6 +3,8 @@ import shutil
 import subprocess
 import re
 import time
+import argparse
+from enum import Enum
 
 # Paths
 DATASET_PATH = "../data/clusteredStudentSolutions/HDBSCAN/results"
@@ -14,40 +16,40 @@ JAVA_HOME = ""
 # Ensure test results directory exists
 os.makedirs(TEST_RESULTS_PATH, exist_ok=True)
 
-# Folders to skip
-SKIP_FOLDERS = [
-    # "MSQueueWithConstantTimeRemove",
-    # "FCPriorityQueue",
-    # "FAABasedQueue",
-    # "FlatCombiningQueue",
-    # "FineGrainedBank",
-    # "MSQueueWithOnlyLogicalRemove",
-    # "ConcurrentHashTableWithoutResize",
-    # "AtomicArrayNoAba",
-    # "AtomicArrayWithCAS2",
-    # "AtomicArrayWithCAS2Simplified",
-    # "TreiberStack",
-    # "MSQueue",
-    # "FAABasedQueueSimplified",
-    # "IntIntHashMap",
-    # "AtomicCounterArray",
-    # "AtomicArrayWithCAS2SingleWriter",
-    # "MSQueueWithLinearTimeNonParallelRemove",
-    # "SkipList",
-    # "AtomicArray",
-    # "AtomicArrayWithCAS2AndImplementedDCSS",
-    # "SynchronousQueue",
-    # "DynamicArraySimplified",
-    # "TreiberStackWithElimination",
-    # "DynamicArray",
-    # "SingleWriterHashTable",
-    # "CoarseGrainedBank",
-    # "AtomicArrayWithDCSS",
-    # "ConcurrentHashTable",
-    # "MSQueueWithLinearTimeRemove",
-    # "LinkedListSet",
-    # "ShardedCounter",
-    # "FAAQueue"
+# Folders to run
+RUN_FOLDERS = [
+    "MSQueueWithConstantTimeRemove",
+    "FCPriorityQueue",
+    "FAABasedQueue",
+    "FlatCombiningQueue",
+    "FineGrainedBank",
+    "MSQueueWithOnlyLogicalRemove",
+    "ConcurrentHashTableWithoutResize",
+    "AtomicArrayNoAba",
+    "AtomicArrayWithCAS2",
+    "AtomicArrayWithCAS2Simplified",
+    "TreiberStack",
+    "MSQueue",
+    "FAABasedQueueSimplified",
+    "IntIntHashMap",
+    "AtomicCounterArray",
+    "AtomicArrayWithCAS2SingleWriter",
+    "MSQueueWithLinearTimeNonParallelRemove",
+    "SkipList",
+    "AtomicArray",
+    "AtomicArrayWithCAS2AndImplementedDCSS",
+    "SynchronousQueue",
+    "DynamicArraySimplified",
+    "TreiberStackWithElimination",
+    "DynamicArray",
+    "SingleWriterHashTable",
+    "CoarseGrainedBank",
+    "AtomicArrayWithDCSS",
+    "ConcurrentHashTable",
+    "MSQueueWithLinearTimeRemove",
+    "LinkedListSet",
+    "ShardedCounter",
+    "FAAQueue"
 ]
 
 # Mapping of single-task file names to project names
@@ -113,17 +115,42 @@ TEMPLATE_PROJECT_TEST_CLASS = {
     "TreiberStackWithElimination": "TreiberStackWithEliminationTest",
 }
 
+
+class TestResult(Enum):
+    CORRECT = "No bugs found"
+    BUG_FOUND = "Bugs found"
+    TEST_ERROR = "Test is not working"
+    END_ON_TIMEOUT = "Timeout"
+
+class TestErrorType(Enum):
+    COMPILATION_ERROR = "Compilation error"
+    LINCHECK_BUG = "Tool bug (Lincheck bug)"
+    OTHER_ERROR = "Other error"
+
+class BugType(Enum):
+    NON_LINEARIZABILITY = "Non-linearizability (consistency violation)"
+    OBSTRUCTION_FREEDOM_VIOLATION = "Obstruction-freedom violation (non-blocking violation)"
+    EXECUTION_HUNG = "Hung (deadlock/livelock)"
+    INVARIANT_VIOLATION = "Data structure invariant/validation violation"
+    UNEXPECTED_EXCEPTION = "Unexpected exceptions"
+    OTHER_ERROR = "Other error"
+
+
+parser = argparse.ArgumentParser(description="Run tests for dataset")
+parser.add_argument("-tasks", nargs="*", default=["all_tests"], help="Space-separated list of task names, or 'all_tests' to run all tasks")
+parser.add_argument("-testing_method", choices=["lincheck_mc", "lincheck_stress", "all_methods"], default="all_methods", help="Testing method to use")
+args = parser.parse_args()
+
+
 def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=300):
+    start_time = time.time()
     """Run a specific test method within a test class using Gradle, with a timeout."""
     try:
-        # Build the Gradle command for the specific test method
         gradle_command = [
             "./gradlew", "test",
             f"--tests={test_class}.{test_method}",
             "--info", "--warning-mode", "none"
         ]
-
-        # Run the command with a timeout
         result = subprocess.run(
             gradle_command,
             cwd=project_path,
@@ -132,59 +159,54 @@ def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=
             check=True,
             timeout=timeout
         )
-        return result.stdout, None  # Return test output on success
-
+        end_time = time.time()
+        duration = end_time - start_time
+        return result.stdout, None, duration
     except subprocess.TimeoutExpired:
-        # Kill only the specific Gradle task if timeout occurs
-        subprocess.run(
-            ["pkill", "-f", f"./gradlew test --tests={test_class}.{test_method}"],
-            cwd=project_path
-        )
-        return None, f"Timeout: The test '{test_class}.{test_method}' exceeded {timeout} seconds and was terminated."
-
+        subprocess.run(["pkill", "-f", f"./gradlew test --tests={test_class}.{test_method}"], cwd=project_path)
+        end_time = time.time()
+        duration = end_time - start_time
+        return None, f"Execution ended on timeout: {timeout} seconds.", duration
     except subprocess.CalledProcessError as e:
-        # Capture error if the Gradle task fails
-        return None, e.stdout + e.stderr
+        end_time = time.time()
+        duration = end_time - start_time
+        error_message = e.stdout + e.stderr
+        failed_task_match = re.search(r"> Task :.* FAILED", error_message)
+        if failed_task_match:
+            start_index = failed_task_match.start()
+            end_index = error_message.find("FAILURE: Build failed with an exception.", start_index)
+            if end_index != -1:
+                error_message = error_message[start_index:end_index].strip()
+        return None, error_message, duration
 
 
 def extract_lincheck_output(output):
     """Extract Lincheck-specific test results from the output."""
     if output is None:
-        return "No errors or Lincheck-specific results found."
-
+        return TestResult.CORRECT.value
     if "Timeout:" in output:
-        return "Execution ended on timeout."
-
-    lincheck_error_messages = [
-        "= The execution failed with an unexpected exception =",
-        "= The execution has hung =",
-        "= The execution has hung, see the thread dump =",
-        "= Invalid execution results =",
-        "= Validation function",
-        "The algorithm should be non-blocking",
-        "Wow! You've caught a bug in Lincheck.",
-    ]
-
-    # Find the start of the relevant output
-    lincheck_start = -1
-    for message in lincheck_error_messages:
+        return TestResult.END_ON_TIMEOUT.value
+    lincheck_error_messages = {
+        "= The execution failed with an unexpected exception =": BugType.UNEXPECTED_EXCEPTION,
+        "= The execution has hung =": BugType.EXECUTION_HUNG,
+        "= The execution has hung, see the thread dump =": BugType.EXECUTION_HUNG,
+        "= Invalid execution results =": BugType.NON_LINEARIZABILITY,
+        "= Validation function": BugType.INVARIANT_VIOLATION,
+        "The algorithm should be non-blocking": BugType.OBSTRUCTION_FREEDOM_VIOLATION,
+    }
+    for message, bug_type in lincheck_error_messages.items():
         lincheck_start = output.find(message)
         if lincheck_start != -1:
-            break
-
-    if lincheck_start == -1:
-        return "No Lincheck results found."
-
-    # Find the end of the relevant output
-    lincheck_end = output.find("Finished generating", lincheck_start)
-    if lincheck_end == -1:
-        lincheck_end = len(output)  # If "Finished generating" is not found, take everything until the end
-
-    # Return the trimmed output
-    return output[lincheck_start:lincheck_end].strip()
+            lincheck_end = output.find("Finished generating", lincheck_start)
+            if lincheck_end == -1:
+                lincheck_end = len(output)
+            return f"{TestResult.BUG_FOUND.value}: {bug_type.value}\n{output[lincheck_start:lincheck_end].strip()}"
+    if "Wow! You've caught a bug in Lincheck." in output:
+        return f"{TestResult.TEST_ERROR.value}: {TestErrorType.LINCHECK_BUG.value}"
+    return f"{TestResult.TEST_ERROR.value}: {TestErrorType.OTHER_ERROR.value}, see error logs:\n {output}"
 
 
-def process_single_task(file_path, project_name, log_file, task_name):
+def process_single_task(file_path, project_name, log_file, task_name, test_methods):
     """Process a single task by running both modelCheckingTest and stressTest, logging results in a .txt file."""
     project_path = os.path.join(PROJECTS_PATH, project_name)
     src_path = os.path.join(project_path, "src")
@@ -215,11 +237,11 @@ def process_single_task(file_path, project_name, log_file, task_name):
     with open(log_file, "a") as log:
         log.write(f"Processing file: {os.path.basename(file_path)}\n")
 
-        for test_method in ["modelCheckingTest", "stressTest"]:
-            output, error = run_gradle_test_with_timeout(project_path, test_class, test_method)
+        for test_method in test_methods:
+            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method)
             lincheck_output = extract_lincheck_output(error)
 
-            log.write(f"  Test method: {test_method}\n")
+            log.write(f"  Test method: {test_method}\n  Testing time: {duration:.2f} seconds\n")
             log.write(f"{lincheck_output}\n\n")
 
         log.write("\n")  # Add spacing between files
@@ -228,8 +250,8 @@ def process_single_task(file_path, project_name, log_file, task_name):
     shutil.copyfile(temp_file, dest_file)
 
 
-def process_template_task(file_path, test_file, log_file, task_name):
-    """Process a template task, running both modelCheckingTest and stressTest, logging results in a .txt file."""
+def process_template_task(file_path, test_file, log_file, task_name, test_methods):
+    """Process a template task, running specified test methods, logging results in a .txt file."""
     project_path = os.path.join(PROJECTS_PATH, "template")
     src_path = os.path.join(project_path, "src")
 
@@ -244,12 +266,11 @@ def process_template_task(file_path, test_file, log_file, task_name):
     with open(log_file, "a") as log:
         log.write(f"Processing file: {os.path.basename(file_path)}\n")
 
-        for test_method in ["modelCheckingTest", "stressTest"]:
-            output, error = run_gradle_test_with_timeout(project_path, test_class, test_method)
-
+        for test_method in test_methods:
+            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method)
             lincheck_output = extract_lincheck_output(error)
 
-            log.write(f"  Test method: {test_method}\n")
+            log.write(f"  Test method: {test_method}\n  Testing time: {duration:.2f} seconds\n")
             log.write(f"{lincheck_output}\n\n")
 
         log.write("\n")  # Add spacing between files
@@ -260,11 +281,11 @@ def process_template_task(file_path, test_file, log_file, task_name):
 
 def main():
     """Main function to process the dataset."""
+    task_list = args.tasks if "all_tests" not in args.tasks else RUN_FOLDERS
+    test_methods = ["modelCheckingTest", "stressTest"] if args.testing_method == "all_methods" else [args.testing_method.replace("lincheck_", "")]
     for root, dirs, _ in os.walk(DATASET_PATH):
         if root == DATASET_PATH:
-            dirs[:] = [d for d in dirs if d not in SKIP_FOLDERS and d != os.path.basename(
-                PROJECTS_PATH)]  # Exclude "template-projects" and skipped folders
-
+            dirs[:] = [d for d in dirs if d in task_list]
         if not os.path.exists(TEMP_DIR_PATH):
             os.mkdir(TEMP_DIR_PATH)
         for folder in dirs:
@@ -272,31 +293,22 @@ def main():
             result_folder = os.path.join(TEST_RESULTS_PATH, folder)
             os.makedirs(result_folder, exist_ok=True)
             log_file = os.path.join(result_folder, "results.txt")
-
-            # Clear the log file for a new iteration
             open(log_file, "w").close()
-
             start_time = time.time()
             for file in os.listdir(folder_path):
                 if file.endswith(".kt"):
                     file_path = os.path.join(folder_path, file)
-                    task_name = file.split("-")[0]  # Extract task name before the first hyphen
-
-                    # Determine task type
+                    task_name = file.split("-")[0]
                     with open(file_path, "r") as f:
                         content = f.read()
-
                     if re.search(r"//\s*package day\d+", content):
-                        # Template-based task
                         test_file = TEMPLATE_PROJECT_TEST_CLASS.get(task_name)
                         if test_file:
-                            process_template_task(file_path, test_file, log_file, task_name)
+                            process_template_task(file_path, test_file, log_file, task_name, test_methods)
                     else:
-                        # Single task
                         project_name = SINGLE_TASK_PROJECTS.get(task_name)
                         if project_name:
-                            process_single_task(file_path, project_name, log_file, task_name)
-
+                            process_single_task(file_path, project_name, log_file, task_name, test_methods)
             end_time = time.time()
             print(f"Processed folder {folder_path} in {end_time - start_time:.2f} seconds.")
         shutil.rmtree(TEMP_DIR_PATH)

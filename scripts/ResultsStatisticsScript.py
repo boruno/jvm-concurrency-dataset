@@ -1,26 +1,22 @@
 import os
 import re
+import time
 from collections import defaultdict
 
 # Define error messages
-not_found = {
-    "No errors or Lincheck-specific results found.",
-    "No Lincheck results found.",
-    "Execution ended on timeout."
-}
+not_found = {"No bugs found", "Execution ended on timeout:"}
 
 lincheck_error_messages = {
     "= The execution failed with an unexpected exception =": "Unexpected exception",
     "= The execution has hung =": "Execution hung",
     "= The execution has hung, see the thread dump =": "Execution hung",
-    "= Invalid execution results =": "Invalid execution results",
+    "= Invalid execution results =": "Invalid execution results",  # most often non-linearizability
     "= Validation function": "Validation function error",
     "The algorithm should be non-blocking": "Non-blocking algorithm",
-    "Wow! You've caught a bug in Lincheck.": "Lincheck bug"
 }
 
 # Path to the directory containing subfolders
-base_path = "test-results"
+base_path = "./test-results"
 
 # Output file
 output_file = "testing_statistics.txt"
@@ -32,6 +28,8 @@ def parse_results(file_path):
     results = []
     current_file = None
     current_method = None
+    current_time = 0.0
+
     for line in lines:
         line = line.strip()
         if line.startswith("Processing file:"):
@@ -39,19 +37,25 @@ def parse_results(file_path):
             current_method = None
         elif line.startswith("Test method:"):
             current_method = line.split("Test method:")[1].strip()
+        elif line.startswith("Testing time:"):
+            current_time = float(line.split("Testing time:")[1].strip().split(" ")[0])
         elif current_method:
-            if line in not_found:
-                results.append((current_file, current_method, "no_error"))
+            if any(n in line for n in not_found):
+                results.append((current_file, current_method, "Correct", current_time))
             else:
                 for key, error_type in lincheck_error_messages.items():
                     if key in line:
-                        results.append((current_file, current_method, error_type))
+                        results.append((current_file, current_method, error_type, current_time))
                         break
     return results
 
 def process_statistics():
     statistics = defaultdict(lambda: defaultdict(int))
-    overall_stats = {"total_files": 0, "correct_files": 0, "incorrect_files": 0, "lincheck_bug_files": 0}
+    overall_stats = {
+        "compilation_errors": 0,
+        "total_files": 0, "correct_files": 0, "incorrect_files": 0,
+        "lincheck_bug_files": 0, "total_time": 0.0
+    }
 
     for folder_name in os.listdir(base_path):
         folder_path = os.path.join(base_path, folder_name)
@@ -64,22 +68,30 @@ def process_statistics():
 
         results = parse_results(result_file)
         file_stats = defaultdict(list)
-        for filename, method, error_type in results:
+        total_folder_time = 0.0
+
+        for filename, method, error_type, exec_time in results:
+            if error_type == "Compilation error":
+                statistics[folder_name]["Compilation errors"] += 1
+                overall_stats["compilation_errors"] += 1
+                continue
             file_stats[filename].append(error_type)
+            total_folder_time += exec_time
 
         statistics[folder_name]["Number of files processed"] = len(file_stats)
+        statistics[folder_name]["Total execution time"] = total_folder_time
         overall_stats["total_files"] += len(file_stats)
+        overall_stats["total_time"] += total_folder_time
 
         for errors in file_stats.values():
-            if errors == ["no_error", "no_error"]:
+            if errors.count("Correct") == 2:
                 statistics[folder_name]["Correct"] += 1
                 overall_stats["correct_files"] += 1
             elif "Lincheck bug" in errors:
                 statistics[folder_name]["Lincheck bug"] += 1
-                overall_stats["incorrect_files"] += 1
                 overall_stats["lincheck_bug_files"] += 1
-            elif any(e != "no_error" for e in errors):
-                error_type = errors[0] if errors[0] != "no_error" else errors[1]
+            elif any(e != "Correct" for e in errors):
+                error_type = [e for e in errors if e != "Correct"][0]
                 statistics[folder_name][error_type] += 1
                 overall_stats["incorrect_files"] += 1
 
@@ -98,10 +110,14 @@ def write_statistics(statistics, overall_stats):
         correct_files = overall_stats["correct_files"]
         incorrect_files = overall_stats["incorrect_files"]
         lincheck_bug_files = overall_stats["lincheck_bug_files"]
-        incorrectness_percentage = (incorrect_files / total_files) * 100 if total_files > 0 else 0
+        total_time = overall_stats["total_time"]
+        valid_files = total_files - overall_stats["compilation_errors"] - overall_stats["lincheck_bug_files"]
+        incorrectness_percentage = (incorrect_files / valid_files) * 100 if valid_files > 0 else 0
 
         file.write("Overall Statistics\n")
+        file.write(f"Compilation errors: {overall_stats['compilation_errors']}\n")
         file.write(f"Total number of files processed: {total_files}\n")
+        file.write(f"Total execution time: {total_time:.2f} seconds\n")
         file.write(f"Correct: {correct_files}\n")
         file.write(f"Incorrect: {incorrect_files}\n")
         file.write(f"Incorrectness: {incorrectness_percentage:.2f}%\n")
