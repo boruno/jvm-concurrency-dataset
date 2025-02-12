@@ -4,7 +4,13 @@ import time
 from collections import defaultdict
 
 # Define error messages
-not_found = {"No bugs found", "Execution ended on timeout:"}
+not_found = {
+    "No bugs found",
+    "Execution ended on timeout:",
+    "No errors or Lincheck-specific results found.",
+    "No Lincheck results found.",
+    "Test is not working"
+}
 
 lincheck_error_messages = {
     "= The execution failed with an unexpected exception =": "Unexpected exception",
@@ -29,16 +35,20 @@ def parse_results(file_path):
     current_file = None
     current_method = None
     current_time = 0.0
+    file_found = False
 
     for line in lines:
         line = line.strip()
         if line.startswith("Processing file:"):
             current_file = line.split("Processing file:")[1].strip()
             current_method = None
+            file_found = True
         elif line.startswith("Test method:"):
             current_method = line.split("Test method:")[1].strip()
         elif line.startswith("Testing time:"):
-            current_time = float(line.split("Testing time:")[1].strip().split(" ")[0])
+            current_time = round(float(line.split("Testing time:")[1].strip().split(" ")[0]), 2)
+        elif "Test is not working" in line:
+            results.append((current_file, "Unknown", "Test failure", current_time))
         elif current_method:
             if any(n in line for n in not_found):
                 results.append((current_file, current_method, "Correct", current_time))
@@ -47,6 +57,10 @@ def parse_results(file_path):
                     if key in line:
                         results.append((current_file, current_method, error_type, current_time))
                         break
+
+    if file_found and not results:
+        results.append((current_file, "Unknown", "No recorded test", 0.0))
+
     return results
 
 def process_statistics():
@@ -71,27 +85,23 @@ def process_statistics():
         total_folder_time = 0.0
 
         for filename, method, error_type, exec_time in results:
-            if error_type == "Compilation error":
-                statistics[folder_name]["Compilation errors"] += 1
-                overall_stats["compilation_errors"] += 1
-                continue
             file_stats[filename].append(error_type)
-            total_folder_time += exec_time
+            total_folder_time += round(exec_time, 2)
 
         statistics[folder_name]["Number of files processed"] = len(file_stats)
         statistics[folder_name]["Total execution time"] = total_folder_time
         overall_stats["total_files"] += len(file_stats)
-        overall_stats["total_time"] += total_folder_time
+        overall_stats["total_time"] += round(total_folder_time, 2)
 
         for errors in file_stats.values():
-            if errors.count("Correct") == 2:
+            if "Correct" in errors:
                 statistics[folder_name]["Correct"] += 1
                 overall_stats["correct_files"] += 1
             elif "Lincheck bug" in errors:
                 statistics[folder_name]["Lincheck bug"] += 1
                 overall_stats["lincheck_bug_files"] += 1
-            elif any(e != "Correct" for e in errors):
-                error_type = [e for e in errors if e != "Correct"][0]
+            else:
+                error_type = errors[0]  # Take the first encountered error
                 statistics[folder_name][error_type] += 1
                 overall_stats["incorrect_files"] += 1
 
