@@ -1,225 +1,457 @@
 MSQueueWithConstantTimeRemove
 Number of files processed: 10
-Total execution time: 165.03999999999996
-Validation function error: 8
-Invalid execution results: 1
-Non-blocking algorithm: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 1
+    Validation function error: 8
+    Non-blocking algorithm: 1
+Total execution time: 165.04 seconds
 
 FCPriorityQueue
 Number of files processed: 10
-Total execution time: 2258.4900000000002
-Invalid execution results: 6
-Correct: 3
-Execution hung: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 1
+    Invalid execution results: 9
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 2258.49 seconds
 
 FAABasedQueue
 Number of files processed: 8
-Total execution time: 322.84
-Test failure: 3
-Validation function error: 1
-Invalid execution results: 4
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 8
+    Unexpected exception: 0
+    Execution hung: 2
+    Invalid execution results: 5
+    Validation function error: 1
+    Non-blocking algorithm: 0
+Total execution time: 322.84 seconds
 
 FlatCombiningQueue
 Number of files processed: 9
-Total execution time: 1575.0500000000004
-Correct: 2
-Test failure: 3
-Execution hung: 3
-Invalid execution results: 1
+Testing errors: 1
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 1
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 3
+    Invalid execution results: 4
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 1575.05 seconds
 
 FineGrainedBank
 Number of files processed: 9
-Total execution time: 635.1099999999999
-Invalid execution results: 4
-Execution hung: 3
-Test failure: 1
+Testing errors: 1
+Lincheck bugs: 0
+Timeouts: 0
 Correct: 1
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 3
+    Invalid execution results: 4
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 635.11 seconds
 
 MSQueueWithOnlyLogicalRemove
 Number of files processed: 6
-Total execution time: 76.30999999999999
-Invalid execution results: 6
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 6
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 6
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 76.31 seconds
 
 ConcurrentHashTableWithoutResize
 Number of files processed: 6
-Total execution time: 662.0799999999999
-Correct: 4
-Execution hung: 2
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 6
+    Unexpected exception: 0
+    Execution hung: 3
+    Invalid execution results: 3
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 662.08 seconds
 
 AtomicArrayNoAba
 Number of files processed: 10
-Total execution time: 347.04000000000013
-Correct: 1
-Invalid execution results: 3
-Test failure: 3
-Non-blocking algorithm: 3
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 1
+    Invalid execution results: 6
+    Validation function error: 0
+    Non-blocking algorithm: 3
+Total execution time: 347.04 seconds
 
 AtomicArrayWithCAS2
 Number of files processed: 8
-Total execution time: 390.5799999999999
-Invalid execution results: 3
-Correct: 2
-Test failure: 2
-Non-blocking algorithm: 1
+Testing errors: 2
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 6
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 5
+    Validation function error: 0
+    Non-blocking algorithm: 1
+Total execution time: 390.58 seconds
 
 AtomicArrayWithCAS2Simplified
 Number of files processed: 10
-Total execution time: 102.92999999999998
-Non-blocking algorithm: 2
-Test failure: 3
-Correct: 1
-Invalid execution results: 4
+Testing errors: 3
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 5
+    Validation function error: 0
+    Non-blocking algorithm: 2
+Total execution time: 102.93 seconds
 
 TreiberStack
 Number of files processed: 5
-Total execution time: 129.72000000000003
-Test failure: 4
-Non-blocking algorithm: 1
+Testing errors: 4
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 1
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 0
+    Validation function error: 0
+    Non-blocking algorithm: 1
+Total execution time: 129.72 seconds
 
 MSQueue
 Number of files processed: 10
-Total execution time: 143.0399999999999
-Invalid execution results: 8
-Correct: 1
-Validation function error: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 9
+    Validation function error: 1
+    Non-blocking algorithm: 0
+Total execution time: 143.04 seconds
 
 FAABasedQueueSimplified
 Number of files processed: 9
-Total execution time: 115.92000000000004
-Non-blocking algorithm: 2
-Invalid execution results: 6
-Validation function error: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 9
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 6
+    Validation function error: 1
+    Non-blocking algorithm: 2
+Total execution time: 115.92 seconds
 
 IntIntHashMap
 Number of files processed: 9
-Total execution time: 673.9099999999999
-Execution hung: 1
-Correct: 4
-Invalid execution results: 4
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 9
+    Unexpected exception: 0
+    Execution hung: 1
+    Invalid execution results: 8
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 673.91 seconds
 
 AtomicCounterArray
 Number of files processed: 7
-Total execution time: 263.8399999999999
-Test failure: 1
-Invalid execution results: 4
-Non-blocking algorithm: 2
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 1
+    Invalid execution results: 4
+    Validation function error: 0
+    Non-blocking algorithm: 2
+Total execution time: 263.84 seconds
 
 AtomicArrayWithCAS2SingleWriter
 Number of files processed: 8
-Total execution time: 309.37
-Invalid execution results: 7
-Non-blocking algorithm: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 8
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 7
+    Validation function error: 0
+    Non-blocking algorithm: 1
+Total execution time: 309.37 seconds
 
 MSQueueWithLinearTimeNonParallelRemove
 Number of files processed: 9
-Total execution time: 442.96
-Invalid execution results: 6
-Non-blocking algorithm: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
 Correct: 1
-Validation function error: 1
+Concurrency bugs: 8
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 6
+    Validation function error: 1
+    Non-blocking algorithm: 1
+Total execution time: 442.96 seconds
 
 SkipList
 Number of files processed: 4
-Total execution time: 47.080000000000005
-Test failure: 1
-Invalid execution results: 3
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 4
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 4
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 47.08 seconds
 
 AtomicArray
 Number of files processed: 8
-Total execution time: 201.28999999999994
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
 Correct: 1
-Non-blocking algorithm: 1
-Invalid execution results: 5
-Test failure: 1
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 6
+    Validation function error: 0
+    Non-blocking algorithm: 1
+Total execution time: 201.29 seconds
 
 AtomicArrayWithCAS2AndImplementedDCSS
 Number of files processed: 7
-Total execution time: 47.44
-Correct: 7
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 1
+Concurrency bugs: 6
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 4
+    Validation function error: 0
+    Non-blocking algorithm: 2
+Total execution time: 47.44 seconds
 
 SynchronousQueue
 Number of files processed: 9
-Total execution time: 281.84
-Test failure: 2
-Invalid execution results: 5
-Execution hung: 1
+Testing errors: 1
+Lincheck bugs: 0
+Timeouts: 0
 Correct: 1
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 2
+    Invalid execution results: 5
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 281.84 seconds
 
 DynamicArraySimplified
 Number of files processed: 1
-Total execution time: 7.27
-Invalid execution results: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 1
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 1
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 7.27 seconds
 
 TreiberStackWithElimination
 Number of files processed: 11
-Total execution time: 1116.8600000000001
-Test failure: 4
-Invalid execution results: 4
-Non-blocking algorithm: 1
-Correct: 2
+Testing errors: 4
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 7
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 5
+    Validation function error: 0
+    Non-blocking algorithm: 2
+Total execution time: 1116.86 seconds
 
 DynamicArray
 Number of files processed: 11
-Total execution time: 438.4299999999999
-Invalid execution results: 9
-Test failure: 1
-Non-blocking algorithm: 1
+Testing errors: 1
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 9
+    Validation function error: 0
+    Non-blocking algorithm: 1
+Total execution time: 438.43 seconds
 
 SingleWriterHashTable
 Number of files processed: 2
-Total execution time: 100.9
-Test failure: 1
-Invalid execution results: 1
+Testing errors: 1
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 1
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 1
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 100.90 seconds
 
 CoarseGrainedBank
 Number of files processed: 1
-Total execution time: 14.909999999999998
-Invalid execution results: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 1
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 1
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 14.91 seconds
 
 AtomicArrayWithDCSS
 Number of files processed: 8
-Total execution time: 229.49000000000007
-Non-blocking algorithm: 2
-Invalid execution results: 6
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 8
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 6
+    Validation function error: 0
+    Non-blocking algorithm: 2
+Total execution time: 229.49 seconds
 
 ConcurrentHashTable
 Number of files processed: 7
-Total execution time: 408.37
-Invalid execution results: 3
-Execution hung: 1
-Test failure: 1
-Non-blocking algorithm: 1
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
 Correct: 1
+Concurrency bugs: 6
+    Unexpected exception: 0
+    Execution hung: 1
+    Invalid execution results: 4
+    Validation function error: 0
+    Non-blocking algorithm: 1
+Total execution time: 408.37 seconds
 
 MSQueueWithLinearTimeRemove
 Number of files processed: 10
-Total execution time: 220.07000000000002
-Non-blocking algorithm: 1
-Correct: 1
-Invalid execution results: 4
-Validation function error: 4
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 4
+    Validation function error: 5
+    Non-blocking algorithm: 1
+Total execution time: 220.07 seconds
 
 LinkedListSet
 Number of files processed: 9
-Total execution time: 89.68
-Invalid execution results: 5
-Test failure: 4
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 9
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 9
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 89.68 seconds
 
 ShardedCounter
 Number of files processed: 3
-Total execution time: 35.18999999999999
-Invalid execution results: 3
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 3
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 3
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 35.19 seconds
 
 FAAQueue
 Number of files processed: 10
-Total execution time: 153.71999999999997
-Invalid execution results: 10
+Testing errors: 0
+Lincheck bugs: 0
+Timeouts: 0
+Correct: 0
+Concurrency bugs: 10
+    Unexpected exception: 0
+    Execution hung: 0
+    Invalid execution results: 10
+    Validation function error: 0
+    Non-blocking algorithm: 0
+Total execution time: 153.72 seconds
 
 Overall Statistics
-Compilation errors: 0
 Total number of files processed: 244
-Total execution time: 12006.77 seconds
-Correct: 33
-Incorrect: 211
-Incorrectness: 86.48%
+Testing errors: 18
+Correct: 7
+Incorrect: 219
+Incorrectness: 96.90%
 Lincheck bugs: 0
+Timeouts: 0
+Total execution time: 12006.77 seconds
