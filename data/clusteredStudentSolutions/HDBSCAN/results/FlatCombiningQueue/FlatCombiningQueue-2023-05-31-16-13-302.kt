@@ -54,10 +54,10 @@ class FlatCombiningQueue<E> : Queue<E> {
                         tasksForCombiner[randomIndex].value = null
                     }
                     helpOthers()
-                    println(dequeued)
-                    println(dequeued === PROCESSED)
-                    println(dequeued === DEQUE_TASK)
-                    println("-----")
+//                    println(dequeued)
+//                    println(dequeued === PROCESSED)
+//                    println(dequeued === DEQUE_TASK)
+//                    println("-----")
                     return dequeued
                 }
                 finally {
