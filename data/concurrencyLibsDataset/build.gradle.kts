@@ -21,7 +21,7 @@ dependencies {
     implementation("net.bytebuddy:byte-buddy-agent:1.14.12")
     implementation("org.jetbrains.kotlinx:atomicfu:0.19.0")
     testImplementation("junit:junit:4.13.1")
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.35")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.36")
     testImplementation("org.jetbrains.kotlinx:atomicfu:0.18.3")
     testImplementation("com.google.guava:guava:33.2.1-jre")
     testImplementation("org.agrona:agrona:1.22.0")
