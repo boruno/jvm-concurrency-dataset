@@ -1,0 +1,493 @@
+2.36-modelChecking                           |2.36-stress                                  
+-------------------------------------------------------------------------------------------
+                                             |
+Overall Statistics:                          |                                             
+Total number of files processed: 244         |Total number of files processed: 244         
+Testing errors: 40                           |Testing errors: 31                           
+Correct: 16                                  |Correct: 14                                  
+Incorrect: 183                               |Incorrect: 198                               
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Timeouts: 5                                  |Timeouts: 1                                  
+Total execution time: 4515.54 seconds        |Total execution time: 5111.51 seconds        
+-------------------------------------------------------------------------------------------
+Detailed Statistics by Data Structure:       |                                             
+-------------------------------------------------------------------------------------------
+AtomicArray:                                 |                                             
+Testing errors: 1                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 1                                   
+Concurrency bugs: 6                          |Concurrency bugs: 7                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 40.79 seconds                    |Total time: 115.51 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 6                  |    Unexpected exception: 5                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 0             |    Invalid execution results: 1             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicArrayNoAba:                            |                                             
+Testing errors: 3                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 0                                   
+Concurrency bugs: 6                          |Concurrency bugs: 10                         
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 64.19 seconds                    |Total time: 208.42 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 5                  
+    Execution hung: 0                        |    Execution hung: 3                        
+    Invalid execution results: 1             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicArrayWithCAS2:                         |                                             
+Testing errors: 2                            |Testing errors: 2                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 2                                   
+Concurrency bugs: 6                          |Concurrency bugs: 4                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 147.55 seconds                   |Total time: 277.55 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 1                  |    Unexpected exception: 0                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 5             |    Invalid execution results: 4             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicArrayWithCAS2AndImplementedDCSS:       |                                             
+Testing errors: 1                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 7                                   
+Concurrency bugs: 6                          |Concurrency bugs: 0                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 27.84 seconds                    |Total time: 11.81 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 2                  |    Unexpected exception: 0                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 4             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicArrayWithCAS2Simplified:               |                                             
+Testing errors: 3                            |Testing errors: 3                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 1                                   
+Concurrency bugs: 7                          |Concurrency bugs: 6                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 25.98 seconds                    |Total time: 33.02 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 6                  |    Unexpected exception: 5                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 1             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicArrayWithCAS2SingleWriter:             |                                             
+Testing errors: 1                            |Testing errors: 3                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 7                          |Concurrency bugs: 5                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 78.94 seconds                    |Total time: 204.41 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 3                  |    Unexpected exception: 1                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 4             |    Invalid execution results: 3             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicArrayWithDCSS:                         |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 8                          |Concurrency bugs: 8                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 56.50 seconds                    |Total time: 161.10 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 2                  |    Unexpected exception: 3                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 6             |    Invalid execution results: 4             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+AtomicCounterArray:                          |                                             
+Testing errors: 1                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 6                          |Concurrency bugs: 6                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 27.32 seconds                    |Total time: 174.22 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 4                  |    Unexpected exception: 2                  
+    Execution hung: 0                        |    Execution hung: 2                        
+    Invalid execution results: 2             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+CoarseGrainedBank:                           |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 1                          |Concurrency bugs: 1                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 7.99 seconds                     |Total time: 2.89 seconds                     
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 0                  |    Unexpected exception: 1                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 1             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+ConcurrentHashTable:                         |                                             
+Testing errors: 3                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 0                                   
+Concurrency bugs: 3                          |Concurrency bugs: 7                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 187.45 seconds                   |Total time: 227.62 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 1                  |    Unexpected exception: 3                  
+    Execution hung: 0                        |    Execution hung: 2                        
+    Invalid execution results: 2             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+ConcurrentHashTableWithoutResize:            |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 4                                   |Correct: 0                                   
+Concurrency bugs: 2                          |Concurrency bugs: 6                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 352.10 seconds                   |Total time: 307.50 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 0                  |    Unexpected exception: 2                  
+    Execution hung: 2                        |    Execution hung: 3                        
+    Invalid execution results: 0             |    Invalid execution results: 1             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+DynamicArray:                                |                                             
+Testing errors: 1                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 10                         |Concurrency bugs: 10                         
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 40.96 seconds                    |Total time: 399.05 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 9                  |    Unexpected exception: 8                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 1             |    Invalid execution results: 1             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+DynamicArraySimplified:                      |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 1                          |Concurrency bugs: 1                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 3.76 seconds                     |Total time: 3.78 seconds                     
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 1                  |    Unexpected exception: 1                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+FAABasedQueue:                               |                                             
+Testing errors: 1                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 7                          |Concurrency bugs: 7                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 115.48 seconds                   |Total time: 196.94 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 3                  |    Unexpected exception: 4                  
+    Execution hung: 1                        |    Execution hung: 2                        
+    Invalid execution results: 3             |    Invalid execution results: 1             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+FAABasedQueueSimplified:                     |                                             
+Testing errors: 0                            |Testing errors: 2                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 9                          |Concurrency bugs: 7                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 22.48 seconds                    |Total time: 30.83 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 9                  |    Unexpected exception: 5                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+FAAQueue:                                    |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 10                         |Concurrency bugs: 10                         
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 62.82 seconds                    |Total time: 65.30 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 3                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 5             |    Invalid execution results: 7             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+FCPriorityQueue:                             |                                             
+Testing errors: 0                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 7                          |Concurrency bugs: 9                          
+Timeouts: 3                                  |Timeouts: 0                                  
+Total time: 1095.97 seconds                  |Total time: 275.79 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 2                  |    Unexpected exception: 2                  
+    Execution hung: 1                        |    Execution hung: 1                        
+    Invalid execution results: 4             |    Invalid execution results: 6             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+FineGrainedBank:                             |                                             
+Testing errors: 2                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 1                                   
+Concurrency bugs: 7                          |Concurrency bugs: 7                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 278.83 seconds                   |Total time: 385.58 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 3                  |    Unexpected exception: 4                  
+    Execution hung: 3                        |    Execution hung: 3                        
+    Invalid execution results: 1             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+FlatCombiningQueue:                          |                                             
+Testing errors: 3                            |Testing errors: 2                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 4                          |Concurrency bugs: 7                          
+Timeouts: 2                                  |Timeouts: 0                                  
+Total time: 727.38 seconds                   |Total time: 243.11 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 0                  |    Unexpected exception: 1                  
+    Execution hung: 3                        |    Execution hung: 3                        
+    Invalid execution results: 1             |    Invalid execution results: 3             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+IntIntHashMap:                               |                                             
+Testing errors: 0                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 4                                   |Correct: 0                                   
+Concurrency bugs: 5                          |Concurrency bugs: 8                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 220.48 seconds                   |Total time: 453.47 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 3                  |    Unexpected exception: 1                  
+    Execution hung: 1                        |    Execution hung: 1                        
+    Invalid execution results: 1             |    Invalid execution results: 6             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+LinkedListSet:                               |                                             
+Testing errors: 4                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 5                          |Concurrency bugs: 9                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 24.22 seconds                    |Total time: 22.59 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 7                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+MSQueue:                                     |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 0                                   
+Concurrency bugs: 9                          |Concurrency bugs: 10                         
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 45.28 seconds                    |Total time: 30.86 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 9                  |    Unexpected exception: 10                 
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+MSQueueWithConstantTimeRemove:               |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 10                         |Concurrency bugs: 10                         
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 88.65 seconds                    |Total time: 76.90 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 9                  |    Unexpected exception: 10                 
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 1             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+MSQueueWithLinearTimeNonParallelRemove:      |                                             
+Testing errors: 1                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 1                                   
+Concurrency bugs: 7                          |Concurrency bugs: 8                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 142.29 seconds                   |Total time: 244.29 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 7                  |    Unexpected exception: 3                  
+    Execution hung: 0                        |    Execution hung: 2                        
+    Invalid execution results: 0             |    Invalid execution results: 3             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+MSQueueWithLinearTimeRemove:                 |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 0                                   
+Concurrency bugs: 9                          |Concurrency bugs: 10                         
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 78.65 seconds                    |Total time: 139.58 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 7                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 4             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+MSQueueWithOnlyLogicalRemove:                |                                             
+Testing errors: 1                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 5                          |Concurrency bugs: 5                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 18.97 seconds                    |Total time: 21.59 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 0                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 5             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+ShardedCounter:                              |                                             
+Testing errors: 0                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 3                          |Concurrency bugs: 3                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 6.92 seconds                     |Total time: 5.87 seconds                     
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 3                  |    Unexpected exception: 3                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+SingleWriterHashTable:                       |                                             
+Testing errors: 1                            |Testing errors: 1                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 1                          |Concurrency bugs: 1                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 72.95 seconds                    |Total time: 32.24 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 0                  |    Unexpected exception: 0                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 1             |    Invalid execution results: 1             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+SkipList:                                    |                                             
+Testing errors: 1                            |Testing errors: 0                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 3                          |Concurrency bugs: 4                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 12.02 seconds                    |Total time: 20.39 seconds                    
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 3                  |    Unexpected exception: 2                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 0             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+SynchronousQueue:                            |                                             
+Testing errors: 2                            |Testing errors: 2                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 0                                   
+Concurrency bugs: 6                          |Concurrency bugs: 7                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 94.26 seconds                    |Total time: 165.35 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 6                  
+    Execution hung: 1                        |    Execution hung: 1                        
+    Invalid execution results: 0             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+TreiberStack:                                |                                             
+Testing errors: 4                            |Testing errors: 4                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 0                                   |Correct: 0                                   
+Concurrency bugs: 1                          |Concurrency bugs: 1                          
+Timeouts: 0                                  |Timeouts: 0                                  
+Total time: 22.24 seconds                    |Total time: 118.75 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 1                  |    Unexpected exception: 0                  
+    Execution hung: 0                        |    Execution hung: 1                        
+    Invalid execution results: 0             |    Invalid execution results: 0             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |
+-------------------------------------------------------------------------------------------
+TreiberStackWithElimination:                 |                                             
+Testing errors: 4                            |Testing errors: 5                            
+Lincheck bugs: 0                             |Lincheck bugs: 0                             
+Correct: 1                                   |Correct: 1                                   
+Concurrency bugs: 6                          |Concurrency bugs: 4                          
+Timeouts: 0                                  |Timeouts: 1                                  
+Total time: 324.28 seconds                   |Total time: 455.20 seconds                   
+Detailed bug categories:                     |Detailed bug categories:                     
+    Unexpected exception: 5                  |    Unexpected exception: 2                  
+    Execution hung: 0                        |    Execution hung: 0                        
+    Invalid execution results: 1             |    Invalid execution results: 2             
+    Validation function error: 0             |    Validation function error: 0             
+    Non-blocking algorithm: 0                |    Non-blocking algorithm: 0                
+                                             |

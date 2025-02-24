@@ -2,6 +2,12 @@ import os
 from collections import defaultdict
 from typing import Dict, Tuple, List
 
+folder_1_path = "./test-results-2.36"
+folder_2_path = "./test-results-2.36"
+test_method_1 = "modelCheckingTest"
+test_method_2 = "stressTest"
+output_file = "stress_vs_mc-comparison_results.txt"
+
 lincheck_error_messages = {
     "Non-linearizability": "Invalid execution results",
     "Non-atomicity": "Execution hung",
@@ -101,7 +107,7 @@ def process_current_test(file_name, method, log_content, time):
     # Default case
     return file_name, method, "Test failure", time
 
-def process_statistics(base_path: str) -> Tuple[Dict, Dict]:
+def process_statistics(base_path: str, test_method) -> Tuple[Dict, Dict]:
     all_categories = {
         "Unexpected exception": 0,
         "Execution hung": 0,
@@ -140,7 +146,7 @@ def process_statistics(base_path: str) -> Tuple[Dict, Dict]:
                 results = parse_results(results_file)
 
                 for file_name, method, error_type, time in results:
-                    if method != "modelCheckingTest":
+                    if method != test_method:
                         continue
                     if file_name not in file_results:
                         file_results[file_name] = {"tests": [], "total_time": 0.0}
@@ -182,9 +188,16 @@ def process_statistics(base_path: str) -> Tuple[Dict, Dict]:
 
 
 def write_comparison(stats1, overall1, stats2, overall2, output_file):
-    with open(output_file, 'w') as f:
-        # Write header
-        f.write(f"{'Version 2.35':<45}|{'Version 2.35-NEWMC':<45}\n")
+    folder1 = folder_1_path.removeprefix("./test-results-")
+    folder2 = folder_2_path.removeprefix("./test-results-")
+
+    # Append testing methods to the folder names
+    folder1_header = f"{folder1}-{test_method_1.removesuffix('Test')}"
+    folder2_header = f"{folder2}-{test_method_2.removesuffix('Test')}"
+
+    with open(output_file, "w") as f:
+        # Write header using the header variables with left alignment over 45 characters
+        f.write(f"{folder1_header:<45}|{folder2_header:<45}\n")
         f.write("-" * 91 + "\n")
         f.write(f"{'':<45}|\n")
 
@@ -194,7 +207,10 @@ def write_comparison(stats1, overall1, stats2, overall2, output_file):
             val1 = overall1[key]
             val2 = overall2[key]
             if isinstance(val1, float):
-                f.write(f"{key}: {val1:.2f}".ljust(45) + "|" + f"{key}: {val2:.2f}".ljust(45) + "\n")
+                if key == "Total execution time":
+                    f.write(f"{key}: {val1} seconds".ljust(45) + "|" + f"{key}: {val2:.2f} seconds".ljust(45) + "\n")
+                else:
+                    f.write(f"{key}: {val1:.2f}".ljust(45) + "|" + f"{key}: {val2:.2f}".ljust(45) + "\n")
             else:
                 f.write(f"{key}: {val1}".ljust(45) + "|" + f"{key}: {val2}".ljust(45) + "\n")
 
@@ -223,7 +239,7 @@ def write_comparison(stats1, overall1, stats2, overall2, output_file):
             # Write total time
             time1 = folder_stats1.get("total_time", 0)
             time2 = folder_stats2.get("total_time", 0)
-            f.write(f"Total time: {time1:.2f}".ljust(45) + "|" + f"Total time: {time2:.2f}".ljust(45) + "\n")
+            f.write(f"Total time: {time1:.2f} seconds".ljust(45) + "|" + f"Total time: {time2:.2f} seconds".ljust(45) + "\n")
 
             # Write bug categories if there are any concurrency bugs
             if folder_stats1.get("Concurrency bugs", 0) > 0 or folder_stats2.get("Concurrency bugs", 0) > 0:
@@ -255,13 +271,9 @@ def write_comparison(stats1, overall1, stats2, overall2, output_file):
 
 
 def main():
-    comparison_folder_1_path = "./test-results-2.35"
-    comparison_folder_2_path = "./test-results-2.35-NEWMC"
-    output_file = "comparison_results.txt"
-
     # Process both versions
-    stats1, overall1 = process_statistics(comparison_folder_1_path)
-    stats2, overall2 = process_statistics(comparison_folder_2_path)
+    stats1, overall1 = process_statistics(folder_1_path, test_method_1)
+    stats2, overall2 = process_statistics(folder_2_path, test_method_2)
 
     # Write comparison
     write_comparison(stats1, overall1, stats2, overall2, output_file)
