@@ -1,7 +1,7 @@
 import os
 import re
 
-path = '.' # Change this to the path of the directory containing the folders
+path = '..'  # Change this to the path of the directory containing the folders
 
 for folder_name in os.listdir(path):
     folder_path = os.path.join(path, folder_name)

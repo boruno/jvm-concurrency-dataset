@@ -19,7 +19,7 @@ lincheck_error_messages = {
 }
 
 # Path to the directory containing subfolders
-base_path = "./test-results"
+base_path = "test-results"
 
 output_file = "testing_statistics.txt"
 

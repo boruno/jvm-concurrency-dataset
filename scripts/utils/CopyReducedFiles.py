@@ -2,9 +2,9 @@ import os
 import shutil
 
 # Paths
-initial_dataset_path = "../data/studentSolutions"
-reduction_file_path = "../data/clusteredStudentSolutions/editDistanceClustering/EDC_final_reduction.txt"
-results_path = "../data/clusteredStudentSolutions/editDistanceClustering/results"
+initial_dataset_path = "../../data/studentSolutions"
+reduction_file_path = "../../data/clusteredStudentSolutions/editDistanceClustering/EDC_final_reduction.txt"
+results_path = "../../data/clusteredStudentSolutions/editDistanceClustering/results"
 
 def copy_reduced_files():
     # Dictionary to track all the files that should be present for each task folder

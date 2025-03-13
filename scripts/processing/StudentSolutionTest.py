@@ -7,8 +7,8 @@ import argparse
 from enum import Enum
 
 # Paths
-DATASET_PATH = "../data/clusteredStudentSolutions/HDBSCAN/results"
-PROJECTS_PATH = "../template-projects"
+DATASET_PATH = "../../data/clusteredStudentSolutions/HDBSCAN/results"
+PROJECTS_PATH = "../../template-projects"
 TEMP_DIR_PATH = os.path.join(PROJECTS_PATH, "temp")
 TEST_RESULTS_PATH = "./test-results"
 JAVA_HOME = ""

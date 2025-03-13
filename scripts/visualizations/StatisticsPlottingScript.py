@@ -170,7 +170,7 @@ def plot_statistics(data, version):
 
 if __name__ == "__main__":
     file_path = "testing_statistics.txt"  # Update this if the file is located elsewhere
-    version_match = re.search(r'-(\d+\.\d+)', file_path)
+    version_match = re.search(r'-(\d+\.\d+.*)\.txt$', file_path)
     version = version_match.group(1) if version_match else "unknown"
 
     stats_data = parse_statistics_file(file_path)

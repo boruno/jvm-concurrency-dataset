@@ -2,8 +2,8 @@ import os
 from collections import defaultdict
 from typing import Dict, Tuple, List
 
-folder_1_path = "./test-results-2.36"
-folder_2_path = "./test-results-2.36"
+folder_1_path = "test-results-2.36"
+folder_2_path = "test-results-2.36"
 test_method_1 = "modelCheckingTest"
 test_method_2 = "stressTest"
 output_file = "stress_vs_mc-comparison_results.txt"
