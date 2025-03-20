@@ -23,7 +23,7 @@ def parse_statistics_file(file_path):
                     'lincheck_bugs': 0,
                     'correct': 0,
                     'timeouts': 0,
-                    'testing_errors': 0
+                    'non-executable_tests': 0
                 }
             else:
                 parts = line.split(': ')
@@ -35,7 +35,7 @@ def parse_statistics_file(file_path):
                     if 'Number of files processed' in key:
                         data[current_task]['processed'] = value
                     elif 'Testing errors' in key:
-                        data[current_task]['testing_errors'] = value
+                        data[current_task]['non-executable_tests'] = value
                     elif 'Lincheck bugs' in key:
                         data[current_task]['lincheck_bugs'] = value
                     elif 'Timeouts' in key:
@@ -72,8 +72,8 @@ def plot_statistics(data, version):
         return
 
     tasks = list(data.keys())
-    category_names = ['Concurrency Violations', 'Lincheck Bugs', 'Correct', 'Timeouts', 'Testing Errors']
-    colors = ['green', 'black', 'red', 'white', 'gray']
+    category_names = ['Concurrency Violations', 'Lincheck Bugs', 'Correct', 'Timeouts', 'Non-executable tests']
+    colors = ["#E69F00", "#D55E00", "#009E73", "#CC79A7", "#999999"]
 
     # Determine grid dimensions for subplots (try a square layout)
     num_tasks = len(tasks)
@@ -97,7 +97,7 @@ def plot_statistics(data, version):
             stats['lincheck_bugs'],
             stats['correct'],
             stats['timeouts'],
-            stats['testing_errors']
+            stats['non-executable_tests']
         ]
         ax = axes[idx]
 
@@ -169,7 +169,7 @@ def plot_statistics(data, version):
 
 
 if __name__ == "__main__":
-    file_path = "testing_statistics.txt"  # Update this if the file is located elsewhere
+    file_path = "../processing/testing_statistics-2.38-eighth-less-invocations.txt"  # Update this if the file is located elsewhere
     version_match = re.search(r'-(\d+\.\d+.*)\.txt$', file_path)
     version = version_match.group(1) if version_match else "unknown"
 
