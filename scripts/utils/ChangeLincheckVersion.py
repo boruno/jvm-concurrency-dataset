@@ -22,7 +22,7 @@ def update_lincheck_version(directory: str, new_version: str):
                     print(f"No changes made in {file_path}")
 
 # Set directory and desired version
-directory_to_search = "../"
-new_lincheck_version = "2.36"
+directory_to_search = "../../"
+new_lincheck_version = "2.39"
 
 update_lincheck_version(directory_to_search, new_lincheck_version)

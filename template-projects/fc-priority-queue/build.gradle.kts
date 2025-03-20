@@ -33,7 +33,7 @@ dependencies {
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test-junit"))
     testImplementation("junit:junit:4.13.1")
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.36")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.39")
 }
 
 kotlin {
