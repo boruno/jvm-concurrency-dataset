@@ -149,7 +149,7 @@ def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=
         gradle_command = [
             "./gradlew", "test",
             f"--tests={test_class}.{test_method}",
-            "--info", "--warning-mode", "none"
+            "--warning-mode=none", "--console=plain"
         ]
         result = subprocess.run(
             gradle_command,
@@ -171,9 +171,9 @@ def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=
         end_time = time.time()
         duration = end_time - start_time
         error_message = e.stdout + e.stderr
-        failed_task_match = re.search(r"> Task :.* FAILED", error_message)
-        if failed_task_match:
-            start_index = failed_task_match.start()
+        task_line_match = re.search(r"> Task :test", error_message)
+        if task_line_match:
+            start_index = task_line_match.start()
             end_index = error_message.find("FAILURE: Build failed with an exception.", start_index)
             if end_index != -1:
                 error_message = error_message[start_index:end_index].strip()
