@@ -11,6 +11,7 @@ plugins {
     kotlin("jvm") version "2.0.20"
     java
 }
+
 apply(plugin = "kotlinx-atomicfu")
 
 repositories {
@@ -22,7 +23,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.39")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.38")
 }
 
 sourceSets.main {
@@ -33,8 +34,19 @@ sourceSets.test {
     java.srcDir("test")
 }
 
-java {
-    toolchain {
+tasks.test {
+    testLogging {
+        events("FAILED")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showStackTraces = true
+        showCauses = true
+        showStandardStreams = true
+    }
+}
+
+kotlin {
+    jvmToolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

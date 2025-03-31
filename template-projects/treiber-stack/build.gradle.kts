@@ -8,22 +8,14 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "2.0.20"
     java
-}
-
-tasks {
-    test {
-        maxHeapSize = "4g"
-    }
 }
 
 apply(plugin = "kotlinx-atomicfu")
 
-group = "ru.ifmo.mpp"
-version = "1.0-SNAPSHOT"
-
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -31,7 +23,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.39")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.38")
 }
 
 sourceSets.main {
@@ -40,4 +32,39 @@ sourceSets.main {
 
 sourceSets.test {
     java.srcDir("test")
+}
+
+tasks.test {
+    testLogging {
+        events("FAILED")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showStackTraces = true
+        showCauses = true
+        showStandardStreams = true
+    }
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+tasks {
+    test {
+        maxHeapSize = "6g"
+    }
+}
+
+tasks.withType<Jar>() {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType<Test> {
+    jvmArgs(
+        "--add-opens", "java.base/jdk.internal.misc=ALL-UNNAMED",
+        "--add-exports", "java.base/jdk.internal.util=ALL-UNNAMED",
+        "--add-exports", "java.base/sun.security.action=ALL-UNNAMED"
+    )
 }
