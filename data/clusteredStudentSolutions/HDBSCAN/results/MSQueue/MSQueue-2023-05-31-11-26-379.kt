@@ -20,7 +20,7 @@ class MSQueue<E> : Queue<E> {
             val currentTail  = tail.value
             if (currentTail.next.compareAndSet(null, newTail)){
                 tail.compareAndSet(currentTail, newTail)
-                println("Enqueue $element" + toString())
+//                println("Enqueue $element" + toString())
                 return
             } else {
                 tail.compareAndSet(currentTail, currentTail.next.value!!)
@@ -35,7 +35,7 @@ class MSQueue<E> : Queue<E> {
             val currentNext = currentHead.next.value ?: throw IllegalStateException("Queue is empty")
             if (head.compareAndSet(currentHead, currentNext)){
                 val result = currentHead.element
-                println("Dequeued $result" + toString())
+//                println("Dequeued $result" + toString())
                 return result
             }
         }

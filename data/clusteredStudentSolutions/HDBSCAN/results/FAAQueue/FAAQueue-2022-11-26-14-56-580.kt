@@ -77,7 +77,7 @@ class FAAQueue<E> {
             if (cellValue is Just<*>) {
                 return (cellValue as Just<E>).value
             } else {
-                println(cellValue)
+//                println(cellValue)
                 return null
             }
 //            val nextCellValue = segment.get().get((index % SEGMENT_SIZE).toInt())

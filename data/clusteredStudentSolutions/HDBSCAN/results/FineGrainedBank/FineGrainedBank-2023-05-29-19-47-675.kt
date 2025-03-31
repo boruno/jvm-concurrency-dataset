@@ -4,6 +4,7 @@
 
 import Bank.Companion.MAX_AMOUNT
 import java.util.concurrent.locks.*
+import kotlinx.atomicfu.locks.withLock
 
 class FineGrainedBank(accountsNumber: Int) : Bank {
     private val accounts: Array<Account> = Array(accountsNumber) { Account() }

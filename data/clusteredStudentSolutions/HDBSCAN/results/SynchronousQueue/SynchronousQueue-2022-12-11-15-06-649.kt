@@ -27,7 +27,6 @@ class SynchronousQueue<E:Any> {
      * [receive] invocation on this channel.
      */
     suspend fun send(element: E): Unit {
-        LOG.info("aaaa")
         while (true) {
             val curTail = tail.value
             if (isEmpty() || curTail.x != null) {

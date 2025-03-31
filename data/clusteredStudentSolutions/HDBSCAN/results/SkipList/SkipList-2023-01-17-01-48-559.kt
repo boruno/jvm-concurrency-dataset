@@ -137,7 +137,7 @@ class SkipList<E : Comparable<E>> {
 
     private fun findSubsetOnLevel(element: E, level: Int): NodeSubset<E> {
         var prevNode = head
-        check(prevNode.levelsCount >= level) { println("Levels count: ${prevNode.levelsCount}; Level: $level") }
+//        check(prevNode.levelsCount >= level) { println("Levels count: ${prevNode.levelsCount}; Level: $level") }
         val curNodeAtomic = prevNode.next[level]
         var curNode = curNodeAtomic.value!!
 

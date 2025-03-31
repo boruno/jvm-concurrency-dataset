@@ -14,7 +14,7 @@ class AtomicCounterArray(size: Int) {
         for (i in 0 until size) {
             array[i].value = 0
         }
-        println()
+//        println()
     }
 
     fun get(index: Int): Int {
@@ -22,7 +22,7 @@ class AtomicCounterArray(size: Int) {
         require(index >= 0 && index < array.size)
         var i = 0
         while (i < array.size){
-            print(array[i].value)
+//            print(array[i].value)
             i++
         }
         while (true){
@@ -32,13 +32,13 @@ class AtomicCounterArray(size: Int) {
                 continue
             }
             else {
-                print(" ($index, $k) -- ")
+//                print(" ($index, $k) -- ")
                 var i = 0
                 while (i < array.size){
-                    print(array[i].value)
+//                    print(array[i].value)
                     i++
                 }
-                println()
+//                println()
                 return k as Int
             }
         }
@@ -64,16 +64,16 @@ class AtomicCounterArray(size: Int) {
     }
 
     fun inc2(index1: Int, index2: Int): Boolean {
-        print("Inc2 works! ")
+//        print("Inc2 works! ")
         if (index1 == index2)
-            print(" aboba ")
+//            print(" aboba ")
         require(index1 != index2) { "The indices should be different" }
         var desc: IncrementDescriptor
         var i = 0
         while (i < array.size){
-            print(array[i].value)
+//            print(array[i].value)
             i++ }
-        print("--i1:$index1, i2:$index2 Before Incr: ${array[index1].value}, ${array[index2].value} ")
+//        print("--i1:$index1, i2:$index2 Before Incr: ${array[index1].value}, ${array[index2].value} ")
         while (true){
             val firstValue = array[index1].value
             if (firstValue is IncrementDescriptor){
@@ -95,7 +95,7 @@ class AtomicCounterArray(size: Int) {
             }
             continue
         }
-        println("After: ${array[index1].value}, ${array[index2].value} -- ${desc.status.value}")
+//        println("After: ${array[index1].value}, ${array[index2].value} -- ${desc.status.value}")
         if (desc.status.value === SUCCESS) {
             return true }
         return false

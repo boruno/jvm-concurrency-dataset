@@ -52,11 +52,11 @@ class TreiberStackWithElimination<E> {
      */
     fun pop(): E? {
         if ( !eliminationArray[ 1 ].equals( null ) ) {
-            println( eliminationArray[ 1 ].value )
+//            println( eliminationArray[ 1 ].value )
             return eliminationArray[ 1 ].getAndSet( null ) as E?
         }
         if ( !eliminationArray[ 0 ].equals( null ) ) {
-            println( eliminationArray[ 0 ].value )
+//            println( eliminationArray[ 0 ].value )
             return eliminationArray[ 0 ].getAndSet( null ) as E?
         }
         while ( true ) {

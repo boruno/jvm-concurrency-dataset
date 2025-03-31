@@ -118,7 +118,7 @@ class DynamicArrayImpl<E> : DynamicArray<E> {
                             oldSize = nextCore.size
                         }
                         if (size < index + 1) {
-                            println("Size have not advanced in PUT!");
+//                            println("Size have not advanced in PUT!");
                             throw Exception("Size have not advanced in PUT!")
                         }
                         currentCore.putCas(index, currentValue, NodeMoved(element))

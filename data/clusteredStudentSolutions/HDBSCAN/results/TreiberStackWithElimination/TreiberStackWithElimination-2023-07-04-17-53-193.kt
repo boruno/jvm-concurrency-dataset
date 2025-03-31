@@ -4,7 +4,7 @@ import kotlinx.atomicfu.*
 import java.util.concurrent.*
 
 @Suppress("UNCHECKED_CAST")
-class TreiberStackWithElimination<E> : Stack<E> {
+open class TreiberStackWithElimination<E> : Stack<E> {
     private val stack = TreiberStack<E>()
 
     // TODO: Try to optimize concurrent push and pop operations,
@@ -23,7 +23,7 @@ class TreiberStackWithElimination<E> : Stack<E> {
     // TODO: element. If so, clean the cell and finish,
     // TODO: returning `true`. Otherwise, move the cell
     // TODO: to the empty state and return `false`.
-    private fun tryPushElimination(element: E): Boolean {
+    protected open fun tryPushElimination(element: E): Boolean {
         val cellIndex = randomCellIndex()
         if (eliminationArray[cellIndex].compareAndSet(CELL_STATE_EMPTY, element)) {
             for (i in 0..ELIMINATION_WAIT_CYCLES) {

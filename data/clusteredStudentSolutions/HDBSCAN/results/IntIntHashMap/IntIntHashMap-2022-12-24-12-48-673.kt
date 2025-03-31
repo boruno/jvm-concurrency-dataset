@@ -154,9 +154,9 @@ class IntIntHashMap {
                         if(nextCore.value!!.putInternal(-currentKey, currentValue) == NEEDS_REHASH)
                             throw Exception("Need rehash, where not supposed")
                         if (!map[index + 1].compareAndSet(currentValue, MOVED_VALUE)) {
-                            print("165:")
-                            print(currentValue)
-                            println(map[index + 1].value)
+//                            print("165:")
+//                            print(currentValue)
+//                            println(map[index + 1].value)
                             needToRestart = true
                             break
                         }
@@ -170,18 +170,18 @@ class IntIntHashMap {
                     if (currentValue > 0 && currentValue != DEL_VALUE)
                     {
                         if (!map[index].compareAndSet(currentKey, -currentKey)) {
-                            print("175:")
-                            print(currentValue)
-                            println(map[index + 1].value)
+//                            print("175:")
+//                            print(currentValue)
+//                            println(map[index + 1].value)
                             needToRestart = true
                             break
                         }
                         if(nextCore.value!!.putInternal(currentKey, currentValue) == NEEDS_REHASH)
                             throw Exception("Need rehash, where not supposed")
                         if (!map[index + 1].compareAndSet(currentValue, MOVED_VALUE)) {
-                            print("183:")
-                            print(currentValue)
-                            println(map[index + 1].value)
+//                            print("183:")
+//                            print(currentValue)
+//                            println(map[index + 1].value)
                             needToRestart = true
                             break
                         }
@@ -197,9 +197,9 @@ class IntIntHashMap {
                         map[index + 1].compareAndSet(currentValue, MOVED_VALUE)
                         if (map[index + 1].value != MOVED_VALUE)
                         {
-                            print("196:")
-                            print(currentValue)
-                            println(map[index + 1].value)
+//                            print("196:")
+//                            print(currentValue)
+//                            println(map[index + 1].value)
                             needToRestart = true
                             break
                         }

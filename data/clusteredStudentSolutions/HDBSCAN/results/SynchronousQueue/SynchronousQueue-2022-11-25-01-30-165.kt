@@ -66,12 +66,12 @@ class SynchronousQueue<E : Any> {
                 val receiver = suspendCoroutine<Continuation<E>?> { cont ->
                     val node = Node(cont, element)
                     node.senderRnd = Random.nextInt(100)
-                    println("haaaah:" + node.senderRnd)
+//                    println("haaaah:" + node.senderRnd)
                     if (t.next.compareAndSet(null, node)) {
                         tail.compareAndSet(t, node)
                     }
                 }
-                print("lal")
+//                print("lal")
                 // after receiver kindly asks sender to stop and let him go after
                 suspendCoroutine { cont ->
                     assert(receiver != null)
@@ -79,7 +79,7 @@ class SynchronousQueue<E : Any> {
                     cont.resume(Unit)
                 }
                 // i'm done -- goodbye, folks
-                print("love")
+//                print("love")
                 return
             } else {
                 // gotta tell everyone i took the receiver
@@ -90,7 +90,7 @@ class SynchronousQueue<E : Any> {
                         // receiver,you have a value
                         suspendCoroutine { cont ->
                             //currentHeadNext.sendThread = cont
-                            print(currentHeadNext.receiveThread!!.hashCode())
+//                            print(currentHeadNext.receiveThread!!.hashCode())
                             currentHeadNext.receiveThread!!.resume(element)
                             cont.resume(Unit)
                         }
@@ -143,7 +143,7 @@ class SynchronousQueue<E : Any> {
                         // i have found a vacant sender
                         // gotta notify him to finish first
                         //val s = currentHeadNext.senderRnd
-                        println("heh: " + currentHeadNext.senderRnd)
+//                        println("heh: " + currentHeadNext.senderRnd)
                         return suspendCoroutine<E> {  cont ->
                             //val o = currentHeadNext.sendThread!!.hashCode()
                             //print(h.sendThread == null)

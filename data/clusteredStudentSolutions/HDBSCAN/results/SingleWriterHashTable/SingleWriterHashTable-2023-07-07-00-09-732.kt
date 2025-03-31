@@ -4,8 +4,8 @@
 
 import kotlinx.atomicfu.*
 
-class SingleWriterHashTable<K: Any, V: Any> : HashTable<K, V> {
-    private val core = atomic(Core<K, V>(INITIAL_CAPACITY))
+class SingleWriterHashTable<K: Any, V: Any> (initialCapacity: Int) : HashTable<K, V> {
+    private val core = atomic(Core<K, V>(initialCapacity))
 
     override fun put(key: K, value: V): V? {
         while (true) {
@@ -110,6 +110,5 @@ class SingleWriterHashTable<K: Any, V: Any> : HashTable<K, V> {
 }
 
 private const val MAGIC = -0x61c88647 // golden ratio
-private const val INITIAL_CAPACITY = 4
 private const val MAX_PROBES = 2
 private val NEEDS_REHASH = "NEEDS_REHASH"

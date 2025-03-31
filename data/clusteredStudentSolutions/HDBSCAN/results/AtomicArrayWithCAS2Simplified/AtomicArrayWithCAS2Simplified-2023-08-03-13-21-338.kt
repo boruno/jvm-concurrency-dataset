@@ -18,9 +18,9 @@ class AtomicArrayWithCAS2Simplified<E : Any>(size: Int, initialValue: E) {
 
     fun get(index: Int): E {
         return when (val value = array[index].value) {
-            is AtomicArrayWithCAS2SingleWriter<*>.CAS2Descriptor -> {
+            is AtomicArrayWithCAS2Simplified<*>.CAS2Descriptor -> {
                 when (value.status.value) {
-                    AtomicArrayWithCAS2SingleWriter.Status.UNDECIDED, AtomicArrayWithCAS2SingleWriter.Status.FAILED -> {
+                    AtomicArrayWithCAS2Simplified.Status.UNDECIDED, AtomicArrayWithCAS2Simplified.Status.FAILED -> {
                         when {
                             value.index1 == index -> value.expected1
                             value.index2 == index -> value.expected2
@@ -28,7 +28,7 @@ class AtomicArrayWithCAS2Simplified<E : Any>(size: Int, initialValue: E) {
                         }
                     }
 
-                    AtomicArrayWithCAS2SingleWriter.Status.SUCCESS -> {
+                    AtomicArrayWithCAS2Simplified.Status.SUCCESS -> {
                         when {
                             value.index1 == index -> value.update1
                             value.index2 == index -> value.update2
@@ -64,12 +64,12 @@ class AtomicArrayWithCAS2Simplified<E : Any>(size: Int, initialValue: E) {
     }
 
     inner class CAS2Descriptor(
-        private val index1: Int,
-        private val expected1: E,
-        private val update1: E,
-        private val index2: Int,
-        private val expected2: E,
-        private val update2: E
+        internal val index1: Int,
+        internal val expected1: E,
+        internal val update1: E,
+        internal val index2: Int,
+        internal val expected2: E,
+        internal val update2: E
     ) {
         val status = atomic(UNDECIDED)
 

@@ -74,12 +74,12 @@ class LinkedListSet<E : Comparable<E>> {
        loop@ while (true) {
             var curNode: Node<E>? = first
             var nextNode = curNode!!.nextAndRemoved.value.first
-            println(curNode.next?.element)
-            println(nextNode?.element)
+//            println(curNode.next?.element)
+//            println(nextNode?.element)
             while ((curNode == first && nextNode != last) || curNode!!.element < x) {
                 val (nextNextNode, nextNextRemoved) = nextNode?.nextAndRemoved?.value ?: Pair(null, false)
                 if (nextNextRemoved) {
-                    if (!curNode.nextAndRemoved.compareAndSet(nextNode, nextNextNode, false, false))
+                    if (curNode != null && !curNode.nextAndRemoved.compareAndSet(nextNode, nextNextNode, false, false))
                         continue@loop
                     nextNode = nextNextNode
                 } else {
@@ -100,7 +100,7 @@ class AtomicNodeWrapper<E : Comparable<E>>(
 
     init {
         if (!isRemoved) {
-            println(node?.element)
+//            println(node?.element)
             atomicNode = atomic(Alive(node))
         } else {
             atomicNode = atomic(Dead(node))
@@ -192,141 +192,3 @@ class Node<E : Comparable<E>>(
     fun casNext(expected: Node<E>?, update: Node<E>?) =
         _next.compareAndSet(expected, update)
 }
-
-//class LinkedListSet<E : Comparable<E>> {
-//    private class MyAtomicMarkableReference(node: Node?, isRemoved: Boolean) {
-//        private var nodeAtomicRef: AtomicRef<NodeWrapper>? = null
-//
-//        init {
-//            nodeAtomicRef = if (!isRemoved) {
-//                atomic(Alive(node))
-//            } else {
-//                atomic(Removed(node))
-//            }
-//        }
-//
-//        operator fun get(flag: BooleanArray): Node? {
-//            val node = nodeAtomicRef!!.value
-//            if (node is Alive) {
-//                flag[0] = false
-//                return node.node
-//            }
-//            if (node is Removed) {
-//                flag[0] = true
-//                return node.node
-//            }
-//            throw RuntimeException("unexpected case")
-//        }
-//
-//        val reference: Node?
-//            get() = get(BooleanArray(1))
-//        val isMarked: Boolean
-//            get() {
-//                val res = BooleanArray(1)
-//                get(res)
-//                return res[0]
-//            }
-//
-//        fun compareAndSet(
-//            expectedNode: Node?, newNode: Node?,
-//            expectedMark: Boolean, newMark: Boolean
-//        ): Boolean {
-//            val node = nodeAtomicRef!!.value
-//            if (!expectedMark) {
-//                if (node is Alive) {
-//                    val node1 = node.node
-//                    if (node1 == expectedNode) {
-//                        return if (!newMark) {
-//                            nodeAtomicRef!!.compareAndSet(node, Alive(newNode))
-//                        } else {
-//                            nodeAtomicRef!!.compareAndSet(node, Removed(newNode))
-//                        }
-//                    }
-//                }
-//            } else {
-//                if (node is Removed) {
-//                    val node1 = node.node
-//                    if (node1 == expectedNode) {
-//                        return if (!newMark) {
-//                            nodeAtomicRef!!.compareAndSet(node, Alive(newNode))
-//                        } else {
-//                            nodeAtomicRef!!.compareAndSet(node, Removed(newNode))
-//                        }
-//                    }
-//                }
-//            }
-//            return false
-//        }
-//    }
-//
-//    private interface NodeWrapper
-//    private class Removed(val node: Node?) : NodeWrapper
-//    private class Alive(val node: Node?) : NodeWrapper
-//    private class Node(val x: Int, next: Node?) {
-//        val nextAndFlag = MyAtomicMarkableReference(next, false)
-//    }
-//
-//    private class Window(val cur: Node?, val next: Node?)
-//
-//    private val head = Node(Int.MIN_VALUE, Node(Int.MAX_VALUE, null))
-//
-//    /**
-//     * Returns the [Window], where cur.x < x <= next.x
-//     */
-//    private fun findWindow(x: Int): Window {
-//        retry@ while (true) {
-//            var w_cur: Node? = head
-//            var w_next = w_cur!!.nextAndFlag.reference
-//            val w_next_is_removed = BooleanArray(1)
-//            while (w_next!!.x < x) {
-//                val w_next_next = w_next.nextAndFlag[w_next_is_removed]
-//                if (w_next_is_removed[0]) {
-//                    if (!w_cur!!.nextAndFlag.compareAndSet(w_next, w_next_next, false, false)) {
-//                        continue@retry
-//                    }
-//                    w_next = w_next_next
-//                } else {
-//                    w_cur = w_next
-//                    w_next = w_cur.nextAndFlag.reference
-//                }
-//            }
-//            return Window(w_cur, w_next)
-//        }
-//    }
-//
-//    fun add(x: Int): Boolean {
-//        while (true) {
-//            val w = findWindow(x)
-//            if (!w.next!!.nextAndFlag.isMarked) {
-//                if (w.next.x == x) {
-//                    return false
-//                }
-//            }
-//            val node = Node(x, w.next)
-//            if (w.cur!!.nextAndFlag.compareAndSet(w.next, node, false, false)) {
-//                return true
-//            }
-//        }
-//    }
-//
-//    fun remove(x: Int): Boolean {
-//        while (true) {
-//            val w = findWindow(x)
-//            if (w.next!!.nextAndFlag.isMarked || w.next.x != x) {
-//                return false
-//            }
-//            val node = w.next.nextAndFlag.reference
-//            if (w.next.nextAndFlag.compareAndSet(node, node, false, true)) {
-//                w.cur!!.nextAndFlag.compareAndSet(w.next, node, false, false)
-//                return true
-//            }
-//        }
-//    }
-//
-//    operator fun contains(x: Int): Boolean {
-//        val w = findWindow(x)
-//        return if (!w.next!!.nextAndFlag.isMarked) {
-//            w.next.x == x
-//        } else false
-//    }
-//}

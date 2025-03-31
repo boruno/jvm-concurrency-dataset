@@ -56,7 +56,7 @@ class AtomicArray<E : Any>(size: Int, initialValue: E) {
         descriptor.complete()
 
         if (descriptor.outcome.value != CasnOutcome.SUCCESS) {
-            println(this)
+//            println(this)
         }
         
         return descriptor.outcome.value == CasnOutcome.SUCCESS

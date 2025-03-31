@@ -68,8 +68,8 @@ fun main() {
     q.enqueue(1)
     q.enqueue(2)
     q.enqueue(1)
-    println(q.dequeue())
-    println(q.dequeue())
-    println(q.dequeue())
-    println(q.dequeue())
+//    println(q.dequeue())
+//    println(q.dequeue())
+//    println(q.dequeue())
+//    println(q.dequeue())
 }

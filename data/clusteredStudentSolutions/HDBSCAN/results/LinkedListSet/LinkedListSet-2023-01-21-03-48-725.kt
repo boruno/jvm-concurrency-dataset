@@ -26,14 +26,14 @@ class LinkedListSet<E : Comparable<E>> {
             var nodeNext = node.value.next
 
             while (nodeNext?.optElement() != null && nodeNext.element < element) {
-                println("element = " + nodeNext.element)
+//                println("element = " + nodeNext.element)
 
                 node.value = nodeNext
                 nodeNext = node.value.next
             }
             assert(nodeNext != null)
 
-            println(nodeNext?.optElement().toString() + "-----")
+//            println(nodeNext?.optElement().toString() + "-----")
 
 
             if (nodeNext?.optElement() != null && !nodeNext.alive) {
@@ -41,14 +41,14 @@ class LinkedListSet<E : Comparable<E>> {
             }
 
             if (nodeNext?.optElement() != null && nodeNext?.element == element) {
-                println("return false")
+//                println("return false")
                 return false
             }
 
             val newNode = Node<E>(element, nodeNext)
             val nodeNextAndAlive = node.value.nextAndAlive.value
             if (nodeNextAndAlive.second && node.value.casNext(nodeNextAndAlive, Pair(newNode, true))) {
-                println("element = $element return true")
+//                println("element = $element return true")
                 return true
             }
         }

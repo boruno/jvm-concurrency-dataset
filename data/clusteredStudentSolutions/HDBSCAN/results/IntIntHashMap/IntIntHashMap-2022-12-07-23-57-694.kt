@@ -118,7 +118,7 @@ class IntIntHashMap {
                     oldValue = map[index + 1].value
                 }
                 // found key -- update value
-                print(map[index + 1].value == oldValue)
+//                print(map[index + 1].value == oldValue)
                 if (!map[index + 1].compareAndSet(oldValue, value)){
                     continue
                 }

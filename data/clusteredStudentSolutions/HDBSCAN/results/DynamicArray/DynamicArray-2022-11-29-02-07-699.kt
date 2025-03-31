@@ -217,7 +217,7 @@ private class Core<E>(
             return false
 
         if (!casSize(index, index + 1)) {
-            println("Failed to CAS size from $index to ${index + 1}. Current size is ${_size.value}.")
+//            println("Failed to CAS size from $index to ${index + 1}. Current size is ${_size.value}.")
             return false
         }
 

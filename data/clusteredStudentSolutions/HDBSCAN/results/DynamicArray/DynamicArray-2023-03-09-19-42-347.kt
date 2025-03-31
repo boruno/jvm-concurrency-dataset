@@ -72,8 +72,6 @@ private class Core<E>(
     val size: Int = _size.value
     val deprecated: Boolean = _deprecated.value
 
-    val debug = atomic("")
-
     @Suppress("UNCHECKED_CAST")
     fun get(index: Int): E {
         require(index < size)
@@ -110,15 +108,10 @@ private class Core<E>(
             val localSize = size
             if (localSize >= capacity) break
             if (array[localSize].compareAndSet(null, Movement.Still(element))) {
-                debug.compareAndSet(debug.value, "success")
                 _size.compareAndSet(localSize, localSize + 1)
-                debug.compareAndSet(debug.value, "after success $size")
                 return
             } else {
-                debug.compareAndSet(debug.value, "failure")
                 _size.compareAndSet(localSize, localSize + 1)
-                debug.compareAndSet(debug.value, "after failure $size")
-
             }
         }
         val newCore = Core<E>(capacity shl 1, capacity + 1)
@@ -135,7 +128,7 @@ private class Core<E>(
         for (i in (0 until capacity)) {
             if (newCore.array[i].value != null) continue
             val value = array[i].getAndUpdate { movement -> when(movement) {is Movement.Still -> Movement.Moved(movement.value); else -> movement} }
-                newCore.array[i].compareAndSet(null, Movement.Still(value!!.value))
+            newCore.array[i].compareAndSet(null, Movement.Still(value!!.value))
         }
         _deprecated.value = true
         // and that's naive implementation done ig

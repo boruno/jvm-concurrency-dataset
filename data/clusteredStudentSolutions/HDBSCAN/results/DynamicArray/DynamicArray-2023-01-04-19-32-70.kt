@@ -84,9 +84,9 @@ private class Core<E>(
         do {
             when (val cur = array[index].value) {
                 null -> {
-                    println("OPA OPA")
+//                    println("OPA OPA")
                     for (i in 0 until array.size) {
-                        println(array[i].value)
+//                        println(array[i].value)
                     }
                     throw IllegalArgumentException(_size.value.toString())
                 }

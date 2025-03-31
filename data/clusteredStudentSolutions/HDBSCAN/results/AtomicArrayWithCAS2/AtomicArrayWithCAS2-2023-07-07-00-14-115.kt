@@ -180,7 +180,7 @@ class AtomicArrayWithCAS2<E : Any>(size: Int, initialValue: E) {
                         return true
                     }
 
-                    curState is AtomicArrayWithDCSS<*>.DCSSDescriptor -> {
+                    curState is AtomicArrayWithCAS2<*>.DCSSDescriptor -> {
                         curState.apply()
                     }
 

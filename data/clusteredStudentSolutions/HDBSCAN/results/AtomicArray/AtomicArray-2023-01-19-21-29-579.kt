@@ -220,9 +220,9 @@ class AtomicArray<E>(size: Int, initialValue: E) {
 
 fun main(){
     val g = AtomicArray<Int>(10, 0)
-    println(g.cas2(2, 0, 1, 0, 0, 1))
-    println(g.cas2(4, 0, 1, 2, 1, 2))
-    println(g.get(0))
-    println(g.get(2))
-    println(g.get(4))
+//    println(g.cas2(2, 0, 1, 0, 0, 1))
+//    println(g.cas2(4, 0, 1, 2, 1, 2))
+//    println(g.get(0))
+//    println(g.get(2))
+//    println(g.get(4))
 }

@@ -61,10 +61,10 @@ class SynchronousQueue<E> {
                 }
                 val rand = ThreadLocalRandom.current().nextInt()
                 if (res == RETRY) {
-                    println("RETRY $rand")
+//                    println("RETRY $rand")
                     continue
                 }
-                println("SUSPENDED $rand")
+//                println("SUSPENDED $rand")
                 return
             } else {
                 val deq = dequeue(h) ?: continue

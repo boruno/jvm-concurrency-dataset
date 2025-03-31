@@ -47,7 +47,7 @@ class AtomicArrayWithCAS2<E : Any>(size: Int, initialValue: E) {
             expected ->
                 if (array[index].compareAndSet(expected, update)) return true
                 else cas(index, expected, update)
-            is AtomicArrayWithDCSS<*>.DCSS -> {
+            is AtomicArrayWithCAS2<*>.DCSS -> {
                 e.apply()
                 cas(index, expected, update)
             }
@@ -160,7 +160,7 @@ class AtomicArrayWithCAS2<E : Any>(size: Int, initialValue: E) {
                 val e = array[index].value
                 when {
                     e == this -> return true
-                    e is AtomicArrayWithDCSS<*>.DCSS -> e.apply()
+                    e is AtomicArrayWithCAS2<*>.DCSS -> e.apply()
                     e == expected && status.value == Status.UNDECIDED -> if (array[index].compareAndSet(expected, this)) return true
                     else -> return false
                 }

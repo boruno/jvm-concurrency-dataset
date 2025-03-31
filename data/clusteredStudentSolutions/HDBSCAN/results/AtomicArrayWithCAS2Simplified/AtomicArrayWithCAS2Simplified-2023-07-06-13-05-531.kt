@@ -20,9 +20,9 @@ class AtomicArrayWithCAS2Simplified<E : Any>(size: Int, initialValue: E) {
     fun get(index: Int): E {
         val ref = array[index]
         val value = ref.value
-        if (value is AtomicArrayWithCAS2SingleWriter<*>.CAS2Descriptor) {
-            if (index == value.index1) return if (value.status.value == AtomicArrayWithCAS2SingleWriter.Status.SUCCESS) value.update1 as E else value.expected1 as E
-            if (index == value.index2) return if (value.status.value == AtomicArrayWithCAS2SingleWriter.Status.SUCCESS) value.update2 as E else value.expected2 as E
+        if (value is AtomicArrayWithCAS2Simplified<*>.CAS2Descriptor) {
+            if (index == value.index1) return if (value.status.value == AtomicArrayWithCAS2Simplified.Status.SUCCESS) value.update1 as E else value.expected1 as E
+            if (index == value.index2) return if (value.status.value == AtomicArrayWithCAS2Simplified.Status.SUCCESS) value.update2 as E else value.expected2 as E
         }
         return value as E
     }
@@ -44,12 +44,12 @@ class AtomicArrayWithCAS2Simplified<E : Any>(size: Int, initialValue: E) {
         expected2_: E,
         update2_: E
     ) {
-        private val index1 = if (index1_ < index2_) index1_ else index2_
-        private val index2 = if (index1_ < index2_) index2_ else index1_
-        private val expected1 = if (index1_ < index2_) expected1_ else expected2_
-        private val expected2 = if (index1_ < index2_) expected2_ else expected1_
-        private val update1 = if (index1_ < index2_) update1_ else update2_
-        private val update2 = if (index1_ < index2_) update2_ else update1_
+        internal val index1 = if (index1_ < index2_) index1_ else index2_
+        internal val index2 = if (index1_ < index2_) index2_ else index1_
+        internal val expected1 = if (index1_ < index2_) expected1_ else expected2_
+        internal val expected2 = if (index1_ < index2_) expected2_ else expected1_
+        internal val update1 = if (index1_ < index2_) update1_ else update2_
+        internal val update2 = if (index1_ < index2_) update2_ else update1_
 
         val status = atomic(UNDECIDED)
 
