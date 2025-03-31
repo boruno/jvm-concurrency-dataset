@@ -12,3 +12,8 @@
 ._*
 build
 .gradle
+
+#Project-specific
+options_testing
+temp_projects_options
+test-results
