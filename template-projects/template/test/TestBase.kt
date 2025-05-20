@@ -17,11 +17,11 @@ abstract class TestBase(
     @Test
     fun modelCheckingTest() = ModelCheckingOptions()
         .iterations(scenarios)
-        .invocationsPerIteration(10_000)
+        .invocationsPerIteration(10000)
         .actorsBefore(actorsBefore)
+        .actorsAfter(0)
         .threads(threads)
         .actorsPerThread(3)
-        .actorsAfter(0)
         .checkObstructionFreedom(checkObstructionFreedom)
         .sequentialSpecification(sequentialSpecification.java)
         .apply { customConfiguration() }
@@ -30,11 +30,11 @@ abstract class TestBase(
     @Test
     fun stressTest() = StressOptions()
         .iterations(scenarios)
-        .invocationsPerIteration(25_000)
+        .invocationsPerIteration(25000)
         .actorsBefore(actorsBefore)
+        .actorsAfter(0)
         .threads(threads)
         .actorsPerThread(3)
-        .actorsAfter(0)
         .sequentialSpecification(sequentialSpecification.java)
         .apply { customConfiguration() }
         .check(this::class.java)

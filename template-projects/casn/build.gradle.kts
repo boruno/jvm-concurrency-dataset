@@ -23,7 +23,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.jetbrains.kotlinx:lincheck:2.38")
+    testImplementation("org.jetbrains.kotlinx:lincheck:2.40-HACKATHON")
 }
 
 sourceSets.main {

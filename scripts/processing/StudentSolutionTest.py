@@ -10,8 +10,9 @@ from enum import Enum
 DATASET_PATH = "../../data/clusteredStudentSolutions/HDBSCAN/results"
 PROJECTS_PATH = "../../template-projects"
 TEMP_DIR_PATH = os.path.join(PROJECTS_PATH, "temp")
-TEST_RESULTS_PATH = "./test-results"
+TEST_RESULTS_PATH = "test-results/test-results"
 JAVA_HOME = ""
+TIMEOUT = 300
 
 # Ensure test results directory exists
 os.makedirs(TEST_RESULTS_PATH, exist_ok=True)
@@ -120,7 +121,7 @@ class TestResult(Enum):
     CORRECT = "No bugs found"
     BUG_FOUND = "Bugs found"
     TEST_ERROR = "Test is not working"
-    END_ON_TIMEOUT = "Timeout"
+    END_ON_TIMEOUT = f"Execution ended on timeout: {TIMEOUT} seconds"
 
 class TestErrorType(Enum):
     COMPILATION_ERROR = "Compilation error"
@@ -184,7 +185,7 @@ def extract_lincheck_output(output):
     """Extract Lincheck-specific test results from the output."""
     if output is None:
         return TestResult.CORRECT.value
-    if "Timeout:" in output:
+    if "Timeout:" in output or "Execution ended on timeout" in output:
         return TestResult.END_ON_TIMEOUT.value
     lincheck_error_messages = {
         "= The execution failed with an unexpected exception =": BugType.UNEXPECTED_EXCEPTION,
@@ -202,7 +203,7 @@ def extract_lincheck_output(output):
                 lincheck_end = len(output)
             return f"{TestResult.BUG_FOUND.value}: {bug_type.value}\n{output[lincheck_start:lincheck_end].strip()}"
     if "Wow! You've caught a bug in Lincheck." in output:
-        return f"{TestResult.TEST_ERROR.value}: {TestErrorType.LINCHECK_BUG.value}"
+        return f"{TestResult.TEST_ERROR.value}: {TestErrorType.LINCHECK_BUG.value}\n{output.strip()}"
     return f"{TestResult.TEST_ERROR.value}: {TestErrorType.OTHER_ERROR.value}, see error logs:\n {output}"
 
 
@@ -238,7 +239,7 @@ def process_single_task(file_path, project_name, log_file, task_name, test_metho
         log.write(f"Processing file: {os.path.basename(file_path)}\n")
 
         for test_method in test_methods:
-            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method)
+            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method, TIMEOUT)
             lincheck_output = extract_lincheck_output(error)
 
             log.write(f"  Test method: {test_method}\n  Testing time: {duration:.2f} seconds\n")
@@ -267,7 +268,7 @@ def process_template_task(file_path, test_file, log_file, task_name, test_method
         log.write(f"Processing file: {os.path.basename(file_path)}\n")
 
         for test_method in test_methods:
-            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method)
+            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method, TIMEOUT)
             lincheck_output = extract_lincheck_output(error)
 
             log.write(f"  Test method: {test_method}\n  Testing time: {duration:.2f} seconds\n")

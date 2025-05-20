@@ -116,7 +116,7 @@ for metric, color, hatch in zip(metrics, colors, hatch_patterns):
 
 fig1.update_layout(
     barmode="stack",
-    title="Stacked Horizontal Bar Chart by Version (Excluding Time)",
+    title="Testing results by version",
     xaxis_title="Count",
     yaxis_title="Version",
     legend_title="Metrics",

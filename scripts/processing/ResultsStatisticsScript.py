@@ -1,12 +1,14 @@
 import os
 
+# Set of test methods to include in statistics.
+# By default, process both testing methods.
+ALLOWED_TEST_METHODS = {"modelCheckingTest", "stressTest"}
+# ALLOWED_TEST_METHODS = {"modelCheckingTest"}
+# ALLOWED_TEST_METHODS = {"stressTest"}
+
 # Define error messages
 not_found = {
-    "No bugs found",
-    "Execution ended on timeout:",
-    "No errors or Lincheck-specific results found.",
-    "No Lincheck results found.",
-    "Test is not working"
+    "No bugs found"
 }
 
 lincheck_error_messages = {
@@ -19,9 +21,9 @@ lincheck_error_messages = {
 }
 
 # Path to the directory containing subfolders
-base_path = "test-results"
+base_path = "test-results/test-results"
+output_file = "test-results/testing_statistics.txt"
 
-output_file = "testing_statistics.txt"
 
 def parse_results(file_path):
     results = []
@@ -30,6 +32,8 @@ def parse_results(file_path):
     current_time = 0.0
     file_found = False
     current_test_log = []
+    skip_current_test = False
+    allowed_test_in_file = False
 
     with open(file_path, "r") as file:
         lines = file.readlines()
@@ -38,13 +42,12 @@ def parse_results(file_path):
             line = line.strip()
 
             if line.startswith("Processing file:"):
-                # Process the last test of previous file if exists
-                if current_file and current_method:
-                    lincheck_bug = "Wow! You've caught a bug in Lincheck." in "\n".join(current_test_log)
-                    timeout = "Execution ended on timeout:" in "\n".join(current_test_log)
-                    if lincheck_bug:
+                # Process the last test of the previous file if it was allowed
+                if current_file and current_method and not skip_current_test:
+                    test_log_str = "\n".join(current_test_log)
+                    if "Wow! You've caught a bug in Lincheck." in test_log_str:
                         results.append((current_file, current_method, "Lincheck bug", current_time))
-                    elif timeout:
+                    elif "Execution ended on timeout:" in test_log_str:
                         results.append((current_file, current_method, "Timeout", current_time))
 
                 current_file = line.split("Processing file:")[1].strip()
@@ -52,18 +55,28 @@ def parse_results(file_path):
                 current_time = 0.0
                 file_found = True
                 current_test_log = []
+                skip_current_test = False
+                allowed_test_in_file = False
 
             elif line.startswith("Test method:"):
-                # Process previous test method if exists
-                if current_file and current_method:
-                    lincheck_bug = "Wow! You've caught a bug in Lincheck." in "\n".join(current_test_log)
-                    timeout = "Execution ended on timeout:" in "\n".join(current_test_log)
-                    if lincheck_bug:
+                # Process previous test method if exists and if it was allowed
+                if current_file and current_method and not skip_current_test:
+                    test_log_str = "\n".join(current_test_log)
+                    if "Wow! You've caught a bug in Lincheck." in test_log_str:
                         results.append((current_file, current_method, "Lincheck bug", current_time))
-                    elif timeout:
+                    elif "Execution ended on timeout:" in test_log_str:
                         results.append((current_file, current_method, "Timeout", current_time))
 
-                current_method = line.split("Test method:")[1].strip()
+                # Determine if the test method is allowed
+                method_candidate = line.split("Test method:")[1].strip()
+                if method_candidate not in ALLOWED_TEST_METHODS:
+                    skip_current_test = True
+                    current_method = method_candidate  # Record method name for reference
+                else:
+                    skip_current_test = False
+                    current_method = method_candidate
+                    allowed_test_in_file = True
+
                 current_time = 0.0
                 current_test_log = []
 
@@ -71,16 +84,23 @@ def parse_results(file_path):
             current_test_log.append(line)
 
             if line.startswith("Testing time:"):
-                current_time = round(float(line.split("Testing time:")[1].strip().split(" ")[0]), 2)
+                try:
+                    current_time = round(float(line.split("Testing time:")[1].strip().split(" ")[0]), 2)
+                except ValueError:
+                    current_time = 0.0
 
             elif "Test is not working" in line:
-                if "Execution ended on timeout:" in "\n".join(current_test_log):
-                    results.append((current_file, current_method or "Unknown", "Timeout", current_time))
-                else:
-                    results.append((current_file, current_method or "Unknown", "Test failure", current_time))
+                if not skip_current_test:
+                    test_log_str = "\n".join(current_test_log)
+                    if "Lincheck bug" in line:
+                        results.append((current_file, current_method or "Unknown", "Lincheck bug", current_time))
+                    elif "Execution ended on timeout:" in test_log_str:
+                        results.append((current_file, current_method or "Unknown", "Timeout", current_time))
+                    else:
+                        results.append((current_file, current_method or "Unknown", "Testing error", current_time))
                 current_test_log = []
 
-            elif current_method:
+            elif current_method and not skip_current_test:
                 if any(n in line for n in not_found):
                     results.append((current_file, current_method, "Correct", current_time))
                     current_test_log = []
@@ -91,19 +111,55 @@ def parse_results(file_path):
                             current_test_log = []
                             break
 
-        # Process the very last test if exists
-        if current_file and current_method:
-            lincheck_bug = "Wow! You've caught a bug in Lincheck." in "\n".join(current_test_log)
-            timeout = "Execution ended on timeout:" in "\n".join(current_test_log)
-            if lincheck_bug:
+        # Process the very last test if exists and if it was allowed
+        if current_file and current_method and not skip_current_test:
+            test_log_str = "\n".join(current_test_log)
+            if "Wow! You've caught a bug in Lincheck." in test_log_str:
                 results.append((current_file, current_method, "Lincheck bug", current_time))
-            elif timeout:
+            elif "Execution ended on timeout:" in test_log_str:
                 results.append((current_file, current_method, "Timeout", current_time))
 
-    if file_found and not results:
+    # Append a default result only if at least one allowed test method was found in the file
+    if file_found and allowed_test_in_file and not results:
         results.append((current_file, "Unknown", "No recorded test", 0.0))
 
     return results
+
+
+def determine_final_result(tests):
+    """
+    Determine a final result based on test results using the new prioritization strategy:
+    - If there is only one test for a file – take its result.
+    - If both tests are present (modelCheckingTest and stressTest) – pick the result with priority:
+        1. Incorrect (concurrency violation): "Unexpected exception", "Execution hung",
+           "Invalid execution results", "Validation function error", "Non-blocking algorithm"
+        2. Testing errors: "Testing error"
+        3. Timeouts: "Timeout"
+        4. Lincheck bugs: "Lincheck bug"
+        5. Correct: "Correct"
+    """
+    if len(tests) == 1:
+        return tests[0][1]
+
+    priority = {
+        "Unexpected exception": 1,
+        "Execution hung": 1,
+        "Invalid execution results": 1,
+        "Validation function error": 1,
+        "Non-blocking algorithm": 1,
+        "Testing error": 2,
+        "Timeout": 3,
+        "Lincheck bug": 4,
+        "Correct": 5
+    }
+
+    def get_priority(result):
+        return priority.get(result, 6)
+
+    # Pick the result with the highest priority (lowest number)
+    final_result = min((test[1] for test in tests), key=get_priority)
+    return final_result
+
 
 def process_statistics(base_path):
     all_categories = {
@@ -121,7 +177,7 @@ def process_statistics(base_path):
         "Correct": 0,
         "Incorrect": 0,
         "Lincheck bugs": 0,
-        "Timeouts": 0,
+        "Timeout": 0,
         "Total execution time": 0.0
     }
 
@@ -133,7 +189,7 @@ def process_statistics(base_path):
                 "Lincheck bugs": 0,
                 "Correct": 0,
                 "Concurrency bugs": 0,
-                "Timeouts": 0,
+                "Timeout": 0,
                 "bug_categories": dict(all_categories),
                 "total_time": 0.0
             }
@@ -158,19 +214,21 @@ def process_statistics(base_path):
 
                     # Check for timeout conditions
                     timeouts = sum(1 for _, error_type, _ in file_data["tests"] if error_type == "Timeout")
-                    test_errors = sum(1 for _, error_type, _ in file_data["tests"] if error_type == "Test failure")
+                    test_errors = sum(1 for _, error_type, _ in file_data["tests"] if error_type == "Testing error")
 
                     if timeouts == len(file_data["tests"]) or (timeouts >= 1 and test_errors >= 1):
-                        folder_stats["Timeouts"] += 1
+                        folder_stats["Timeout"] += 1
                     elif final_result == "Lincheck bug":
                         folder_stats["Lincheck bugs"] += 1
-                    elif final_result == "Test failure":
+                    elif final_result == "Testing error":
                         folder_stats["Testing errors"] += 1
                     elif final_result == "Correct":
                         folder_stats["Correct"] += 1
                     else:  # It's a concurrency bug
                         folder_stats["Concurrency bugs"] += 1
-                        folder_stats["bug_categories"][final_result] += 1
+                        # Only update bug_categories for actual concurrency bugs
+                        if final_result in folder_stats["bug_categories"]:
+                            folder_stats["bug_categories"][final_result] += 1
 
                 if file_results:
                     statistics[folder] = folder_stats
@@ -180,58 +238,23 @@ def process_statistics(base_path):
                     overall_stats["Testing errors"] += folder_stats["Testing errors"]
                     overall_stats["Correct"] += folder_stats["Correct"]
                     overall_stats["Lincheck bugs"] += folder_stats["Lincheck bugs"]
-                    overall_stats["Timeouts"] += folder_stats["Timeouts"]
+                    overall_stats["Timeout"] += folder_stats["Timeout"]
                     overall_stats["Incorrect"] += folder_stats["Concurrency bugs"]  # Only count concurrency bugs
                     overall_stats["Total execution time"] += folder_stats["total_time"]
 
     return statistics, overall_stats
 
-def determine_final_result(tests):
-    """
-    Determine a final result based on two test results following the specified rules.
-    """
-    # Check for Lincheck bugs first
-    if any(test[1] == "Lincheck bug" for test in tests):
-        return "Lincheck bug"
 
-    # Check if all tests are test failures
-    if all(test[1] == "Test failure" for test in tests):
-        return "Test failure"
-
-    # Check if all tests end on timeout
-    if all(test[1] == "Timeout" for test in tests):
-        return "Timeout"
-
-    # Look for concurrency bugs
-    concurrency_bugs = [test[1] for test in tests if test[1] in [
-        "Unexpected exception",
-        "Execution hung",
-        "Invalid execution results",
-        "Validation function error",
-        "Non-blocking algorithm"
-    ]]
-
-    if concurrency_bugs:
-        return concurrency_bugs[0]  # Return the first found concurrency bug
-
-    # If we reach here and at least one test passed correctly, mark as correct
-    if any(test[1] == "Correct" for test in tests):
-        return "Correct"
-
-    # Default case (shouldn't normally happen)
-    return "Test failure"
-
-def write_statistics(statistics, output_file):
+def write_statistics(statistics, overall_stats, output_file):
     with open(output_file, "w") as f:
         for folder, stats in statistics.items():
             f.write(f"{folder}\n")
-            total_files = sum(v for k, v in stats.items()
-                              if k not in ['bug_categories', 'total_time'])
+            total_files = sum(v for k, v in stats.items() if k not in ['bug_categories', 'total_time'])
 
             f.write(f"Number of files processed: {total_files}\n")
             f.write(f"Testing errors: {stats['Testing errors']}\n")
             f.write(f"Lincheck bugs: {stats['Lincheck bugs']}\n")
-            f.write(f"Timeouts: {stats['Timeouts']}\n")
+            f.write(f"Timeouts: {stats['Timeout']}\n")
             f.write(f"Correct: {stats['Correct']}\n")
             f.write(f"Concurrency bugs: {stats['Concurrency bugs']}\n")
 
@@ -258,10 +281,10 @@ def write_statistics(statistics, output_file):
 
         f.write(f"Incorrectness: {incorrectness:.2f}%\n")
         f.write(f"Lincheck bugs: {overall_stats['Lincheck bugs']}\n")
-        f.write(f"Timeouts: {overall_stats['Timeouts']}\n")
+        f.write(f"Timeouts: {overall_stats['Timeout']}\n")
         f.write(f"Total execution time: {overall_stats['Total execution time']:.2f} seconds\n")
 
 if __name__ == "__main__":
     statistics, overall_stats = process_statistics(base_path)
-    write_statistics(statistics, output_file)
+    write_statistics(statistics, overall_stats, output_file)
     print(f"Statistics written to {output_file}")

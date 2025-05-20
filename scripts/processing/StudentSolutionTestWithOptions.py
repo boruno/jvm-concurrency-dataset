@@ -7,12 +7,15 @@ import time
 import argparse
 from enum import Enum
 
+# Set timeout for a test in seconds
+TIMEOUT = 300
+
 # The following enums remain as before
 class TestResult(Enum):
     CORRECT = "No bugs found"
     BUG_FOUND = "Bugs found"
     TEST_ERROR = "Test is not working"
-    END_ON_TIMEOUT = "Timeout"
+    END_ON_TIMEOUT = f"Execution ended on timeout: {TIMEOUT} seconds"
 
 class TestErrorType(Enum):
     COMPILATION_ERROR = "Compilation error"
@@ -147,46 +150,70 @@ TEMPLATE_PROJECT_TEST_CLASS = {
     "TreiberStackWithElimination": "TreiberStackWithEliminationTest",
 }
 
-def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=300):
-    start_time = time.time()
+def run_gradle_test_with_timeout(project_path, test_class, test_method, timeout=300, max_attempts=3):
+    attempt = 0
+    while attempt < max_attempts:
+        attempt += 1
+        start_time = time.time()
+        try:
+            gradle_command = [
+                "./gradlew", "test",
+                f"--tests={test_class}.{test_method}",
+                "--warning-mode=none", "--console=plain"
+            ]
+            result = subprocess.run(
+                gradle_command,
+                cwd=project_path,
+                capture_output=True,
+                text=True,
+                check=True,
+                timeout=timeout
+            )
+            end_time = time.time()
+            duration = end_time - start_time
+            return result.stdout, None, duration
+        except subprocess.TimeoutExpired:
+            end_time = time.time()
+            duration = end_time - start_time
+            subprocess.run(["pkill", "-f", f"./gradlew test --tests={test_class}.{test_method}"], cwd=project_path)
+            return None, f"Execution ended on timeout: {timeout} seconds.", duration
+        except subprocess.CalledProcessError as e:
+            error_message = e.stdout + e.stderr
+            if "Timeout waiting to lock journal cache" in error_message:
+                print(f"[Attempt {attempt}] Gradle journal lock error detected. Stopping Gradle daemons and cleaning lock.")
+                _fix_gradle_lock(project_path)
+                time.sleep(1)
+                continue  # Retry the test.
+            else:
+                end_time = time.time()
+                duration = end_time - start_time
+                return None, error_message, duration
+    return None, f"Test failed after {max_attempts} attempts due to Gradle journal lock issues.", timeout
+
+def _fix_gradle_lock(project_path):
+    """
+    Stop Gradle daemons and remove the journal lock file if it still exists.
+    """
     try:
-        gradle_command = [
-            "./gradlew", "test",
-            f"--tests={test_class}.{test_method}",
-            "--warning-mode=none", "--console=plain"
-        ]
-        result = subprocess.run(
-            gradle_command,
-            cwd=project_path,
-            capture_output=True,
-            text=True,
-            check=True,
-            timeout=timeout
-        )
-        end_time = time.time()
-        duration = end_time - start_time
-        return result.stdout, None, duration
-    except subprocess.TimeoutExpired:
-        subprocess.run(["pkill", "-f", f"./gradlew test --tests={test_class}.{test_method}"], cwd=project_path)
-        end_time = time.time()
-        duration = end_time - start_time
-        return None, f"Execution ended on timeout: {timeout} seconds.", duration
-    except subprocess.CalledProcessError as e:
-        end_time = time.time()
-        duration = end_time - start_time
-        error_message = e.stdout + e.stderr
-        task_line_match = re.search(r"> Task :test", error_message)
-        if task_line_match:
-            start_index = task_line_match.start()
-            end_index = error_message.find("FAILURE: Build failed with an exception.", start_index)
-            if end_index != -1:
-                error_message = error_message[start_index:end_index].strip()
-        return None, error_message, duration
+        # Stop any running Gradle daemons.
+        subprocess.run(["./gradlew", "--stop"], cwd=project_path, capture_output=True, text=True)
+        print("Gradle daemons stopped.")
+    except Exception as ex:
+        print(f"Error stopping Gradle daemons: {ex}")
+
+    # Default location for the journal lock file.
+    lock_file = os.path.join(os.path.expanduser("~"), ".gradle", "caches", "journal-1", "journal-1.lock")
+    if os.path.exists(lock_file):
+        try:
+            os.remove(lock_file)
+            print("Lock file removed.")
+        except Exception as ex:
+            print(f"Error removing lock file: {ex}")
 
 def extract_lincheck_output(output):
     if output is None:
         return TestResult.CORRECT.value
-    if "Timeout:" in output:
+    if "Timeout:" in output or "Execution ended on timeout" in output:
         return TestResult.END_ON_TIMEOUT.value
     lincheck_error_messages = {
         "= The execution failed with an unexpected exception =": BugType.UNEXPECTED_EXCEPTION,
@@ -204,7 +231,7 @@ def extract_lincheck_output(output):
                 lincheck_end = len(output)
             return f"{TestResult.BUG_FOUND.value}: {bug_type.value}\n{output[lincheck_start:lincheck_end].strip()}"
     if "Wow! You've caught a bug in Lincheck." in output:
-        return f"{TestResult.TEST_ERROR.value}: {TestErrorType.LINCHECK_BUG.value}"
+        return f"{TestResult.TEST_ERROR.value}: {TestErrorType.LINCHECK_BUG.value}\n{output.strip()}"
     return f"{TestResult.TEST_ERROR.value}: {TestErrorType.OTHER_ERROR.value}, see error logs:\n {output}"
 
 def process_single_task(file_path, project_name, log_file, task_name, test_methods):
@@ -226,7 +253,7 @@ def process_single_task(file_path, project_name, log_file, task_name, test_metho
     with open(log_file, "a") as log:
         log.write(f"Processing file: {os.path.basename(file_path)}\n")
         for test_method in test_methods:
-            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method)
+            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method, TIMEOUT)
             lincheck_output = extract_lincheck_output(error)
             log.write(f"  Test method: {test_method}\n  Testing time: {duration:.2f} seconds\n")
             log.write(f"{lincheck_output}\n\n")
@@ -244,7 +271,7 @@ def process_template_task(file_path, test_file, log_file, task_name, test_method
     with open(log_file, "a") as log:
         log.write(f"Processing file: {os.path.basename(file_path)}\n")
         for test_method in test_methods:
-            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method)
+            output, error, duration = run_gradle_test_with_timeout(project_path, test_class, test_method, TIMEOUT)
             lincheck_output = extract_lincheck_output(error)
             log.write(f"  Test method: {test_method}\n  Testing time: {duration:.2f} seconds\n")
             log.write(f"{lincheck_output}\n\n")

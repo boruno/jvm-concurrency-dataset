@@ -90,8 +90,8 @@ for (t, a) in threads_options:
 
 # Function to update Kotlin test files with given parameter values
 def update_test_files(root_dir, params):
-    # Define regex patterns for the parameters
-    replacements = {
+    # Replacements that work for single-task files (method calls)
+    common_replacements = {
         r"\.actorsBefore\(\s*\d+\s*\)": f".actorsBefore({params['actors'][0]})",
         r"\.actorsAfter\(\s*\d+\s*\)": f".actorsAfter({params['actors'][1]})",
         r"\.iterations\(\s*\d+\s*\)": f".iterations({params['iterations']})",
@@ -99,15 +99,27 @@ def update_test_files(root_dir, params):
         r"\.threads\(\s*\d+\s*\)": f".threads({params['threads'][0]})",
         r"\.actorsPerThread\(\s*\d+\s*\)": f".actorsPerThread({params['threads'][1]})"
     }
-    # Walk through all .kt files in the projects copy and update them
+
+    # Extra replacements for template tests (TestBase constructor defaults)
+    template_replacements = {
+        r"scenarios:\s*Int\s*=\s*\d+": f"scenarios: Int = {params['iterations']}",
+        r"threads:\s*Int\s*=\s*\d+": f"threads: Int = {params['threads'][0]}",
+        r"actorsBefore:\s*Int\s*=\s*\d+": f"actorsBefore: Int = {params['actors'][0]}"
+    }
+
     for subdir, _, files in os.walk(root_dir):
         for file in files:
             if file.endswith(".kt"):
                 file_path = os.path.join(subdir, file)
                 with open(file_path, "r") as f:
                     content = f.read()
-                for pattern, replacement in replacements.items():
+                # Apply common replacements to all Kotlin test files.
+                for pattern, replacement in common_replacements.items():
                     content = re.sub(pattern, replacement, content)
+                # If the file contains TestBase, apply additional template-specific replacements.
+                if "abstract class TestBase(" in content:
+                    for pattern, replacement in template_replacements.items():
+                        content = re.sub(pattern, replacement, content)
                 with open(file_path, "w") as f:
                     f.write(content)
 

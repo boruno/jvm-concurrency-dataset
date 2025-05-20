@@ -2,7 +2,7 @@ import os
 import re
 
 def update_lincheck_version(directory: str, new_version: str):
-    pattern = re.compile(r'(testImplementation\("org\.jetbrains\.kotlinx:lincheck:)([\d\.]+)("\))')
+    pattern = re.compile(r'(testImplementation\("org\.jetbrains\.kotlinx:lincheck:)([\d\.]+(?:-SNAPSHOT)?)("\))')
 
     for root, _, files in os.walk(directory):
         for file in files:
@@ -22,7 +22,7 @@ def update_lincheck_version(directory: str, new_version: str):
                     print(f"No changes made in {file_path}")
 
 # Set directory and desired version
-directory_to_search = "../../"
+directory_to_search = "../../template-projects/"
 new_lincheck_version = "2.39"
 
 update_lincheck_version(directory_to_search, new_lincheck_version)

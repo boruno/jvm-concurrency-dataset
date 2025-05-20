@@ -107,8 +107,8 @@ ConcurrentWeakKeysMap,Data Structure,Non-blocking,Google Guava,Yes,A ConcurrentM
 ForwardingBlockingDeque,Data Structure,Blocking,Google Guava,Yes,A BlockingDeque which forwards all its method calls to another BlockingDeque.,Success,
 ForwardingBlockingQueue,Data Structure,Blocking,Google Guava,Yes,A BlockingQueue which forwards all its method calls to another BlockingQueue.,Success,
 ForwardingLock,Lock,N/A,Google Guava,Yes,A Lock which forwards all its method calls to another Lock.,Success,
-ConcurrentRadixTree,Data Structure,Non-blocking,Google Concurrent-trees,No,TBR,Success,This is one of the examples from CAV Lincheck paper. ConcurrentRadixTree is not linearizable.
-SnapTree,Data Structure,Non-blocking,PPoPP'10,No,TBR,Success
-LogicalOrderingAVL,Data Structure,Non-blocking,PPoPP'14,No,TBR,Success
-CATree,Data Structure,Non-blocking,ISPDC'15,No,TBR,Success
-ConcurrencyOptimalTree,Data Structure,Non-blocking,Euro-Par'17,No,TBR,Success
+ConcurrentRadixTree,Data Structure,Non-blocking,Google Concurrent-trees,No,,Success,
+SnapTree,Data Structure,Non-blocking,PPoPP'10,No,,Success,
+LogicalOrderingAVL,Data Structure,Non-blocking,PPoPP'14,No,,Success,
+CATree,Data Structure,Non-blocking,ISPDC'15,No,,Success,
+ConcurrencyOptimalTree,Data Structure,Non-blocking,Euro-Par'17,No,,Success,

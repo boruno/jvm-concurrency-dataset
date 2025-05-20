@@ -139,7 +139,7 @@ def plot_outcomes(outcomes):
     plt.show()
 
 if __name__ == "__main__":
-    test_results_path = "../processing/test-results-2.36"
+    test_results_path = "../processing/test-results/test-results-2.36"
 
     outcomes = process_all_results(test_results_path)
     print("\n[INFO] Aggregated outcomes:", outcomes)

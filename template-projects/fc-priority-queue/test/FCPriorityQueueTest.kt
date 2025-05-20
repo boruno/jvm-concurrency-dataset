@@ -23,7 +23,9 @@ class FCPriorityQueueTest {
     fun modelCheckingTest() = try {
         ModelCheckingOptions()
             .iterations(100)
-            .invocationsPerIteration(10_000)
+            .invocationsPerIteration(10000)
+            .actorsBefore(0)
+            .actorsAfter(0)
             .threads(3)
             .actorsPerThread(3)
             .sequentialSpecification(PriorityQueueSequential::class.java)
@@ -36,7 +38,9 @@ class FCPriorityQueueTest {
     fun stressTest() = try {
         StressOptions()
             .iterations(100)
-            .invocationsPerIteration(50_000)
+            .invocationsPerIteration(50000)
+            .actorsBefore(0)
+            .actorsAfter(0)
             .threads(3)
             .actorsPerThread(3)
             .sequentialSpecification(PriorityQueueSequential::class.java)
